@@ -23,7 +23,7 @@
     delete from material_type_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.MaterialTypeInfoDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.MaterialTypeInfoDomain">
     insert into material_type_info (id, materail_info_id, material_type_code_parent, 
       material_type_code_child, material_style_code, 
       create_time)
@@ -31,7 +31,7 @@
       #{materialTypeCodeChild,jdbcType=VARCHAR}, #{materialStyleCode,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.MaterialTypeInfoDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.MaterialTypeInfoDomain">
     insert into material_type_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -74,7 +74,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.MaterialTypeInfoDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.MaterialTypeInfoDomain">
     update material_type_info
     <set>
       <if test="materailInfoId != null">
@@ -95,7 +95,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.MaterialTypeInfoDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.MaterialTypeInfoDomain">
     update material_type_info
     set materail_info_id = #{materailInfoId,jdbcType=BIGINT},
       material_type_code_parent = #{materialTypeCodeParent,jdbcType=VARCHAR},

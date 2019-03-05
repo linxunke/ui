@@ -23,7 +23,7 @@
     delete from material_type
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.MaterialTypeDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.MaterialTypeDomain">
     insert into material_type (id, type_name, type_code, 
       grade, parent_code, update_time, 
       is_valid)
@@ -31,7 +31,7 @@
       #{grade,jdbcType=INTEGER}, #{parentCode,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isValid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.MaterialTypeDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.MaterialTypeDomain">
     insert into material_type
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.MaterialTypeDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.MaterialTypeDomain">
     update material_type
     <set>
       <if test="typeName != null">
@@ -104,7 +104,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.MaterialTypeDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.MaterialTypeDomain">
     update material_type
     set type_name = #{typeName,jdbcType=VARCHAR},
       type_code = #{typeCode,jdbcType=VARCHAR},

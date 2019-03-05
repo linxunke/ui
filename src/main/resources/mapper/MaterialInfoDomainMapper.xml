@@ -31,7 +31,7 @@
     delete from material_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.MaterialInfoDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
     insert into material_info (id, create_user_id, canvas_info_id_private, 
       canvas_info_id_public, material_name, material_description, 
       material_type, material_url, thumbnail_url, 
@@ -43,7 +43,7 @@
       #{uploadTime,jdbcType=TIMESTAMP}, #{colorType,jdbcType=INTEGER}, #{colorPercentage,jdbcType=VARCHAR}, 
       #{isValid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.MaterialInfoDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
     insert into material_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -128,7 +128,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.MaterialInfoDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
     update material_info
     <set>
       <if test="createUserId != null">
@@ -170,7 +170,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.MaterialInfoDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
     update material_info
     set create_user_id = #{createUserId,jdbcType=BIGINT},
       canvas_info_id_private = #{canvasInfoIdPrivate,jdbcType=BIGINT},

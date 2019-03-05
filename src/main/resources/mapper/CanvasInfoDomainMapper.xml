@@ -23,7 +23,7 @@
     delete from canvas_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.CanvasInfoDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.CanvasInfoDomain">
     insert into canvas_info (id, user_id, canvas_name, 
       describe_info, canvas_type, create_time, 
       is_valid)
@@ -31,7 +31,7 @@
       #{describeInfo,jdbcType=VARCHAR}, #{canvasType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{isValid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.CanvasInfoDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.CanvasInfoDomain">
     insert into canvas_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.CanvasInfoDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.CanvasInfoDomain">
     update canvas_info
     <set>
       <if test="userId != null">
@@ -104,7 +104,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.CanvasInfoDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.CanvasInfoDomain">
     update canvas_info
     set user_id = #{userId,jdbcType=BIGINT},
       canvas_name = #{canvasName,jdbcType=VARCHAR},

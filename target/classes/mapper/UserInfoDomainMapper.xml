@@ -27,7 +27,7 @@
     delete from user_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.UserInfoDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.UserInfoDomain">
     insert into user_info (id, user_account, user_nickname, 
       user_weixin, user_photo_url, user_password, 
       authority, register_time, update_time, 
@@ -37,7 +37,7 @@
       #{authority,jdbcType=INTEGER}, #{registerTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isValid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.UserInfoDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.UserInfoDomain">
     insert into user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.UserInfoDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.UserInfoDomain">
     update user_info
     <set>
       <if test="userAccount != null">
@@ -137,7 +137,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.UserInfoDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.UserInfoDomain">
     update user_info
     set user_account = #{userAccount,jdbcType=VARCHAR},
       user_nickname = #{userNickname,jdbcType=VARCHAR},

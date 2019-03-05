@@ -20,13 +20,13 @@
     delete from message_model
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.MessageModelDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.MessageModelDomain">
     insert into message_model (id, message_detail, message_type, 
       is_valid)
     values (#{id,jdbcType=BIGINT}, #{messageDetail,jdbcType=VARCHAR}, #{messageType,jdbcType=INTEGER}, 
       #{isValid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.MessageModelDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.MessageModelDomain">
     insert into message_model
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -57,7 +57,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.MessageModelDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.MessageModelDomain">
     update message_model
     <set>
       <if test="messageDetail != null">
@@ -72,7 +72,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.MessageModelDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.MessageModelDomain">
     update message_model
     set message_detail = #{messageDetail,jdbcType=VARCHAR},
       message_type = #{messageType,jdbcType=INTEGER},

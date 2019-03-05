@@ -23,7 +23,7 @@
     delete from message_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.MessageInfoDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.MessageInfoDomain">
     insert into message_info (id, user_id, message, 
       accept_time, readed_time, is_read, 
       is_valid)
@@ -31,7 +31,7 @@
       #{acceptTime,jdbcType=TIMESTAMP}, #{readedTime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=INTEGER}, 
       #{isValid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.MessageInfoDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.MessageInfoDomain">
     insert into message_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.MessageInfoDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.MessageInfoDomain">
     update message_info
     <set>
       <if test="userId != null">
@@ -104,7 +104,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.MessageInfoDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.MessageInfoDomain">
     update message_info
     set user_id = #{userId,jdbcType=BIGINT},
       message = #{message,jdbcType=VARCHAR},

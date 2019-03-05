@@ -21,13 +21,13 @@
     delete from material_history_collection
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="code.model.MaterialHistoryCollectionDomain">
+  <insert id="insert" parameterType="com.ztzh.ui.po.MaterialHistoryCollectionDomain">
     insert into material_history_collection (id, material_info_id, user_info_id, 
       type, operate_time)
     values (#{id,jdbcType=BIGINT}, #{materialInfoId,jdbcType=BIGINT}, #{userInfoId,jdbcType=BIGINT}, 
       #{type,jdbcType=INTEGER}, #{operateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="code.model.MaterialHistoryCollectionDomain">
+  <insert id="insertSelective" parameterType="com.ztzh.ui.po.MaterialHistoryCollectionDomain">
     insert into material_history_collection
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="code.model.MaterialHistoryCollectionDomain">
+  <update id="updateByPrimaryKeySelective" parameterType="com.ztzh.ui.po.MaterialHistoryCollectionDomain">
     update material_history_collection
     <set>
       <if test="materialInfoId != null">
@@ -82,7 +82,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="code.model.MaterialHistoryCollectionDomain">
+  <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.MaterialHistoryCollectionDomain">
     update material_history_collection
     set material_info_id = #{materialInfoId,jdbcType=BIGINT},
       user_info_id = #{userInfoId,jdbcType=BIGINT},
