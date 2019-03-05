@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper">
+  <resultMap id="BaseResultMap" type="com.ztzh.ui.po.MaterialHistoryCollectionDomain">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="material_info_id" jdbcType="BIGINT" property="materialInfoId" />
+    <result column="user_info_id" jdbcType="BIGINT" property="userInfoId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, material_info_id, user_info_id, type, operate_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from material_history_collection
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from material_history_collection
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="code.model.MaterialHistoryCollectionDomain">
+    insert into material_history_collection (id, material_info_id, user_info_id, 
+      type, operate_time)
+    values (#{id,jdbcType=BIGINT}, #{materialInfoId,jdbcType=BIGINT}, #{userInfoId,jdbcType=BIGINT}, 
+      #{type,jdbcType=INTEGER}, #{operateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="code.model.MaterialHistoryCollectionDomain">
+    insert into material_history_collection
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="materialInfoId != null">
+        material_info_id,
+      </if>
+      <if test="userInfoId != null">
+        user_info_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="materialInfoId != null">
+        #{materialInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="userInfoId != null">
+        #{userInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="code.model.MaterialHistoryCollectionDomain">
+    update material_history_collection
+    <set>
+      <if test="materialInfoId != null">
+        material_info_id = #{materialInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="userInfoId != null">
+        user_info_id = #{userInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="code.model.MaterialHistoryCollectionDomain">
+    update material_history_collection
+    set material_info_id = #{materialInfoId,jdbcType=BIGINT},
+      user_info_id = #{userInfoId,jdbcType=BIGINT},
+      type = #{type,jdbcType=INTEGER},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

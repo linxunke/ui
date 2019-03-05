@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztzh.ui.dao.MessageInfoDomainMapper">
+  <resultMap id="BaseResultMap" type="com.ztzh.ui.po.MessageInfoDomain">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime" />
+    <result column="readed_time" jdbcType="TIMESTAMP" property="readedTime" />
+    <result column="is_read" jdbcType="INTEGER" property="isRead" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, message, accept_time, readed_time, is_read, is_valid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from message_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from message_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="code.model.MessageInfoDomain">
+    insert into message_info (id, user_id, message, 
+      accept_time, readed_time, is_read, 
+      is_valid)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{message,jdbcType=VARCHAR}, 
+      #{acceptTime,jdbcType=TIMESTAMP}, #{readedTime,jdbcType=TIMESTAMP}, #{isRead,jdbcType=INTEGER}, 
+      #{isValid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="code.model.MessageInfoDomain">
+    insert into message_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="message != null">
+        message,
+      </if>
+      <if test="acceptTime != null">
+        accept_time,
+      </if>
+      <if test="readedTime != null">
+        readed_time,
+      </if>
+      <if test="isRead != null">
+        is_read,
+      </if>
+      <if test="isValid != null">
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptTime != null">
+        #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="readedTime != null">
+        #{readedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRead != null">
+        #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null">
+        #{isValid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="code.model.MessageInfoDomain">
+    update message_info
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="message != null">
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptTime != null">
+        accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="readedTime != null">
+        readed_time = #{readedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRead != null">
+        is_read = #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null">
+        is_valid = #{isValid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="code.model.MessageInfoDomain">
+    update message_info
+    set user_id = #{userId,jdbcType=BIGINT},
+      message = #{message,jdbcType=VARCHAR},
+      accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+      readed_time = #{readedTime,jdbcType=TIMESTAMP},
+      is_read = #{isRead,jdbcType=INTEGER},
+      is_valid = #{isValid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

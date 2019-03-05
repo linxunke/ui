@@ -1,50 +1,120 @@
 package com.ztzh.ui.po;
 
-public class UserInfoDomain{
+import java.io.Serializable;
+import java.util.Date;
 
-	private Integer id;
+public class UserInfoDomain implements Serializable{
 
-    private String username;
+	private static final long serialVersionUID = -3673944971541311289L;
 
-    private Integer age;
+	private Long id;
 
-    private String address;
+    private String userAccount;
 
-    public Integer getId() {
+    private String userNickname;
+
+    private String userWeixin;
+
+    private String userPhotoUrl;
+
+    private String userPassword;
+
+    private Integer authority;
+
+    private Date registerTime;
+
+    private Date updateTime;
+
+    private Integer isValid;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserAccount() {
+        return userAccount;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount == null ? null : userAccount.trim();
     }
 
-    public Integer getAge() {
-        return age;
+    public String getUserNickname() {
+        return userNickname;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname == null ? null : userNickname.trim();
     }
 
-    public String getAddress() {
-        return address;
+    public String getUserWeixin() {
+        return userWeixin;
     }
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+    public void setUserWeixin(String userWeixin) {
+        this.userWeixin = userWeixin == null ? null : userWeixin.trim();
+    }
+
+    public String getUserPhotoUrl() {
+        return userPhotoUrl;
+    }
+
+    public void setUserPhotoUrl(String userPhotoUrl) {
+        this.userPhotoUrl = userPhotoUrl == null ? null : userPhotoUrl.trim();
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword == null ? null : userPassword.trim();
+    }
+
+    public Integer getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(Integer authority) {
+        this.authority = authority;
+    }
+
+    public Date getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(Date registerTime) {
+        this.registerTime = registerTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Integer getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Integer isValid) {
+        this.isValid = isValid;
     }
 
 	@Override
 	public String toString() {
-		return "UserInfoDomain [id=" + id + ", username=" + username + ", age=" + age + ", address=" + address + "]";
+		return "UserInfoDomain [id=" + id + ", userAccount=" + userAccount
+				+ ", userNickname=" + userNickname + ", userWeixin="
+				+ userWeixin + ", userPhotoUrl=" + userPhotoUrl
+				+ ", userPassword=" + userPassword + ", authority=" + authority
+				+ ", registerTime=" + registerTime + ", updateTime="
+				+ updateTime + ", isValid=" + isValid + "]";
 	}
     
 }

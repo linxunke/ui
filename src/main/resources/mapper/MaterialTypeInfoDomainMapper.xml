@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ztzh.ui.dao.MaterialTypeInfoDomainMapper">
+  <resultMap id="BaseResultMap" type="com.ztzh.ui.po.MaterialTypeInfoDomain">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="materail_info_id" jdbcType="BIGINT" property="materailInfoId" />
+    <result column="material_type_code_parent" jdbcType="VARCHAR" property="materialTypeCodeParent" />
+    <result column="material_type_code_child" jdbcType="VARCHAR" property="materialTypeCodeChild" />
+    <result column="material_style_code" jdbcType="VARCHAR" property="materialStyleCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, materail_info_id, material_type_code_parent, material_type_code_child, material_style_code, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from material_type_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from material_type_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="code.model.MaterialTypeInfoDomain">
+    insert into material_type_info (id, materail_info_id, material_type_code_parent, 
+      material_type_code_child, material_style_code, 
+      create_time)
+    values (#{id,jdbcType=BIGINT}, #{materailInfoId,jdbcType=BIGINT}, #{materialTypeCodeParent,jdbcType=VARCHAR}, 
+      #{materialTypeCodeChild,jdbcType=VARCHAR}, #{materialStyleCode,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="code.model.MaterialTypeInfoDomain">
+    insert into material_type_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="materailInfoId != null">
+        materail_info_id,
+      </if>
+      <if test="materialTypeCodeParent != null">
+        material_type_code_parent,
+      </if>
+      <if test="materialTypeCodeChild != null">
+        material_type_code_child,
+      </if>
+      <if test="materialStyleCode != null">
+        material_style_code,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="materailInfoId != null">
+        #{materailInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="materialTypeCodeParent != null">
+        #{materialTypeCodeParent,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeCodeChild != null">
+        #{materialTypeCodeChild,jdbcType=VARCHAR},
+      </if>
+      <if test="materialStyleCode != null">
+        #{materialStyleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="code.model.MaterialTypeInfoDomain">
+    update material_type_info
+    <set>
+      <if test="materailInfoId != null">
+        materail_info_id = #{materailInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="materialTypeCodeParent != null">
+        material_type_code_parent = #{materialTypeCodeParent,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeCodeChild != null">
+        material_type_code_child = #{materialTypeCodeChild,jdbcType=VARCHAR},
+      </if>
+      <if test="materialStyleCode != null">
+        material_style_code = #{materialStyleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="code.model.MaterialTypeInfoDomain">
+    update material_type_info
+    set materail_info_id = #{materailInfoId,jdbcType=BIGINT},
+      material_type_code_parent = #{materialTypeCodeParent,jdbcType=VARCHAR},
+      material_type_code_child = #{materialTypeCodeChild,jdbcType=VARCHAR},
+      material_style_code = #{materialStyleCode,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
