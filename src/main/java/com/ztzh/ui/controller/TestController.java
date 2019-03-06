@@ -3,10 +3,14 @@ package com.ztzh.ui.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ztzh.ui.service.TestService;
+import com.ztzh.ui.utils.MD5Util;
 
 @RestController
 public class TestController {
@@ -14,10 +18,19 @@ public class TestController {
 	
 	@Autowired TestService testService;
 	
+	
 	@RequestMapping(value="/test")
 	public String testInsert() {
 		return "test";
 	}
+	
+	@PostMapping("/upload")
+    public Object upload(@RequestParam("file") MultipartFile  file) {
+         testService.upload(file);
+         return "success";
+ 
+    }
+	
 	
 
 }
