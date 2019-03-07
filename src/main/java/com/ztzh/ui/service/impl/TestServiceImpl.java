@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ztzh.ui.service.TestService;
 
-@Service
+//@Service
 public class TestServiceImpl implements TestService{
 
 
