@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class Test2Controller {
 	@RequestMapping(value = "upload", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
 	public String upload() {
-		return "/usertest";
+		return "/register";
 	}
-
+	
+	@RequestMapping(value="hello")
+	public String hello(){
+		return "cutpic";
+	}
+	
 }
