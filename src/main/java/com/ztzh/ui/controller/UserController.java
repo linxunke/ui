@@ -30,7 +30,7 @@ public class UserController {
 	@RequestMapping(value="register",method = {RequestMethod.GET,RequestMethod.POST})
 	public Object register(HttpServletRequest request,HttpServletResponse response){
 		UserInfoDomain user = new UserInfoDomain();
-		user.setId(1111111L);
+		/*user.setId(1111111L);*/
 		user.setUserAccount(request.getParameter("account"));
 		user.setUserNickname(request.getParameter("nickname"));
 		user.setUserWeixin(request.getParameter("wechat"));
