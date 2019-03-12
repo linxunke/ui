@@ -43,6 +43,9 @@ $(document).ready(function () {
     });
     /*点击保存按钮后提交注册信息*/
     $("#save_btn").click(function () {
+    	var data=document.getElementById("myCan").toDataURL();
+    	var formData=new FormData();
+    	formData.append("head_image",dataURLtoBlob(data));
         var account = $("#account").val();
         var nickname = $("#nickname").val();
         var wechat = $("#wechat").val();
@@ -52,14 +55,15 @@ $(document).ready(function () {
             wechat != "" && password != ""){
             /*异步传输注册的信息*/
             $.ajax({
-                url:'register',
+                url:'test2/register',
                 data:{
+                	head_image:format,
                     account:account,
                     nickname:nickname,
                     wechat:wechat,
                     password:md5_password
                 },
-                type:post,
+                type:'post',
                 success:function () {
                     //do something....
                 },
