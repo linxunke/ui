@@ -8,6 +8,7 @@ import com.ztzh.ui.dao.UserInfoDomainMapper;
 import com.ztzh.ui.po.UserInfoDomain;
 import com.ztzh.ui.service.UserService;
 import com.ztzh.ui.utils.GetSYSTime;
+import com.ztzh.ui.utils.MD5Util;
 import com.ztzh.ui.utils.VerifyLengthUtil;
 
 @Service
@@ -39,6 +40,11 @@ public class UserServiceImpl implements UserService{
 			return 0;
 		}
 		
+	}
+	@Override
+	public String encrypt(String password) {
+		String result = MD5Util.encode2hex(password);
+		return result;
 	}
 	
 }
