@@ -86,6 +86,7 @@ $(document).ready(function () {
     	var context = canvas.getContext('2d'); 
     	var strDataURI=canvas.toDataURL("image/jpg");     
     	$("#head_img").attr("src",strDataURI);
+    	$("#head_img").css("display","block");
     	$("#head_img").css("height","64px");
     	$("#head_img").css("width","64px");
     	$("#head_img").css("border-radius","64px");
