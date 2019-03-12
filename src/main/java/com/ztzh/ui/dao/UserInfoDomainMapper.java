@@ -14,4 +14,6 @@ public interface UserInfoDomainMapper {
     int updateByPrimaryKeySelective(UserInfoDomain record);
 
     int updateByPrimaryKey(UserInfoDomain record);
+    
+    String accountValidate(String account);
 }

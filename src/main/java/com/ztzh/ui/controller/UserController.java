@@ -24,7 +24,7 @@ public class UserController {
 	
 	@RequestMapping(value = "upload", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
 	public String upload() {
-		return "/usertest";
+		return "/register";
 	}
 	
 	@RequestMapping(value="register",method = {RequestMethod.GET,RequestMethod.POST})
@@ -32,10 +32,10 @@ public class UserController {
 		UserInfoDomain user = new UserInfoDomain();
 		user.setId(1111111L);
 		user.setUserAccount(request.getParameter("account"));
-		user.setUserNickname(request.getParameter("nike_name"));
-		user.setUserWeixin(request.getParameter("wei_xin"));
+		user.setUserNickname(request.getParameter("nickname"));
+		user.setUserWeixin(request.getParameter("wechat"));
 		//处理密码加密
-		String password = userService.encrypt(request.getParameter("password"));
+		String password = userService.encrypt(request.getParameter("md5_password"));
 		user.setUserPassword(password);
 		
 		user.setUserPhotoUrl("");
@@ -44,9 +44,9 @@ public class UserController {
 		if(result == 0){
 			//跳转页面
 			System.out.println("成功创建用户");
-			return 0;
+			return "Login";
 		}else{
-			return result;
+			return "Success";
 		}
 	}
 }

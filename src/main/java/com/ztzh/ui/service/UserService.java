@@ -6,4 +6,5 @@ public interface UserService {
 
 	public int register(UserInfoDomain user);
 	public String encrypt(String password);
+	public String accountValidate(String account);
 }
