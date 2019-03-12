@@ -17,4 +17,9 @@ public class Test2Controller {
 		return "/register";
 	}
 	
+	@RequestMapping(value="register")
+	public String hello(HttpServletRequest request, HttpServletResponse response){
+		return "/cutpic";
+	}
+	
 }

@@ -44,8 +44,8 @@ $(document).ready(function () {
     /*点击保存按钮后提交注册信息*/
     $("#save_btn").click(function () {
     	var data=document.getElementById("myCan").toDataURL();
-    	var formData=new FormData();
-    	formData.append("head_image",dataURLtoBlob(data));
+        var formData=new FormData();
+        formData.append("headImg",dataURLtoBlob(data));
         var account = $("#account").val();
         var nickname = $("#nickname").val();
         var wechat = $("#wechat").val();
@@ -55,15 +55,17 @@ $(document).ready(function () {
             wechat != "" && password != ""){
             /*异步传输注册的信息*/
             $.ajax({
-                url:'test2/register',
+                url:'register',
                 data:{
-                	head_image:format,
+                	"formData":formData,
                     account:account,
                     nickname:nickname,
                     wechat:wechat,
                     password:md5_password
                 },
                 type:'post',
+                processData: false,   // jQuery不要去处理发送的数据
+                contentType: false,   // jQuery不要去设置Content-Type请求头
                 success:function () {
                     //do something....
                 },
@@ -100,6 +102,8 @@ $(document).ready(function () {
         openBrowse();
     });
 });
+
+
 //定义一些使用的变量
 var     jcrop_api,//jcrop对象
         boundx,//图片实际显示宽度
@@ -115,8 +119,6 @@ var     jcrop_api,//jcrop对象
 
         xsize = $pcnt.width(),
         ysize = $pcnt.height();
-
-
 
 //1、打开浏览器
 function openBrowse(){
@@ -280,7 +282,7 @@ function initCanvas(){
     }
     ctx.drawImage(img,0,0, realWidth, realHeight, 0,0,  dWidth, dHeight);
 }
-
+/*
 //文件上传
 function uploadFile(){
     //获取裁剪完后的base64图片url,转换为blob
@@ -312,7 +314,7 @@ function uploadFile(){
         }
     };
 }
-
+*/
 //把base64位的toDataURL图片转换成blob
 function dataURLtoBlob(dataurl) {  
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],  
