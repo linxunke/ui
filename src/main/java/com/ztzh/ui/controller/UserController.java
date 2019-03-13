@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ztzh.ui.bo.RegisterResultBo;
+import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.UserInfoDomain;
 import com.ztzh.ui.service.UserService;
 import com.ztzh.ui.utils.FileUpload;
@@ -52,20 +54,24 @@ public class UserController {
 		}
 		photoUrl.append("/"+fileName);		
 		user.setUserPhotoUrl(photoUrl.toString());
-		int result = userService.register(user);
-		String userId = userService.getUserIdByAccount(account);
-		user.setId(new Long(userId));
+		RegisterResultBo result = userService.register(user);
 		ResponseVo responseVo = new ResponseVo();
-		if(result == 1){
+		if(result.getCode() == UserConstants.CHECK_DATA_LENGTH_TRUE){
 			//跳转页面
 			logger.info("成功创建用户");
 			FileUpload.base64ToFile(base64, photoAddress, fileName);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setUserId(result.getUserId());
 			responseVo.setObject(user);
 			return responseVo.toString();
 		}else{
 			return "/false";
 		}
+	}
+	
+	@RequestMapping(value="checkuseraccount",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
+	public boolean checkUserAccount(@RequestParam(value="account",required=true) String account){
+		return userService.checkUserAccountIsValue(account);
 	}
 
 }
