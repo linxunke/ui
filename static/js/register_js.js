@@ -1,11 +1,23 @@
 $(document).ready(function () {
     /*检查手机号是否符合规范*/
     $("#account").blur(function () {
-        var phone = $("#account").val();
+        var account = $("#account").val();
         var format = /^1\d{10}$/;
-        if(phone.match(format)){
-            $("#phone_prompt").css("color","green");
-            $("#phone_prompt").html("√  手机号码格式正确");
+        if(account.match(format)){
+        	$.ajax({
+        		url:'/user/*******',
+                data:{
+                    account:account
+                },
+                dataType:'text',
+                type:'post',
+               success:function (data) {
+                },
+                error:function () {
+                }
+        	});
+            /*$("#phone_prompt").css("color","green");
+            $("#phone_prompt").html("√  手机号码格式正确");*/
         }
         else{
             $("#phone_prompt").css("color","red");
