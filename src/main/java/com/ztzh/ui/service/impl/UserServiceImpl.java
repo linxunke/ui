@@ -2,7 +2,9 @@ package com.ztzh.ui.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ztzh.ui.bo.RegisterResultBo;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.dao.UserInfoDomainMapper;
 import com.ztzh.ui.po.UserInfoDomain;
@@ -16,31 +18,37 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	UserInfoDomainMapper userInfoDomainMapper;
+	
 	@Override
-	public int register(UserInfoDomain user) {
-		// TODO Auto-generated method stub
+	@Transactional
+	public RegisterResultBo register(UserInfoDomain user) {
+		RegisterResultBo registerResBo = new RegisterResultBo();
 		int accountResult = VerifyLengthUtil.objectLengthShortThan20(user.getUserAccount());
 		int nicknameResult = VerifyLengthUtil.objectLengthShortThan20(user.getUserNickname());
 		int weiXinResult = VerifyLengthUtil.objectLengthShortThan20(user.getUserWeixin());
 		int passwordResult = VerifyLengthUtil.objectLengthForPassword(user.getUserPassword());
-		if(accountResult == 1){
-			//检验不过关
-			return 10;
-		}else if(nicknameResult == 1){
-			//检验不过关
-			return 10;
-		}else if(weiXinResult == 1){
-			//检验不过关
-			return 10;
-		}else if(passwordResult == 1){
-			//检验不过关
-			return 10;
+		if(accountResult == UserConstants.CHECK_DATA_LENGTH_FALSE){
+			registerResBo.setCode(UserConstants.CHECK_DATA_LENGTH_FALSE);
+			return registerResBo;
+		}else if(nicknameResult == UserConstants.CHECK_DATA_LENGTH_FALSE){
+			registerResBo.setCode(UserConstants.CHECK_DATA_LENGTH_FALSE);
+			return registerResBo;
+		}else if(weiXinResult == UserConstants.CHECK_DATA_LENGTH_FALSE){
+			registerResBo.setCode(UserConstants.CHECK_DATA_LENGTH_FALSE);
+			return registerResBo;
+		}else if(passwordResult == UserConstants.CHECK_DATA_LENGTH_FALSE){
+			registerResBo.setCode(UserConstants.CHECK_DATA_LENGTH_FALSE);
+			return registerResBo;
 		}else{
 			user.setAuthority(new Integer(UserConstants.USER_AUTHORITY_NORMAL));
 			user.setIsValid(new Integer(UserConstants.USER_IS_VALID_YES));
 			user.setRegisterTime(GetSYSTime.systemTime());
 			//执行dao层方法
-			return userInfoDomainMapper.insert(user);
+			userInfoDomainMapper.insert(user);
+			String userId = userInfoDomainMapper.getUserIdByAccount(user.getUserAccount());
+			registerResBo.setCode(UserConstants.CHECK_DATA_LENGTH_TRUE);
+			registerResBo.setUserId(userId);
+			return registerResBo;
 		}
 		
 	}
@@ -52,7 +60,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public String accountValidate(String account) {
-		// TODO Auto-generated method stub
 		
 		return null;
 	}
@@ -60,6 +67,16 @@ public class UserServiceImpl implements UserService{
 	public String getUserIdByAccount(String account) {
 		
 		return userInfoDomainMapper.getUserIdByAccount(account);
+	}
+	@Override
+	public boolean checkUserAccountIsValue(String account) {
+		String userId = userInfoDomainMapper.getUserIdByAccount(account);
+		if(null==userId){
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
 	
 }

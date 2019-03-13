@@ -14,6 +14,10 @@ public class ResponseVo {
 	 * 失败code
 	 */
 	public static String STATUS_FAILED = "500";
+	
+	public static String STATUS_VALUE_FALSE = "01";
+	public static String STATUS_ACCOUNT_OR_PASSWORD_FALSE = "02";
+	
 	public String status;
 	public String message;
 	public String userId;
