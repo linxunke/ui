@@ -19,25 +19,28 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int register(UserInfoDomain user) {
 		// TODO Auto-generated method stub
-		int accountResult = VerifyLengthUtil.objectLength(user.getUserAccount());
-		int nicknameResult = VerifyLengthUtil.objectLength(user.getUserNickname());
-		int weiXinResult = VerifyLengthUtil.objectLength(user.getUserWeixin());
-		int passwordResult = VerifyLengthUtil.objectLength(user.getUserPassword());
+		int accountResult = VerifyLengthUtil.objectLengthShortThan20(user.getUserAccount());
+		int nicknameResult = VerifyLengthUtil.objectLengthShortThan20(user.getUserNickname());
+		int weiXinResult = VerifyLengthUtil.objectLengthShortThan20(user.getUserWeixin());
+		int passwordResult = VerifyLengthUtil.objectLengthForPassword(user.getUserPassword());
 		if(accountResult == 1){
-			return 1;
+			//检验不过关
+			return 10;
 		}else if(nicknameResult == 1){
-			return 2;
+			//检验不过关
+			return 10;
 		}else if(weiXinResult == 1){
-			return 3;
+			//检验不过关
+			return 10;
 		}else if(passwordResult == 1){
-			return 4;
+			//检验不过关
+			return 10;
 		}else{
 			user.setAuthority(new Integer(UserConstants.USER_AUTHORITY_NORMAL));
 			user.setIsValid(new Integer(UserConstants.USER_IS_VALID_YES));
 			user.setRegisterTime(GetSYSTime.systemTime());
 			//执行dao层方法
-			userInfoDomainMapper.insert(user);
-			return 0;
+			return userInfoDomainMapper.insert(user);
 		}
 		
 	}
@@ -52,6 +55,11 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		
 		return null;
+	}
+	@Override
+	public String getUserIdByAccount(String account) {
+		
+		return userInfoDomainMapper.getUserIdByAccount(account);
 	}
 	
 }

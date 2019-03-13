@@ -43,9 +43,7 @@ $(document).ready(function () {
     });
     /*点击保存按钮后提交注册信息*/
     $("#save_btn").click(function () {
-    	var data=document.getElementById("myCan").toDataURL();
-    	var formData=new FormData();
-    	formData.append("head_image",dataURLtoBlob(data));
+    	var canvasData=document.getElementById("myCan").toDataURL();     
         var account = $("#account").val();
         var nickname = $("#nickname").val();
         var wechat = $("#wechat").val();
@@ -55,20 +53,19 @@ $(document).ready(function () {
             wechat != "" && password != ""){
             /*异步传输注册的信息*/
             $.ajax({
-                url:'test2/register',
+                url:'/user/register',
                 data:{
-                	head_image:formData,
+                	file:canvasData,
                     account:account,
                     nickname:nickname,
                     wechat:wechat,
                     password:md5_password
                 },
+                dataType:'text',
                 type:'post',
-                success:function () {
-                    //do something....
+               success:function (data) {
                 },
                 error:function () {
-                    //do something....
                 }
             });
         }
@@ -100,6 +97,8 @@ $(document).ready(function () {
         openBrowse();
     });
 });
+
+
 //定义一些使用的变量
 var     jcrop_api,//jcrop对象
         boundx,//图片实际显示宽度
@@ -115,8 +114,6 @@ var     jcrop_api,//jcrop对象
 
         xsize = $pcnt.width(),
         ysize = $pcnt.height();
-
-
 
 //1、打开浏览器
 function openBrowse(){
@@ -280,7 +277,7 @@ function initCanvas(){
     }
     ctx.drawImage(img,0,0, realWidth, realHeight, 0,0,  dWidth, dHeight);
 }
-
+/*
 //文件上传
 function uploadFile(){
     //获取裁剪完后的base64图片url,转换为blob
@@ -312,13 +309,25 @@ function uploadFile(){
         }
     };
 }
-
+*/
 //把base64位的toDataURL图片转换成blob
 function dataURLtoBlob(dataurl) {  
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],  
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);  
+    /*var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],  
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n); 
     while (n--) {  
         u8arr[n] = bstr.charCodeAt(n);  
     }  
-    return new Blob([u8arr], { type: mime });  
+    return new Blob([u8arr], { type: mime });*/ 
+	var arr = dataurl.split(',');
+    var mime = arr[0].match(/:(.*?);/)[1];// 结果：   image/png
+    console.log("arr[0]====" + JSON.stringify(arr[0]));//   "data:image/png;base64"
+    console.log("arr[0].match(/:(.*?);/)====" + arr[0].match(/:(.*?);/));// :image/png;,image/png
+    console.log("arr[0].match(/:(.*?);/)[1]====" + arr[0].match(/:(.*?);/)[1]);//   image/png
+    var bstr = atob(arr[1].replace(/\s/g, ''));
+    var n = bstr.length;
+    var u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type: mime});//值，类型
 } 

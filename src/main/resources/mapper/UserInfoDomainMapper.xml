@@ -150,4 +150,10 @@
       is_valid = #{isValid,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+   <select id="getUserIdByAccount" parameterType="java.lang.String" resultType="java.lang.String">
+    select 
+    id AS id
+    from user_info
+    where user_account = #{account}
+  </select>
 </mapper>
