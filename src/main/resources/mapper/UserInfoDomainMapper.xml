@@ -156,4 +156,10 @@
     from user_info
     where user_account = #{account}
   </select>
+  <select id="getUserInfoByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select
+   <include refid="Base_Column_List" />
+   from user_info
+   where user_account = #{account,jdbcType=VARCHAR}
+  </select>
 </mapper>

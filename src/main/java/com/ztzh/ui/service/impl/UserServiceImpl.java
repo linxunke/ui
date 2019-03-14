@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ztzh.ui.bo.LoginResultBo;
 import com.ztzh.ui.bo.RegisterResultBo;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.dao.UserInfoDomainMapper;
@@ -12,6 +13,7 @@ import com.ztzh.ui.service.UserService;
 import com.ztzh.ui.utils.GetSYSTime;
 import com.ztzh.ui.utils.MD5Util;
 import com.ztzh.ui.utils.VerifyLengthUtil;
+import com.ztzh.ui.vo.ResponseVo;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -77,6 +79,41 @@ public class UserServiceImpl implements UserService{
 			return false;
 		}
 		
+	}
+	
+	@Override
+	public LoginResultBo login(String account, String password) {
+		UserInfoDomain userInfoDomain = userInfoDomainMapper.getUserInfoByAccount(account);
+		boolean isValidResult;
+		Integer isValid = userInfoDomain.getIsValid();
+		if(UserConstants.USER_IS_VALID_YES.equals(isValid.toString())){
+			isValidResult= true; //用户有效
+		} else{
+			isValidResult= false; //用户无效
+		}
+		boolean isAccountPasswordMatchResult;
+		String correctPassword = userInfoDomain.getUserPassword();
+		if(correctPassword.equals(password)){
+			isAccountPasswordMatchResult= true;  //账号密码匹配
+		}
+		else{
+			isAccountPasswordMatchResult= false;  //账号密码不匹配
+		}
+		LoginResultBo loginResultBo = new LoginResultBo();
+		if(isAccountPasswordMatchResult){
+			if(isValidResult){
+				loginResultBo.setStatus(ResponseVo.STATUS_SUCCESS);
+			}
+			else{
+				loginResultBo.setStatus(ResponseVo.STATUS_VALUE_FALSE);
+			}
+		}
+		else{
+			loginResultBo.setStatus(ResponseVo.STATUS_ACCOUNT_OR_PASSWORD_FALSE);
+		}
+		loginResultBo.setId(userInfoDomain.getId().toString());
+		loginResultBo.setUserPhotoUrl(userInfoDomain.getUserPhotoUrl());
+		return loginResultBo;
 	}
 	
 }
