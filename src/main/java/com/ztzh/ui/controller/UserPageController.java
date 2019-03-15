@@ -40,7 +40,10 @@ public class UserPageController {
 	public String upload() {
 		return "/register";
 	}
-	
-	
+	//下面的是测试用，随意更改
+	@RequestMapping(value="head",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
+	public String head(){
+		return "/Login";
+	}
 	
 }
