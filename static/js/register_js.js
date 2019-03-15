@@ -12,15 +12,15 @@ $(document).ready(function () {
                 dataType:'text',
                 type:'post',
                success:function (data) {
-            	   console.log(data);
+            	   console.log("----data:"+data);
             	   if(data=='true'){
-            		   console.log("if");
+            		   console.log("account is available!");
             		   $("#phone_prompt").css("color","green");
                        $("#phone_prompt").html("√  手机号码格式正确");
                        $("#save_btn").attr("disabled",false);
             	   }
             	   else{
-            		   console.log("else");
+            		   console.log("account has been registered!");
             		   $("#phone_prompt").css("color","red");
                        $("#phone_prompt").html("×  手机号码已被注册");
                        $("#save_btn").attr("disabled","disabled");
@@ -88,8 +88,16 @@ $(document).ready(function () {
                 dataType:'text',
                 type:'post',
                success:function (data) {
+            	   var result = JSON.parse(data);
+            	   console.log(result.status);
+            	   if("200" == result.status){
+            		   window.location.href = '/userpage/toLogin';
+            	   } else{
+            		   alert("注册失败！");
+            	   }
                 },
                 error:function () {
+                	console.log("连接失败");
                 }
             });
         }

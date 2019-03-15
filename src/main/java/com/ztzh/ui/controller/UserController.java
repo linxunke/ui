@@ -80,7 +80,7 @@ public class UserController {
 		return userService.checkUserAccountIsValue(account);
 	}
 
-	@RequestMapping(value = "userlogin", method = { RequestMethod.GET,
+	@RequestMapping(value = "login", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public String login(
 			@RequestParam(value = "account", required = true) String account,

@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.minidev.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +34,14 @@ public class UserPageController {
 	@Autowired
 	UserService userService;
 	
-	@RequestMapping(value = "regist", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
-	public String upload() {
+	@RequestMapping(value = "toRegist", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
+	public String toRegist() {
 		return "/register";
 	}
-	
-	
+	//下面的是测试用，随意更改
+	@RequestMapping(value="toLogin",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
+	public String toLogin(){
+		return "/login";
+	}
 	
 }
