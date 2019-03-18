@@ -9,23 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-//@Controller
+@Controller
 @RequestMapping("/test2")
 public class Test2Controller {
-	/*@RequestMapping(value = "upload", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
+	@RequestMapping(value = "upload", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
 	public String upload() {
 		return "/register";
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-	*/
 	@RequestMapping(value="hello")
 	public String hello(){
-		return "cutpic";
+		return "/usertest";
 	}
 	
 	@RequestMapping(value="register")
 	public String hello(HttpServletRequest request, HttpServletResponse response){
 		return "/cutpic";
 	}
+	
+
 }
