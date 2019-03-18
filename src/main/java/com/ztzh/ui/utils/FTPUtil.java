@@ -232,14 +232,21 @@ public class FTPUtil {
 	    // Check the path is exist; exist return true, else false.  
 	    public boolean existDirectory(String path) throws IOException {
 	        boolean flag = false;  
-	        FTPFile[] ftpFileArr = ftpClient.listFiles(path);  
-	        for (FTPFile ftpFile : ftpFileArr) {  
-	            if (ftpFile.isDirectory()  
-	                    && ftpFile.getName().equalsIgnoreCase(path)) {  
-	                flag = true;  
-	                break;  
-	            }  
-	        }  
+	        try {
+	        	connectToServer();
+	        	 FTPFile[] ftpFileArr = ftpClient.listFiles(path);  
+	 	        for (FTPFile ftpFile : ftpFileArr) {  
+	 	            if (ftpFile.isDirectory()  
+	 	                    && ftpFile.getName().equalsIgnoreCase(path)) {  
+	 	                flag = true;  
+	 	                break;  
+	 	            }  
+	 	        }  
+	        }catch (Exception e) {
+	        	closeConnect();
+				e.printStackTrace();
+			}
+	        closeConnect();
 	        return flag;  
 	    } 
 	    /**
@@ -251,10 +258,13 @@ public class FTPUtil {
 	    public boolean createDirectory(String pathName) throws IOException { 
 	    	boolean isSuccess=false;
 	    	try{
+	    		 connectToServer();
 	    		isSuccess=ftpClient.makeDirectory(pathName);
 	    	}catch(Exception e){
 	    		e.printStackTrace();
+	    		ftpClient.disconnect();
 	    	}
+	    	ftpClient.disconnect();
 	        return isSuccess;  
 	    }
 	    /**

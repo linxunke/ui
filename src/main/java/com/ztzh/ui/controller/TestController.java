@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.UserInfoDomain;
 import com.ztzh.ui.service.TestService;
+import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.MD5Util;
 
@@ -34,6 +36,9 @@ public class TestController {
 	
 	@Autowired
 	FTPUtil ftpUtil;
+	
+	@Autowired
+	UploadFileService uploadFileService;
 	
 	
 	@RequestMapping(value="/test")
@@ -50,9 +55,12 @@ public class TestController {
 	
 	@RequestMapping(value="ftptest")
 	public String hello(HttpServletRequest request, HttpServletResponse response) throws FTPConnectionClosedException, IOException, Exception{
-		File file = new File("C:\\Users\\25002\\Desktop\\photo\\12.jpg");
-		InputStream inputStream = new FileInputStream(file);
-		ftpUtil.uploadToFtp(inputStream, "12.jpg", false);
+		/*
+		 * File file = new File("C:\\Users\\25002\\Desktop\\photo\\12.jpg"); InputStream
+		 * inputStream = new FileInputStream(file); ftpUtil.uploadToFtp(inputStream,
+		 * UUID.randomUUID().toString()+".jpg", false);
+		 */
+		uploadFileService.createFTPMaterialDirectoryByAccount("lxk");
 		return "success";
 	}
 

@@ -14,6 +14,7 @@ import com.ztzh.ui.bo.LoginResultBo;
 import com.ztzh.ui.bo.RegisterResultBo;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.UserInfoDomain;
+import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.service.UserService;
 import com.ztzh.ui.utils.FileUpload;
 import com.ztzh.ui.vo.ResponseVo;
@@ -28,6 +29,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	UploadFileService uploadFileService;
 
 	@RequestMapping(value = "register", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
@@ -64,7 +68,19 @@ public class UserController {
 			// 跳转页面
 			logger.info("成功创建用户");
 			FileUpload.base64ToFile(base64, photoAddress, fileName);
-			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			logger.info("开始创建用户的文件夹");
+			boolean isCreatedAllDirectory = false;
+			boolean isCreatedMaterialDirectory = false;
+			boolean isCreatedThumbnailDirectory = false;
+			isCreatedMaterialDirectory = uploadFileService.createFTPMaterialDirectoryByAccount(account);
+			isCreatedThumbnailDirectory = uploadFileService.createFTPThumbnailDirectoryAccount(account);
+			logger.info("创建用户的文件夹结束");
+			isCreatedAllDirectory = isCreatedMaterialDirectory==isCreatedThumbnailDirectory?true:false;
+			if(!isCreatedAllDirectory) {
+				responseVo.setStatus(ResponseVo.FAILED_CREATED_FTP_DIRECTORY);
+			}else {
+				responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			}
 			responseVo.setUserId(result.getUserId());
 			responseVo.setObject(user);
 			return responseVo.toString();
