@@ -18,4 +18,6 @@ public interface UserInfoDomainMapper {
     String accountValidate(String account);
     
     String getUserIdByAccount(String account);
+    
+    UserInfoDomain getUserInfoByAccount(String account);
 }

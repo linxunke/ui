@@ -17,12 +17,12 @@ public class Test2Controller {
 		return "/register";
 	}
 	@RequestMapping(value="hello")
-	public String hello(){
-		return "/usertest";
+	public String hello(HttpServletRequest request, HttpServletResponse response){
+		return "Login";
 	}
 	
 	@RequestMapping(value="register")
-	public String hello(HttpServletRequest request, HttpServletResponse response){
+	public String hello2(HttpServletRequest request, HttpServletResponse response){
 		return "/cutpic";
 	}
 	

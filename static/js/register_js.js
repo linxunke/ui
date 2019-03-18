@@ -1,11 +1,35 @@
 $(document).ready(function () {
     /*检查手机号是否符合规范*/
     $("#account").blur(function () {
-        var phone = $("#account").val();
+        var account = $("#account").val();
         var format = /^1\d{10}$/;
-        if(phone.match(format)){
-            $("#phone_prompt").css("color","green");
-            $("#phone_prompt").html("√  手机号码格式正确");
+        if(account.match(format)){
+        	$.ajax({
+        		url:'/user/checkuseraccount',
+                data:{
+                    account:account
+                },
+                dataType:'text',
+                type:'post',
+               success:function (data) {
+            	   console.log("----data:"+data);
+            	   if(data=='true'){
+            		   console.log("account is available!");
+            		   $("#phone_prompt").css("color","green");
+                       $("#phone_prompt").html("√  手机号码格式正确");
+                       $("#save_btn").attr("disabled",false);
+            	   }
+            	   else{
+            		   console.log("account has been registered!");
+            		   $("#phone_prompt").css("color","red");
+                       $("#phone_prompt").html("×  手机号码已被注册");
+                       $("#save_btn").attr("disabled","disabled");
+            	   }
+                },
+                error:function () {
+                	console.log("1");
+                }
+        	});
         }
         else{
             $("#phone_prompt").css("color","red");
@@ -64,8 +88,16 @@ $(document).ready(function () {
                 dataType:'text',
                 type:'post',
                success:function (data) {
+            	   var result = JSON.parse(data);
+            	   console.log(result.status);
+            	   if("200" == result.status){
+            		   window.location.href = '/userpage/toLogin';
+            	   } else{
+            		   alert("注册失败！");
+            	   }
                 },
                 error:function () {
+                	console.log("连接失败");
                 }
             });
         }
@@ -277,39 +309,6 @@ function initCanvas(){
     }
     ctx.drawImage(img,0,0, realWidth, realHeight, 0,0,  dWidth, dHeight);
 }
-/*
-//文件上传
-function uploadFile(){
-    //获取裁剪完后的base64图片url,转换为blob
-    var data=document.getElementById("myCan").toDataURL();
-    var formData=new FormData();
-    formData.append("imageName",dataURLtoBlob(data));
-    var httprequest= null;
-    if (window.XMLHttpRequest) {
-        httprequest = new XMLHttpRequest();
-    } else {
-        httprequest = new ActiveXObject('MicroSoft.XMLHTTP');
-    }
-    var apiurl= ""; //上传图片的api接口，自行填写
-    httprequest.open('POST',apiurl,true);
-    httprequest.send(formData);
-    httprequest.onreadystatechange= function () {
-        
-        if(httprequest.readyState == 4 ){
-            
-            if(httprequest.status == 200)
-            {
-                var json=JSON.parse(httprequest.responseText);
-                console.log(json);
-                
-            }else
-            {
-                alert('获取数据错误,错误代码：' + httprequest.status + '错误信息：' + httprequest.statusText);
-            }
-        }
-    };
-}
-*/
 //把base64位的toDataURL图片转换成blob
 function dataURLtoBlob(dataurl) {  
     /*var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],  
