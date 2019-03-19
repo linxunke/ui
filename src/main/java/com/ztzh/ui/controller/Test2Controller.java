@@ -12,13 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/test2")
 public class Test2Controller {
-	/*@RequestMapping(value = "upload", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
-	public String upload() {
-		return "/register";
-	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-	*/
+	
 	@RequestMapping(value="hello")
 	public String hello(HttpServletRequest request, HttpServletResponse response){
 		return "Login";
@@ -27,5 +21,9 @@ public class Test2Controller {
 	@RequestMapping(value="register")
 	public String hello2(HttpServletRequest request, HttpServletResponse response){
 		return "/cutpic";
+	}
+	@RequestMapping(value="toMaterialUpload")
+	public String toMaterialUpload(){
+		return "materialUpload";
 	}
 }
