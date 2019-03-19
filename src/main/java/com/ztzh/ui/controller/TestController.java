@@ -25,6 +25,7 @@ import com.ztzh.ui.po.UserInfoDomain;
 import com.ztzh.ui.service.TestService;
 import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.utils.FTPUtil;
+import com.ztzh.ui.utils.ImageUtil;
 import com.ztzh.ui.utils.MD5Util;
 
 @RestController
@@ -55,12 +56,12 @@ public class TestController {
 	
 	@RequestMapping(value="ftptest")
 	public String hello(HttpServletRequest request, HttpServletResponse response) throws FTPConnectionClosedException, IOException, Exception{
-		/*
-		 * File file = new File("C:\\Users\\25002\\Desktop\\photo\\12.jpg"); InputStream
-		 * inputStream = new FileInputStream(file); ftpUtil.uploadToFtp(inputStream,
+		
+		 File file = new File("C:\\Users\\25002\\Desktop\\photo\\20190319102554.png");
+		 /* InputStream inputStream = new FileInputStream(file); ftpUtil.uploadToFtp(inputStream,
 		 * UUID.randomUUID().toString()+".jpg", false);
 		 */
-		uploadFileService.createFTPMaterialDirectoryByAccount("lxk");
+		ImageUtil.getColorPercentage(file);
 		return "success";
 	}
 
