@@ -1,7 +1,9 @@
 package com.ztzh.ui.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import com.ztzh.ui.utils.FileUpload;
 
 @Service
 public class UploadFileServiceImpl implements UploadFileService{
-	Logger logger = LoggerFactory.getLogger(UploadFileService.class);
+	Logger logger = LoggerFactory.getLogger(UploadFileServiceImpl.class);
 	
 	@Value("${user.photo.address}")
 	private String fileAddress;

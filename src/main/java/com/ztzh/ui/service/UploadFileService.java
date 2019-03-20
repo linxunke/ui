@@ -1,5 +1,7 @@
 package com.ztzh.ui.service;
 
+import java.io.File;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UploadFileService {
@@ -25,5 +27,6 @@ public interface UploadFileService {
 	 * @return
 	 */
 	public boolean createFTPThumbnailDirectoryAccount(String account);
+	
 
 }

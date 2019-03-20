@@ -5,15 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,9 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.UserInfoDomain;
+import com.ztzh.ui.service.ImageConvertService;
 import com.ztzh.ui.service.TestService;
 import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.utils.FTPUtil;
+import com.ztzh.ui.utils.ImageMagickUtil;
 import com.ztzh.ui.utils.ImageUtil;
 import com.ztzh.ui.utils.MD5Util;
 
@@ -41,6 +47,14 @@ public class TestController {
 	@Autowired
 	UploadFileService uploadFileService;
 	
+	@Autowired
+	ImageMagickUtil imageMagicUtil;
+	
+	@Value("${material.catch.operation.url}")
+	private String catchOperationUrl;
+	
+	@Autowired
+	ImageConvertService imageConvertService;
 	
 	@RequestMapping(value="/test")
 	public String testInsert() {
@@ -56,13 +70,16 @@ public class TestController {
 	
 	@RequestMapping(value="ftptest")
 	public String hello(HttpServletRequest request, HttpServletResponse response) throws FTPConnectionClosedException, IOException, Exception{
-		
-		 File file = new File("C:\\Users\\25002\\Desktop\\photo\\20190319102554.png");
-		 /* InputStream inputStream = new FileInputStream(file); ftpUtil.uploadToFtp(inputStream,
-		 * UUID.randomUUID().toString()+".jpg", false);
-		 */
-		ImageUtil.getColorPercentage(file);
-		return "success";
+		List<String> urls = new ArrayList<String>();
+		urls.add(catchOperationUrl+"红包.ai");
+		urls.add(catchOperationUrl+"薯条1.svg");
+		urls.add(catchOperationUrl+"薯条2.svg");
+		urls.add(catchOperationUrl+"薯条3.svg");
+		urls.add(catchOperationUrl+"薯条4.svg");
+		urls.add(catchOperationUrl+"薯条5.svg");
+		urls.add(catchOperationUrl+"薯条6.svg");
+		String result = imageConvertService.iconsImagesTOPng(urls);
+		return result;
 	}
 
 }

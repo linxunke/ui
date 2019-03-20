@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -88,6 +90,16 @@ public class FileUpload {
     				e.printStackTrace();
     			}
     		}
+    	}
+    }
+    
+    public static void deleteFiles(List<String> filesUrl) {
+    	List<File> files = new ArrayList<File>();
+    	for(String fileUrl:filesUrl) {
+    		files.add(new File(fileUrl));
+    	}
+    	for(File file:files) {
+    		file.delete();
     	}
     }
 
