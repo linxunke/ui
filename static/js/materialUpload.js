@@ -140,6 +140,23 @@ function getFileUrl(sourceId) {
 //选择文件事件
 function changeFile() {
     var url = getFileUrl("file");//根据id获取文件路径
+    var fileObj = document.getElementById("file").files[0];
+    var formdata = new FormData(); // FormData 对象
+    formdata.append("file", fileObj); // 文件对象
+    $.ajax({
+		url:'/uploadMaterial/getMaterialFiles',
+		type:'post',
+		enctype:'multipart/form-data',
+		data:formdata,
+		contentType: false,
+        processData: false,
+		success:function(data){
+			console.log("11");
+		},
+		error:function(){
+			console.log('error happened----');
+		}
+	});
     preImg(url);
     return false;
 }

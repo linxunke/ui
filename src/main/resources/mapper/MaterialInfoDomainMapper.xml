@@ -13,7 +13,7 @@
     <result column="thumbnail_url" jdbcType="VARCHAR" property="thumbnailUrl" />
     <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
     <result column="color_type" jdbcType="INTEGER" property="colorType" />
-    <result column="color_percentage" jdbcType="VARCHAR" property="colorPercentage" />
+    <result column="color_percentage" jdbcType="REAL" property="colorPercentage" />
     <result column="is_valid" jdbcType="INTEGER" property="isValid" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -40,7 +40,7 @@
     values (#{id,jdbcType=BIGINT}, #{createUserId,jdbcType=BIGINT}, #{canvasInfoIdPrivate,jdbcType=BIGINT}, 
       #{canvasInfoIdPublic,jdbcType=BIGINT}, #{materialName,jdbcType=VARCHAR}, #{materialDescription,jdbcType=VARCHAR}, 
       #{materialType,jdbcType=VARCHAR}, #{materialUrl,jdbcType=VARCHAR}, #{thumbnailUrl,jdbcType=VARCHAR}, 
-      #{uploadTime,jdbcType=TIMESTAMP}, #{colorType,jdbcType=INTEGER}, #{colorPercentage,jdbcType=VARCHAR}, 
+      #{uploadTime,jdbcType=TIMESTAMP}, #{colorType,jdbcType=INTEGER}, #{colorPercentage,jdbcType=REAL}, 
       #{isValid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
@@ -121,7 +121,7 @@
         #{colorType,jdbcType=INTEGER},
       </if>
       <if test="colorPercentage != null">
-        #{colorPercentage,jdbcType=VARCHAR},
+        #{colorPercentage,jdbcType=REAL},
       </if>
       <if test="isValid != null">
         #{isValid,jdbcType=INTEGER},
@@ -162,7 +162,7 @@
         color_type = #{colorType,jdbcType=INTEGER},
       </if>
       <if test="colorPercentage != null">
-        color_percentage = #{colorPercentage,jdbcType=VARCHAR},
+        color_percentage = #{colorPercentage,jdbcType=REAL},
       </if>
       <if test="isValid != null">
         is_valid = #{isValid,jdbcType=INTEGER},
@@ -182,7 +182,7 @@
       thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
       upload_time = #{uploadTime,jdbcType=TIMESTAMP},
       color_type = #{colorType,jdbcType=INTEGER},
-      color_percentage = #{colorPercentage,jdbcType=VARCHAR},
+      color_percentage = #{colorPercentage,jdbcType=REAL},
       is_valid = #{isValid,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>

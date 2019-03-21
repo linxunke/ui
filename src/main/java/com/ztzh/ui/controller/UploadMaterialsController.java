@@ -4,13 +4,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ztzh.ui.bo.UploadMaterialsBo;
 import com.ztzh.ui.po.MaterialTypeDomain;
 import com.ztzh.ui.service.UploadMaterialsService;
+import com.ztzh.ui.utils.FileUpload;
 import com.ztzh.ui.vo.ResponseVo;
 
 @RestController
@@ -32,5 +40,11 @@ public class UploadMaterialsController {
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 		responseVo.setMessage("请求成功！");
 		return responseVo.toString();
+	}
+	@RequestMapping("/getMaterialFiles")
+	public String getMaterialFiles(@RequestParam(value="file")MultipartFile file){
+		FileUpload.writeUploadFile(file, "D://");
+	 	
+		return "success";
 	}
 }

@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ztzh.ui.service.TestService;
 import com.ztzh.ui.utils.FileUpload;
 
-//@Service
+@Service
 public class TestServiceImpl implements TestService{
 	@Value("${user.photo.address}")
 	private String filepath;
