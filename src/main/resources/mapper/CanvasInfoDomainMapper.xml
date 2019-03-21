@@ -114,4 +114,9 @@
       is_valid = #{isValid,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	select
+  	<include refid="Base_Column_List"></include>
+  	from canvas_info where user_id = #{userId,jdbcType=BIGINT}
+  </select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.ztzh.ui.dao;
 
+import java.util.List;
+
 import com.ztzh.ui.po.MaterialTypeDomain;
 
 public interface MaterialTypeDomainMapper {
@@ -14,4 +16,10 @@ public interface MaterialTypeDomainMapper {
     int updateByPrimaryKeySelective(MaterialTypeDomain record);
 
     int updateByPrimaryKey(MaterialTypeDomain record);
+    
+    List<MaterialTypeDomain> selectType();
+    
+    List<MaterialTypeDomain> selectSegmentation();
+    
+    List<MaterialTypeDomain> selectStyle();
 }
