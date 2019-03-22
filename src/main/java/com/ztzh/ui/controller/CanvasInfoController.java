@@ -24,10 +24,9 @@ public class CanvasInfoController {
 	@RequestMapping(value = "getCanvasByUserId", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public String getCanvasInfo(
-			@RequestParam(value = "userid", required = false) String userid) {
-		logger.info(userid);
+			@RequestParam(value = "userId", required = false) String userId) {
 		List<CanvasInfoDomain> userCanvas = canvasInfoService
-				.selectCanvasByUserId(Long.parseLong(userid));
+				.selectCanvasByUserId(Long.parseLong(userId));
 		ResponseVo responseVo = new ResponseVo();
 		if (userCanvas.size() > 0) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
@@ -38,7 +37,7 @@ public class CanvasInfoController {
 			responseVo.setMessage("获取个人画板信息失败");
 			responseVo.setObject(null);
 		}
-		responseVo.setUserId(userid);
+		responseVo.setUserId(userId);
 		return responseVo.toString();
 	}
 }

@@ -3,7 +3,10 @@ $(document).ready(function(){
 	/*获取分类的类别信息*/
 	$.ajax({
 		url:'/uploadMaterial/getMaterialTypes',
-		type:'get',
+		type:'post',
+		data:{
+			userId: '1'
+		},
 		success:function(data){
 			typeData = JSON.parse(data);
 			console.log(typeData);
@@ -34,7 +37,7 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userid=1',
+		url:'/canvasInfo/getCanvasByUserId?userId=1',
 		type:'get',
 		success:function(data){
 			console.log(data);
@@ -151,7 +154,7 @@ function changeFile() {
 		contentType: false,
         processData: false,
 		success:function(data){
-			console.log("11");
+			console.log(data);
 		},
 		error:function(){
 			console.log('error happened----');

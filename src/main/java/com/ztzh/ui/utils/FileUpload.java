@@ -53,8 +53,8 @@ public class FileUpload {
             IOUtils.closeQuietly(fos);
         }
         logger.info("文件名称:{}",filename);
-        logger.info(filepath+"/" + filename);
-        return filepath+"/" + filename;
+        logger.info(filepath+"\\" + filename);
+        return filepath+"\\" + filename;
     }
     
     public static void base64ToFile(String base64, String realPath, String fileName){
