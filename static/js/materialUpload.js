@@ -106,6 +106,7 @@ function changeSelectText(Obj) {
 //删除类别模块
 function deleteInfoModule(obj){
 	var $module = $(obj);
+	/*删除整个类别模块的内容*/
 	$module.parent().remove();
 }
 
@@ -154,13 +155,14 @@ function changeFile() {
 		contentType: false,
         processData: false,
 		success:function(data){
-			console.log(data);
+			var resultData = JSON.parse(data);
+			console.log(resultData);
+			/*preImg();*/
 		},
 		error:function(){
 			console.log('error happened----');
 		}
 	});
-    preImg(url);
     return false;
 }
 

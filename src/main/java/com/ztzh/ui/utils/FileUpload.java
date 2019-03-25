@@ -102,5 +102,16 @@ public class FileUpload {
     		file.delete();
     	}
     }
+    public static String convertPath(String oldPath){
+    	String newPath="";
+    	for(int i = 0; i <oldPath.length(); i++){
+    		if(oldPath.charAt(i) == '\\'){
+    			newPath += "\\\\";
+    		}else {
+				newPath += oldPath.charAt(i);
+			}
+    	}
+    	return newPath;
+    }
 
 }
