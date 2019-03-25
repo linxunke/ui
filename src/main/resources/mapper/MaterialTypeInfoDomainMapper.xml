@@ -104,4 +104,12 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <delete id="deleteByMaterialInfoIds">
+    delete from material_type_info
+    where materail_info_id in
+      <foreach close=")" collection="materialInfoIds" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+  </delete>
 </mapper>

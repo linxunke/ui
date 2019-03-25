@@ -98,10 +98,14 @@
     		<artifactId>im4java</artifactId>
     		<version>1.4.0</version>
 		</dependency>
+		<!-- base64 -->
+		<dependency>
+    		<groupId>com.github.livesense</groupId>
+    		<artifactId>org.liveSense.fragment.sun.misc</artifactId>
+    		<version>1.0.5</version>
+		</dependency>
 	</dependencies>
 	
-	
-
 	<build>
 		<plugins>
 			<plugin>

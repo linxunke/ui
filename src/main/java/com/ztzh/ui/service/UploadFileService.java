@@ -28,5 +28,12 @@ public interface UploadFileService {
 	 */
 	public boolean createFTPThumbnailDirectoryAccount(String account);
 	
+	/**
+	 * 根据账号创建PNG图文档
+	 * @param account
+	 * @return
+	 */
+	public boolean createFTPPNGDirectoryAccount(String account);
+	
 
 }

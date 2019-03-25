@@ -1,13 +1,18 @@
 package com.ztzh.ui.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ztzh.ui.bo.LoginResultBo;
 import com.ztzh.ui.bo.RegisterResultBo;
+import com.ztzh.ui.constants.CanvasInfoConstants;
 import com.ztzh.ui.constants.UserConstants;
+import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.UserInfoDomainMapper;
+import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.UserInfoDomain;
 import com.ztzh.ui.service.UserService;
 import com.ztzh.ui.utils.GetSYSTime;
@@ -17,9 +22,13 @@ import com.ztzh.ui.vo.ResponseVo;
 
 @Service
 public class UserServiceImpl implements UserService {
+	Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	UserInfoDomainMapper userInfoDomainMapper;
+	
+	@Autowired
+	CanvasInfoDomainMapper canvasInfoDomainMapper;
 
 	@Override
 	@Transactional
@@ -55,6 +64,7 @@ public class UserServiceImpl implements UserService {
 					.getUserAccount());
 			registerResBo.setCode(UserConstants.CHECK_DATA_LENGTH_TRUE);
 			registerResBo.setUserId(userId);
+			insertDefaltCanvas(Long.parseLong(userId));
 			return registerResBo;
 		}
 
@@ -124,6 +134,18 @@ public class UserServiceImpl implements UserService {
 			loginResultBo.setStatus(ResponseVo.STATUS_ACCOUNT_OR_PASSWORD_FALSE);
 		}
 		return loginResultBo;
+	}
+	
+	private int insertDefaltCanvas(long userId) {
+		logger.info("开始注册未分类画板");
+		CanvasInfoDomain canvasInfoDomain = new CanvasInfoDomain();
+		canvasInfoDomain.setCanvasName(CanvasInfoConstants.CANVAS_DEFALT_NAME);
+		canvasInfoDomain.setCanvasType(CanvasInfoConstants.CANVAS_TYPE_PRIVATE);
+		canvasInfoDomain.setCreateTime(GetSYSTime.systemTime());
+		canvasInfoDomain.setIsValid(CanvasInfoConstants.CANVAS_IS_VALID);
+		canvasInfoDomain.setUserId(userId);
+		int result = canvasInfoDomainMapper.insert(canvasInfoDomain);
+		return result;
 	}
 
 }

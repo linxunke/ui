@@ -11,6 +11,7 @@
     <result column="material_type" jdbcType="VARCHAR" property="materialType" />
     <result column="material_url" jdbcType="VARCHAR" property="materialUrl" />
     <result column="thumbnail_url" jdbcType="VARCHAR" property="thumbnailUrl" />
+    <result column="png_url" jdbcType="VARCHAR" property="pngUrl" />
     <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
     <result column="color_type" jdbcType="INTEGER" property="colorType" />
     <result column="color_percentage" jdbcType="REAL" property="colorPercentage" />
@@ -18,8 +19,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, create_user_id, canvas_info_id_private, canvas_info_id_public, material_name, 
-    material_description, material_type, material_url, thumbnail_url, upload_time, color_type, 
-    color_percentage, is_valid
+    material_description, material_type, material_url, thumbnail_url, png_url, upload_time, 
+    color_type, color_percentage, is_valid
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -35,13 +36,13 @@
     insert into material_info (id, create_user_id, canvas_info_id_private, 
       canvas_info_id_public, material_name, material_description, 
       material_type, material_url, thumbnail_url, 
-      upload_time, color_type, color_percentage, 
-      is_valid)
+      png_url, upload_time, color_type, 
+      color_percentage, is_valid)
     values (#{id,jdbcType=BIGINT}, #{createUserId,jdbcType=BIGINT}, #{canvasInfoIdPrivate,jdbcType=BIGINT}, 
       #{canvasInfoIdPublic,jdbcType=BIGINT}, #{materialName,jdbcType=VARCHAR}, #{materialDescription,jdbcType=VARCHAR}, 
       #{materialType,jdbcType=VARCHAR}, #{materialUrl,jdbcType=VARCHAR}, #{thumbnailUrl,jdbcType=VARCHAR}, 
-      #{uploadTime,jdbcType=TIMESTAMP}, #{colorType,jdbcType=INTEGER}, #{colorPercentage,jdbcType=REAL}, 
-      #{isValid,jdbcType=INTEGER})
+      #{pngUrl,jdbcType=VARCHAR}, #{uploadTime,jdbcType=TIMESTAMP}, #{colorType,jdbcType=INTEGER}, 
+      #{colorPercentage,jdbcType=REAL}, #{isValid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
     insert into material_info
@@ -72,6 +73,9 @@
       </if>
       <if test="thumbnailUrl != null">
         thumbnail_url,
+      </if>
+      <if test="pngUrl != null">
+        png_url,
       </if>
       <if test="uploadTime != null">
         upload_time,
@@ -114,6 +118,9 @@
       <if test="thumbnailUrl != null">
         #{thumbnailUrl,jdbcType=VARCHAR},
       </if>
+      <if test="pngUrl != null">
+        #{pngUrl,jdbcType=VARCHAR},
+      </if>
       <if test="uploadTime != null">
         #{uploadTime,jdbcType=TIMESTAMP},
       </if>
@@ -155,6 +162,9 @@
       <if test="thumbnailUrl != null">
         thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
       </if>
+      <if test="pngUrl != null">
+        png_url = #{pngUrl,jdbcType=VARCHAR},
+      </if>
       <if test="uploadTime != null">
         upload_time = #{uploadTime,jdbcType=TIMESTAMP},
       </if>
@@ -180,10 +190,24 @@
       material_type = #{materialType,jdbcType=VARCHAR},
       material_url = #{materialUrl,jdbcType=VARCHAR},
       thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+      png_url = #{pngUrl,jdbcType=VARCHAR},
       upload_time = #{uploadTime,jdbcType=TIMESTAMP},
       color_type = #{colorType,jdbcType=INTEGER},
       color_percentage = #{colorPercentage,jdbcType=REAL},
       is_valid = #{isValid,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+   <select id="selectByCanvasId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from material_info
+    where canvas_info_id_private = #{canvasId,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByCanvasId" parameterType="java.lang.Long">
+    delete from material_info
+    where create_user_id = #{userId,jdbcType=BIGINT}
+    AND canvas_info_id_private = #{canvasId,jdbcType=BIGINT}
+  </delete>
 </mapper>

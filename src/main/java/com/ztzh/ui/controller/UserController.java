@@ -72,10 +72,12 @@ public class UserController {
 			boolean isCreatedAllDirectory = false;
 			boolean isCreatedMaterialDirectory = false;
 			boolean isCreatedThumbnailDirectory = false;
+			boolean isCreatedPNGDirectory = false;
 			isCreatedMaterialDirectory = uploadFileService.createFTPMaterialDirectoryByAccount(account);
 			isCreatedThumbnailDirectory = uploadFileService.createFTPThumbnailDirectoryAccount(account);
+			isCreatedPNGDirectory = uploadFileService.createFTPPNGDirectoryAccount(account);
 			logger.info("创建用户的文件夹结束");
-			isCreatedAllDirectory = isCreatedMaterialDirectory==isCreatedThumbnailDirectory?true:false;
+			isCreatedAllDirectory = isCreatedPNGDirectory==(isCreatedMaterialDirectory==isCreatedThumbnailDirectory?true:false)?true:false;
 			if(!isCreatedAllDirectory) {
 				responseVo.setStatus(ResponseVo.FAILED_CREATED_FTP_DIRECTORY);
 			}else {
