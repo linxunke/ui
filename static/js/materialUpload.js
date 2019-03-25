@@ -157,7 +157,9 @@ function changeFile() {
 		success:function(data){
 			var resultData = JSON.parse(data);
 			console.log(resultData);
-			/*preImg();*/
+			/*拼接图片的地址*/
+			var realUrl = window.location.protocol + "//" + window.location.host + "/images/" + resultData.object;
+			preImg(realUrl);
 		},
 		error:function(){
 			console.log('error happened----');

@@ -42,6 +42,15 @@ public class UploadMaterialsController {
 	@Autowired
 	ImageMagickUtil imageMagickUtil;
 	
+	@Value("${material.catch.operation.url}")
+	private String catchOperationUrl;
+	
+	@Value("${material.catch.png.url}")
+	private String catchPngUrl;
+	
+	@Value("${material.catch.resource.url}")
+	private String catchResourceUrl;
+	
 	/*获取素材分类信息*/
 	@RequestMapping("/getMaterialTypes")
 	public String getMaterialTypes(@RequestParam(value="userId" , required=false) String userId){
@@ -62,18 +71,18 @@ public class UploadMaterialsController {
 	@RequestMapping(value="/getMaterialFiles",method= {RequestMethod.POST,RequestMethod.GET})
 	public String getMaterialFiles(@RequestParam(value="file")MultipartFile file ,
 			@RequestParam(value="userId" , required=false) String userId){
-		String resource = FileUpload.writeUploadFile(file, "D:\\catch\\resourceFile");
+		String resource = FileUpload.writeUploadFile(file, catchResourceUrl);
 		/*获取缓存的源文件的文件名*/
 		String[] str1 = resource.split("\\\\");
-		String newPath = "D:\\catch\\png\\" + str1[str1.length-1].split("\\.")[0] + ".png";
+		String newPath = catchPngUrl + str1[str1.length-1].split("\\.")[0] + ".png";
 		String[] imagePath = {resource};
 		ResponseVo responseVo = new ResponseVo();
 		try {
 			imageMagickUtil.convertType(imagePath, newPath);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("后台转换文件成功");
-			
-			/*responseVo.setObject();*/
+			File f = new File(newPath);
+			responseVo.setObject(f.getName());
 		} catch (IOException | InterruptedException | IM4JavaException e) {
 			e.printStackTrace();
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
