@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>作品上传</title>
+<link rel="stylesheet" th:href="@{/css/jquery.Jcrop.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/nav.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{/css/materialUpload.css}"
+	type="text/css" />
+</head>
+<body>
+	<div class="nav">
+		<div class="nav_list logo">
+			<img src="../img/logo.png">
+		</div>
+		<div class="nav_list home">
+			<a href="#">首页</a>
+		</div>
+		<div class="nav_list material_library">
+			<a href="#">素材库</a>
+		</div>
+		<div class="nav_list work_management">
+			<a href="#">作品管理</a>
+		</div>
+		<div class="nav_list search_box">
+			<img src="../img/搜图.png" class="search_map" alt="">
+			<input type="text" value="春节" class="search_content" />
+			<img src="../img/搜索.png" alt="" class="search_btn">
+		</div>
+		<div class="nav_list update">
+			<img src="../img/上传.png">
+		</div>
+		<div class="nav_list message">
+			<img src="../img/消息.png">
+		</div>
+		<div class="nav_list need_sign_in">
+			<img src="../img/未登录.png">
+		</div>
+	</div>
+	<form enctype="multipart/form-data">
+	<div class="material_body">
+		<div class="image_content">
+			<div id="material_source">
+				<img src="../img/缩略图.png" id="target"/>
+			</div>
+			<div id="canvas_preview">
+				<canvas id="myCan" width="200" height="200"></canvas>
+			</div>
+			<div class="body_content" id="preview-pane" style="display:none">
+					<div class="preview-container">
+						<img src="" class="jcrop-preview" id="Preview" />
+					</div>
+				</div>
+		</div>
+		<div class="image_info">
+			<div class="info_list">
+				<div class="list_title">名称</div>
+				<div class="list_content">
+					<input type="text" id="material_title_content" placeholder=" 请输入素材名称"/>
+				</div>
+			</div>
+			
+			
+			<div class="info_list material_type_module">
+			  <div class="material_total_info">
+				<div class="material_type_info">
+					<div class="type_info_title">类型</div>
+					<div class="type_info_content">
+						<select class="material_type_select material_type_text" onchange="changeSelectText(this)">
+						</select>
+					</div>
+				</div>
+				<div class="material_type_info">
+					<div class="type_info_title">细分</div>
+					<div class="type_info_content">
+						<select class="material_type_select material_segmentation_text">
+						</select>
+					</div>
+				</div>
+				<div class="material_type_info">
+					<div class="type_info_title">风格</div>
+					<div class="type_info_content">
+						<select class="material_type_select material_style_text">
+						</select>
+					</div>
+				</div>
+			  </div>
+			  <input type="button" class="type_info_manage" id="add_type_info_div" value="+"/>
+			</div>
+			<div style="clear: both;"></div>
+			<div class="info_list">
+				<div class="list_title">标签</div>
+				<div class="list_content">
+					<input type="text" id="material_label_content" placeholder=" 输入标签，多个标签以空格分隔"/>
+				</div>
+			</div>
+			<div class="info_list">
+				<div class="list_title">个人画板</div>
+				<div class="list_content">
+					<select id="personal_sketchpad">
+					</select>
+				</div>
+			</div>
+			<div class="info_list">
+				<div class="list_title">选择文件</div>
+				<div class="list_content">
+					<a href="" class="a-upload">
+						<input type="file" id="file" onchange="changeFile()"/>请选择要上传的文件
+					</a>
+				</div>
+			</div>
+			<div class="info_list">
+				<div class="list_title"></div>
+				<div class="list_content">
+					<button id="upload_material">上传</button>
+				</div>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	</form>
+	<div class="material_footer">
+		<div class="foot_head_list">
+			<div class="foot_title foot_title_1">图标制作声明</div>
+			<div class="foot_title">
+				<img src="../img/ai图标.png">
+			</div>
+			<div class="foot_title"><a href="#" id="downloadModels">下载矢量图标设计模板（插画画布尺寸1024x1024像素，其它项目、运营根据具体情况尺寸自定义）</a></div>
+		</div>
+		<div class="foot_list">
+			<div class="foot_list_contents">
+				<div class="foot_list_content">
+					<img class="foot_content_img" src="../img/闭合.png">
+				</div>
+				<div class="foot_list_content">
+					<div class="description_title">闭合</div>
+					<div class="description_content">图形需要封闭，不能有出现未闭合图形</div>
+				</div>
+			</div>
+		</div>
+		<div class="foot_list">
+			<div class="foot_list_contents">
+				<div class="foot_list_content">
+					<img class="foot_content_img" src="../img/节点.png">
+				</div>
+				<div class="foot_list_content">
+					<div class="description_title">节点</div>
+					<div class="description_content">图形尽量减少节点使用，简化图形去除无用节点</div>
+				</div>
+			</div>
+		</div>
+		<div class="foot_list">
+			<div class="foot_list_contents">
+				<div class="foot_list_content">
+					<img class="foot_content_img" src="../img/大小.png">
+				</div>
+				<div class="foot_list_content">
+					<div class="description_title">大小</div>
+					<div class="description_content">在限定边框内绘制完成图形，尽量撑满绘制区域，以16x16点阵作为对齐以及细节参考</div>
+				</div>
+			</div>
+		</div>
+		<div class="foot_list">
+			<div class="foot_list_contents">
+				<div class="foot_list_content">
+					<img class="foot_content_img" src="../img/轮廓化.png">
+				</div>
+				<div class="foot_list_content">
+					<div class="description_title">轮廓化</div>
+					<div class="description_content">将描边转化为闭合图形，选择要转换的描边，
+					对象-路径-轮廓化描边（某些复杂线条图标可以视情况上传带描边源文件，如：指纹图标）
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="foot_list">
+			<div class="foot_list_contents">
+				<div class="foot_list_content">
+					<img class="foot_content_img" src="../img/合并.png">
+				</div>
+				<div class="foot_list_content">
+					<div class="description_title">合并</div>
+					<div class="description_content">如果有两个以上的图形，或者有布尔关系的
+					图形，请对图形合并并且扩展（限图标，其它素材视情况而定）</div>
+				</div>
+			</div>
+		</div>
+		<div class="foot_list">
+			<div class="foot_list_contents">
+				<div class="foot_list_content">
+					<img class="foot_content_img" src="../img/图形化.png">
+				</div>
+				<div class="foot_list_content">
+					<div class="description_title">图形化</div>
+					<div class="description_content">插画中使用了样式、风格化后，将其样式转换为图形，对象-扩展外观</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
+	<script type="text/javascript" th:src="@{/js/materialUpload.js}"></script>
+</body>
+</html>

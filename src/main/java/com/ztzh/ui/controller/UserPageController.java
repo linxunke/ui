@@ -26,7 +26,7 @@ public class UserPageController {
 	public String toRegist() {
 		return "/register";
 	}
-	//下面的是测试用，随意更改
+	
 	@RequestMapping(value="toLogin",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
 	public String toLogin(){
 		return "/login";

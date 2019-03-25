@@ -14,6 +14,7 @@ import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
 import com.ztzh.ui.dao.MaterialInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
+import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
 import com.ztzh.ui.utils.FileUpload;
@@ -58,6 +59,10 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		FileUpload.deleteFiles(fileList);
 		logger.info("总共删除{}件素材",countDeletedMaterials);
 		logger.info("删除磁盘中的素材文件成功");
+	}
+	@Override
+	public List<CanvasInfoDomain> selectCanvasByUserId(Long userId) {
+		return canvasInfoDomainMapper.selectByUserId(userId);
 	}
 
 }

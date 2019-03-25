@@ -33,10 +33,10 @@ public class FileUpload {
             fileDir.mkdirs();
  
         String extname = FilenameUtils.getExtension(filename);
-        String allowImgFormat = "gif,jpg,jpeg,png";
+       /* String allowImgFormat = "gif,jpg,jpeg,png";
         if (!allowImgFormat.contains(extname.toLowerCase())) {
             return "NOT_IMAGE";
-        }
+        }*/
          
         filename = Math.abs(file.getOriginalFilename().hashCode()) + RandomUtil.createRandomString( 4 ) + "." + extname;
         InputStream input = null;
