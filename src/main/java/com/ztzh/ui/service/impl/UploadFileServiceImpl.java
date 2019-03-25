@@ -62,5 +62,21 @@ public class UploadFileServiceImpl implements UploadFileService{
 		}
 		return isSuccess;
 	}
+	
+	@Override
+	public boolean createFTPPNGDirectoryAccount(String account) {
+		boolean isExisted = false;
+		boolean isSuccess = false;
+		try {
+			isExisted = ftpUtil.existDirectory(account);
+			if(!isExisted) {
+				ftpUtil.createDirectory(account);
+			}
+			isSuccess = ftpUtil.createDirectory(account+"/PNG");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return isSuccess;
+	}
 
 }

@@ -90,4 +90,12 @@
       operate_time = #{operateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <delete id="deleteByMaterialInfoIds" parameterType="java.lang.Long">
+    delete from material_history_collection
+    where material_info_id in
+<foreach close=")" collection="materialInfoIds" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+  </delete>
 </mapper>

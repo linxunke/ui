@@ -20,7 +20,7 @@ public class Test2Controller {
 
 	@RequestMapping(value="hello")
 	public String hello(HttpServletRequest request, HttpServletResponse response){
-		return "Login";
+		return "usertest";
 	}
 	
 	@RequestMapping(value="register")

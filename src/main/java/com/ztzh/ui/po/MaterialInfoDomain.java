@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class MaterialInfoDomain implements Serializable{
 
-	private static final long serialVersionUID = -8366586613293380956L;
+	private static final long serialVersionUID = -8856692392646182850L;
 
 	private Long id;
 
@@ -24,6 +24,8 @@ public class MaterialInfoDomain implements Serializable{
     private String materialUrl;
 
     private String thumbnailUrl;
+
+    private String pngUrl;
 
     private Date uploadTime;
 
@@ -103,6 +105,14 @@ public class MaterialInfoDomain implements Serializable{
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl == null ? null : thumbnailUrl.trim();
+    }
+
+    public String getPngUrl() {
+        return pngUrl;
+    }
+
+    public void setPngUrl(String pngUrl) {
+        this.pngUrl = pngUrl == null ? null : pngUrl.trim();
     }
 
     public Date getUploadTime() {
