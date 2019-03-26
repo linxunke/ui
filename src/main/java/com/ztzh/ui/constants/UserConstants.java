@@ -14,4 +14,16 @@ public class UserConstants {
 	 * 检验数据长度不合格
 	 */
 	public static int CHECK_DATA_LENGTH_FALSE = 10;
+	/**
+	 * FTP源文件路径
+	 */
+	public static String FTP_MATERIALS_DIRECTORY = "/material";
+	/**
+	 * FTP缩略图路径
+	 */
+	public static String FTP_THUMBNAIL_DIRECTORY = "/thumbnail";
+    /**
+     * FTP图片路径
+     */
+	public static String FTP_PNG_DIRECTORY = "/png";
 }

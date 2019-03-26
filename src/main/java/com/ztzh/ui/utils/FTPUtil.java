@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
-
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -14,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+
 
 @Component
 public class FTPUtil {
@@ -60,7 +61,7 @@ public class FTPUtil {
 	     * @return
 	     * @throws IOException
 	     */
-	    public boolean uploadToFtp(InputStream buffIn, String fileName,boolean needDelete)
+	    public boolean uploadToFtp(InputStream buffIn, String fileName,boolean needDelete,String directory)
 	            throws FTPConnectionClosedException, IOException,Exception {
 	        boolean returnValue = false;
 	        // 上传文件
@@ -77,12 +78,16 @@ public class FTPUtil {
 	                    throw new IOException("failed to connect to the FTP Server:"+ip);   
 	                }
 	                ftpClient.enterLocalPassiveMode();
-	               /* if(StringUtils.checkStr(CURRENT_DIR)){
-	                	if(!existDirectory(CURRENT_DIR)){
-	                		this.createDirectory(CURRENT_DIR);
+	                boolean a = ftpClient.changeToParentDirectory();
+	                String[] dirs = directory.split("/");
+	                //切换文件夹
+	                for (String dir : dirs) {
+	                //创建并进入不存在的目录
+	                	if (!ftpClient.changeWorkingDirectory(dir)) {
+	                			ftpClient.mkd(dir);
+	                				ftpClient.changeWorkingDirectory(dir);
 	                	}
-	                    ftpClient.changeWorkingDirectory(CURRENT_DIR);
-	                }*/
+	                }
 	                // 上传文件到ftp
 	                returnValue = ftpClient.storeFile(fileName, buffIn);
 	                if(needDelete){
