@@ -67,6 +67,7 @@ body{
 	float: left;
 }
 #material_title_content{
+	color:black;
 	width: 244px;
 	height: 36px;
 	border-radius: 3px;
@@ -125,6 +126,7 @@ body{
 	font-family: PingFangSC-Regular;
 }
 #material_label_content{
+	color:black;
 	width: 480px;
 	height: 36px;
 	border-radius: 3px;

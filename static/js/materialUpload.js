@@ -85,27 +85,41 @@ $(document).ready(function(){
 		$material_type_module.append(type_module);
 	});
 	
+	/*提交上传的素材信息*/
 	$("#upload_material").click(function() {
 		var formdata = new FormData();
+		formdata.append("userId",1);
 		formdata.append("imageName",$("#material_title_content").val());
 		formdata.append("imageLabel",$("#material_label_content").val());
 		formdata.append("personalCanvasId",$("#personal_sketchpad").val());
-		
-		console.log(formdata);
-		/*formdata.append("",);
-		formdata.append("",);*/
-		/*$.ajax({
-			url:'',
+		var typeArray = new Array();
+		for(var i = 0; i <$(".material_total_info").length; i++){
+			typeArray[i] = new Array(3);
+		}
+		var index = 0;
+		$(".material_total_info").each(function() {
+			typeArray[index][0] = $(this).find(".material_type_text").val();
+			typeArray[index][1] = $(this).find(".material_segmentation_text").val();
+			typeArray[index][2] = $(this).find(".material_style_text").val();
+			index += 1;
+		});
+		formdata.append("typeArray",JSON.stringify(typeArray));
+		formdata.append("resourceFile",document.getElementById("file").files[0]);
+		formdata.append("previewImg",document.getElementById("myCan").toDataURL());
+		$.ajax({
+			url:'/uploadMaterial/commitMaterialInfos',
 			type:'post',
-			data:,
+			data:formdata,
+			contentType: false,
+	        processData: false,
 			success:function(data){
-				var resultData = JSON.parse(data);
-				console.log(resultData);
+				/*var resultData = JSON.parse(data);*/
+				console.log(data);
 			},
 			error:function (data) {
 				console.log(data);
 			}
-		});*/
+		});
 	});
 });
 
@@ -227,7 +241,7 @@ function initJcrop(){
     $target.Jcrop({
       onChange: updatePreview,
       onSelect: updatePreview,
-      aspectRatio: 2
+      aspectRatio: 1.3
     },function(){
     //初始化后回调函数
     // 获取图片实际显示的大小
