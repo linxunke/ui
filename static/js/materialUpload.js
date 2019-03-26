@@ -44,7 +44,7 @@ $(document).ready(function(){
 			var canvasInfo = data;
 			var appendOptions = '';
 			for(var i=0; i < canvasInfo.object.length; i++){
-				appendOptions += '<option>'+canvasInfo.object[i].canvasName+'</option>';
+				appendOptions += '<option value="'+canvasInfo.object[i].id+'">'+canvasInfo.object[i].canvasName+'</option>';
 			}
 			$("#personal_sketchpad").append(appendOptions);
 		},
@@ -72,7 +72,6 @@ $(document).ready(function(){
 			if(selectedTypeCode == materialSegmentations[i].parentCode){
 				type_module +='<option value="'+materialSegmentations[i].typeCode+'">'+materialSegmentations[i].typeName+'</option>';
 			}
-			
 		}
 		type_module += '</select></div></div><div class="material_type_info"><div class="type_info_title">风格</div><div class="type_info_content">'+
 			'<select class="material_type_select material_style_text"">';
@@ -82,11 +81,32 @@ $(document).ready(function(){
 			type_module +='<option value="'+materialStyles[i].typeCode+'">'+materialStyles[i].typeName+'</option>';
 		}
 		type_module += '</select></div></div><input type="button" class="type_info_manage delete_type_info_div" value="-" onclick="deleteInfoModule(this)"/></div>';
-		
 		var $material_type_module = $(".material_type_module");
 		$material_type_module.append(type_module);
 	});
 	
+	$("#upload_material").click(function() {
+		var formdata = new FormData();
+		formdata.append("imageName",$("#material_title_content").val());
+		formdata.append("imageLabel",$("#material_label_content").val());
+		formdata.append("personalCanvasId",$("#personal_sketchpad").val());
+		
+		console.log(formdata);
+		/*formdata.append("",);
+		formdata.append("",);*/
+		/*$.ajax({
+			url:'',
+			type:'post',
+			data:,
+			success:function(data){
+				var resultData = JSON.parse(data);
+				console.log(resultData);
+			},
+			error:function (data) {
+				console.log(data);
+			}
+		});*/
+	});
 });
 
 /*类型下拉框的值改变时，对应修改细分下拉框的值*/
@@ -207,7 +227,7 @@ function initJcrop(){
     $target.Jcrop({
       onChange: updatePreview,
       onSelect: updatePreview,
-      aspectRatio: xsize / ysize
+      aspectRatio: 2
     },function(){
     //初始化后回调函数
     // 获取图片实际显示的大小
