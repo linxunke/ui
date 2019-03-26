@@ -1,5 +1,8 @@
 package com.ztzh.ui.dao;
 
+import java.util.ArrayList;
+
+import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.po.CanvasInfoDomain;
 
 public interface CanvasInfoDomainMapper {
@@ -14,4 +17,10 @@ public interface CanvasInfoDomainMapper {
     int updateByPrimaryKeySelective(CanvasInfoDomain record);
 
     int updateByPrimaryKey(CanvasInfoDomain record);
+    
+    int selectCountByUserId(Long userId);
+    
+    ArrayList<ManagementCanvasBo> selectCanvasInfoByUserId(Long userId);
+    
+    
 }

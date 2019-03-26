@@ -1,0 +1,18 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("button").click(function(){
+    var h = '<div class="content"><h1>TITLE</h1><div>content<div>content<p>内容</p><input value=1 /></div></div></div>'
+    var $content = $(".con");
+    $content.append(h);
+  });
+});
+</script>
+</head>
+<body>
+<p class='con'>This is another paragraph.</p>
+<button>在每个 p 元素的结尾添加内容</button>
+</body>
+</html>

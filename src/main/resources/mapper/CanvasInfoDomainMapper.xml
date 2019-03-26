@@ -16,7 +16,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from canvas_info
+    from canvas_info 
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -114,4 +114,23 @@
       is_valid = #{isValid,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectCountByUserId" parameterType="com.ztzh.ui.po.CanvasInfoDomain">
+  select 
+  count(1)
+  from canvas_info
+  where user_id = #{userId,jdbcType=BIGINT} and is_valid = 1
+  </select>
+  <select id="selectCanvasInfoByUserId" parameterType="com.ztzh.ui.po.CanvasInfoDomain" resultMap="BaseResultMap">
+  select c.canvas_name as canvas_name,c.describe_info as describe_info, c.upload_time as upload_time, 
+  d.thumbnail_url,c.number 
+  from (select a.canvas_name as canvas_name,a.describe_info as describe_info,b.upload_time as upload_time, 
+  b.number as number 
+  from canvas_info as a 
+  left join 
+  (SELECT canvas_info_id_private, max(upload_time) as upload_time, COUNT(1) as number 
+  from material_info where create_user_id= #{userId,jdbcType=BIGINT} and is_valid=1 
+  GROUP BY canvas_info_id_private) as b on a.id=b.canvas_info_id_private 
+  where a.is_valid=1 and user_id = #{userId,jdbcType=BIGINT}) as c 
+  left join material_info d on c.upload_time = d.upload_time
+  </select>
 </mapper>
