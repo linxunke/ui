@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.FileUpload;
@@ -40,7 +41,7 @@ public class UploadFileServiceImpl implements UploadFileService{
 			if(!isExisted) {
 				ftpUtil.createDirectory(account);
 			}
-			isSuccess = ftpUtil.createDirectory(account+"/material");
+			isSuccess = ftpUtil.createDirectory(account+UserConstants.FTP_MATERIALS_DIRECTORY);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,7 +57,7 @@ public class UploadFileServiceImpl implements UploadFileService{
 			if(!isExisted) {
 				ftpUtil.createDirectory(account);
 			}
-			isSuccess = ftpUtil.createDirectory(account+"/thumbnail");
+			isSuccess = ftpUtil.createDirectory(account+UserConstants.FTP_THUMBNAIL_DIRECTORY);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -72,7 +73,7 @@ public class UploadFileServiceImpl implements UploadFileService{
 			if(!isExisted) {
 				ftpUtil.createDirectory(account);
 			}
-			isSuccess = ftpUtil.createDirectory(account+"/PNG");
+			isSuccess = ftpUtil.createDirectory(account+UserConstants.FTP_PNG_DIRECTORY);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

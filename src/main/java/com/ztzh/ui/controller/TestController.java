@@ -91,7 +91,9 @@ public class TestController {
 	
 	@RequestMapping(value="base")
 	public String base() throws FTPConnectionClosedException, IOException, Exception{
-			canvasInfoService.userDeleteCanvasWithoutMaterials(3L, 3L);
+			File file = new File("C:\\Users\\25002\\Desktop\\photo\\12.jpg");
+			InputStream input = new FileInputStream(file);
+			ftpUtil.uploadToFtp(input, "123.jpg", false, "/12345678902/"+UserConstants.FTP_PNG_DIRECTORY);
 	        return "";
 	}
 
