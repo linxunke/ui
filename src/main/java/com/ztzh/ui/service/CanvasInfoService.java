@@ -9,5 +9,7 @@ public interface CanvasInfoService {
 	public void userDeleteCanvasWithMaterials(Long canvasId, Long userId);
 
 	List<CanvasInfoDomain> selectCanvasByUserId(Long userId);
+	
+	public void userDeleteCanvasWithoutMaterials(Long canvasId, Long userId);
 
 }

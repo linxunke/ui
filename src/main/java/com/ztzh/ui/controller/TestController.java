@@ -91,7 +91,7 @@ public class TestController {
 	
 	@RequestMapping(value="base")
 	public String base() throws FTPConnectionClosedException, IOException, Exception{
-	
+			canvasInfoService.userDeleteCanvasWithoutMaterials(3L, 3L);
 	        return "";
 	}
 

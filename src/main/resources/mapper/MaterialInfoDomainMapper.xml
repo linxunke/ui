@@ -210,4 +210,51 @@
     where create_user_id = #{userId,jdbcType=BIGINT}
     AND canvas_info_id_private = #{canvasId,jdbcType=BIGINT}
   </delete>
+  
+  <update id="updateByCanvasInfoIdPrivate">
+    update material_info
+    <set>
+      <if test="materialInfoDomain.createUserId != null">
+        create_user_id = #{materialInfoDomain.createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="materialInfoDomain.canvasInfoIdPrivate != null">
+        canvas_info_id_private = #{materialInfoDomain.canvasInfoIdPrivate,jdbcType=BIGINT},
+      </if>
+      <if test="materialInfoDomain.canvasInfoIdPublic != null">
+        canvas_info_id_public = #{materialInfoDomain.canvasInfoIdPublic,jdbcType=BIGINT},
+      </if>
+      <if test="materialInfoDomain.materialName != null">
+        material_name = #{materialInfoDomain.materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialInfoDomain.materialDescription != null">
+        material_description = #{materialInfoDomain.materialDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="materialInfoDomain.materialType != null">
+        material_type = #{materialInfoDomain.materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="materialInfoDomain.materialUrl != null">
+        material_url = #{materialInfoDomain.materialUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialInfoDomain.thumbnailUrl != null">
+        thumbnail_url = #{materialInfoDomain.thumbnailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialInfoDomain.pngUrl != null">
+        png_url = #{materialInfoDomain.pngUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialInfoDomain.uploadTime != null">
+        upload_time = #{materialInfoDomain.uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="materialInfoDomain.colorType != null">
+        color_type = #{materialInfoDomain.colorType,jdbcType=INTEGER},
+      </if>
+      <if test="materialInfoDomain.colorPercentage != null">
+        color_percentage = #{materialInfoDomain.colorPercentage,jdbcType=REAL},
+      </if>
+      <if test="materialInfoDomain.isValid != null">
+        is_valid = #{materialInfoDomain.isValid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where canvas_info_id_private = #{canvasId,jdbcType=BIGINT}
+    and create_user_id = #{userId,jdbcType=BIGINT}
+  </update>
 </mapper>
