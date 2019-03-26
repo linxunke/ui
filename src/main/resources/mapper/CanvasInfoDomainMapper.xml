@@ -119,4 +119,11 @@
   	<include refid="Base_Column_List"></include>
   	from canvas_info where user_id = #{userId,jdbcType=BIGINT}
   </select>
+  
+   <select id="selectByCanvasName" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"></include>
+  	from canvas_info where canvas_name = #{canvasName,jdbcType=VARCHAR}
+  	and user_id = #{userId,jdbcType=BIGINT}
+  </select>
 </mapper>

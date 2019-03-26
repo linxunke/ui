@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ztzh.ui.constants.CanvasInfoConstants;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
 import com.ztzh.ui.dao.MaterialInfoDomainMapper;
@@ -18,6 +19,7 @@ import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
 import com.ztzh.ui.utils.FileUpload;
+import com.ztzh.ui.utils.GetSYSTime;
 
 @Service
 public class CanvasInfoServiceImpl implements CanvasInfoService{
@@ -63,6 +65,24 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	@Override
 	public List<CanvasInfoDomain> selectCanvasByUserId(Long userId) {
 		return canvasInfoDomainMapper.selectByUserId(userId);
+	}
+	
+	@SuppressWarnings("unused")
+	@Override
+	@Transactional
+	public void userDeleteCanvasWithoutMaterials(Long canvasId, Long userId) {
+		logger.info("开始删除画板canvasId:{}",canvasId);
+		int count = canvasInfoDomainMapper.deleteByPrimaryKey(canvasId);
+		logger.info("开始将所属该画板的素材转移到未分类画板中");
+		CanvasInfoDomain canvasInfoDomain = canvasInfoDomainMapper.selectByCanvasName(CanvasInfoConstants.CANVAS_DEFALT_NAME,userId);
+		MaterialInfoDomain materialInfoDomain = new MaterialInfoDomain();
+		materialInfoDomain.setCanvasInfoIdPrivate(canvasInfoDomain.getId());
+		materialInfoDomain.setCanvasInfoIdPublic(canvasInfoDomain.getId());
+		materialInfoDomain.setCreateUserId(userId);
+		materialInfoDomain.setUploadTime(GetSYSTime.systemTime());
+		int updateCount = materialInfoDomainMapper.updateByCanvasInfoIdPrivate(materialInfoDomain,canvasId,userId);
+		logger.info("总共将{}件素材转入未分类",updateCount);
+		
 	}
 
 }
