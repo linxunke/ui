@@ -10,4 +10,5 @@ public interface UploadMaterialsService {
 	public UploadMaterialsBo getMaterialTypes();
 	public int addMaterialInfo(MaterialInfoDomain materialInfo);
 	public int addMaterialTypeInfo(List<MaterialTypeInfoDomain> typesInfoList);
+	public Long getMaterialIdByMaterialUrl(String materialUrl);
 }

@@ -106,6 +106,7 @@ $(document).ready(function(){
 		formdata.append("typeArray",JSON.stringify(typeArray));
 		formdata.append("resourceFile",document.getElementById("file").files[0]);
 		formdata.append("previewImg",document.getElementById("myCan").toDataURL());
+		formdata.append("pngFileSrc",document.getElementById("target").src);
 		$.ajax({
 			url:'/uploadMaterial/commitMaterialInfos',
 			type:'post',
@@ -113,7 +114,6 @@ $(document).ready(function(){
 			contentType: false,
 	        processData: false,
 			success:function(data){
-				/*var resultData = JSON.parse(data);*/
 				console.log(data);
 			},
 			error:function (data) {

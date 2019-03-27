@@ -53,4 +53,9 @@ public class UploadMaterialsServiceImpl implements UploadMaterialsService{
 		}
 		return result;
 	}
+
+	@Override
+	public Long getMaterialIdByMaterialUrl(String materialUrl) {
+		return materialInfoDomainMapper.selectMaterialIdByMaterialUrl(materialUrl);
+	}
 }

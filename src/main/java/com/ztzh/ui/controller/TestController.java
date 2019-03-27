@@ -91,7 +91,7 @@ public class TestController {
 	
 	@RequestMapping(value="base")
 	public String base() throws FTPConnectionClosedException, IOException, Exception{
-			File file = new File("C:\\Users\\25002\\Desktop\\photo\\12.jpg");
+			File file = new File("D:\\catch\\png\\15997457249846.png");
 			InputStream input = new FileInputStream(file);
 			ftpUtil.uploadToFtp(input, "123.jpg", false, "/12345678902/"+UserConstants.FTP_PNG_DIRECTORY);
 	        return "";

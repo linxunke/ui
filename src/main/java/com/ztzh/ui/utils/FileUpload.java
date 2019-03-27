@@ -69,7 +69,7 @@ public class FileUpload {
     	FileOutputStream fos = null;
     	try{
     		byte[] bytes = Base64.getDecoder().decode(base64);
-    		file = new File(filePath+"/"+fileName);
+    		file = new File(filePath+"//"+fileName);
     		fos = new FileOutputStream(file);
     		bos = new BufferedOutputStream(fos);
     		bos.write(bytes);
