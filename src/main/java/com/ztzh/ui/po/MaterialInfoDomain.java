@@ -146,4 +146,19 @@ public class MaterialInfoDomain implements Serializable{
     public void setIsValid(Integer isValid) {
         this.isValid = isValid;
     }
+
+	@Override
+	public String toString() {
+		return "MaterialInfoDomain [id=" + id + ", createUserId="
+				+ createUserId + ", canvasInfoIdPrivate=" + canvasInfoIdPrivate
+				+ ", canvasInfoIdPublic=" + canvasInfoIdPublic
+				+ ", materialName=" + materialName + ", materialDescription="
+				+ materialDescription + ", materialType=" + materialType
+				+ ", materialUrl=" + materialUrl + ", thumbnailUrl="
+				+ thumbnailUrl + ", pngUrl=" + pngUrl + ", uploadTime="
+				+ uploadTime + ", colorType=" + colorType
+				+ ", colorPercentage=" + colorPercentage + ", isValid="
+				+ isValid + "]";
+	}
+    
 }

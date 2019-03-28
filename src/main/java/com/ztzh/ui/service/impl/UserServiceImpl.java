@@ -148,4 +148,9 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	@Override
+	public UserInfoDomain getUserInfoById(Long userId) {
+		return userInfoDomainMapper.selectByPrimaryKey(userId);
+	}
+
 }

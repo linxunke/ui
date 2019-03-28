@@ -19,6 +19,7 @@ import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
 import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
+import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.FileUpload;
 import com.ztzh.ui.utils.GetSYSTime;
 
@@ -38,6 +39,9 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	@Autowired
 	MaterialHistoryCollectionDomainMapper materialHistoryCollectionDomainMapper;
 	
+	@Autowired
+	FTPUtil ftpUtil;
+	
 
 	
 	@SuppressWarnings("unused")
@@ -56,13 +60,13 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 			fileList.add(materialInfoDomain.getPngUrl());
 			materialIdList.add(materialInfoDomain.getId());
 		}
+		ftpUtil.deleteFtpFile(fileList);
+		logger.info("删除磁盘中的素材文件成功");
 		int countDeletedMaterials = materialInfoDomainMapper.deleteByCanvasId(canvasId, userId);
 		//删除分类中的数据
 		int materialTypeInfoCount = materialTypeInfoDomainMapper.deleteByMaterialInfoIds(materialIdList);
 		int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
-		FileUpload.deleteFiles(fileList);
 		logger.info("总共删除{}件素材",countDeletedMaterials);
-		logger.info("删除磁盘中的素材文件成功");
 	}
 	
 	@SuppressWarnings("unused")

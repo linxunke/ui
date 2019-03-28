@@ -110,7 +110,6 @@ public class ImageUtil {
 			maxPercentage = blackWhitePercentage;
 			colorType = ImageColorBo.COLOR_BLACK_WHITE_CODE;
 		}
-		
 		ImageColorBo imageColorBo = new ImageColorBo();
 		imageColorBo.setColorPercentage(maxPercentage);
 		imageColorBo.setColorType(colorType);
