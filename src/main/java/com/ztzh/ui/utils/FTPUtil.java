@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
@@ -307,6 +309,53 @@ public class FTPUtil {
 	        //return currentYear+FtpOperation.DIRSPLIT+currentMouth+FtpOperation.DIRSPLIT+currentDay+FtpOperation.DIRSPLIT+currentHour;
 	        return currentYear+FTPUtil.DIRSPLIT+currentMouth+FTPUtil.DIRSPLIT+currentDay;
 	    }
+	    
+	    /**
+	     * @MethodName  deleteFile
+	     * @Description 删除ftp文件夹下面的视频文件
+	     * @param para
+	     * @return 
+	     * 
+	     */
+          public  boolean deleteFtpFile(List<String> addressList){
+        	  boolean returnValue = false;
+        	  try {
+  	            
+	                // 建立连接
+	                connectToServer();
+	                // 设置传输二进制文件
+	                setFileType(FTP.BINARY_FILE_TYPE);
+	                int reply = ftpClient.getReplyCode();   
+	                if(!FTPReply.isPositiveCompletion(reply))    
+	                {   
+	                    ftpClient.disconnect();   
+	                    throw new IOException("failed to connect to the FTP Server:"+ip); 
+	                }
+	                ftpClient.enterLocalPassiveMode();
+	                boolean a = ftpClient.changeToParentDirectory();
+	                for(int i=0;i<addressList.size();i++) {
+	                	 ftpClient.deleteFile(addressList.get(i));
+	                }
+	                returnValue = true;
+	                if (returnValue) {
+	                    log.info("deleteFtp INFO: delete file  to ftp : succeed!");
+	                } else {
+	                	log.info("deleteFtp INFO: delete file  to ftp : failed!");
+	                }
+	                // 关闭连接
+	                closeConnect();
+	        } catch (FTPConnectionClosedException e) {
+	        	log.error("ftp连接被关闭！", e);
+	        } catch (Exception e) {
+	            log.error("ERR : delete file  on ftp : failed! ", e);
 
+	        } finally {
+	            if (ftpClient.isConnected()) {
+	                closeConnect();
+	            }            
+	        }
+        	return returnValue;
+	      }
 
+	    	
 }

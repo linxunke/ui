@@ -77,8 +77,12 @@ public class TestController {
 	
 	@RequestMapping(value="ftptest")
 	public String hello(HttpServletRequest request, HttpServletResponse response) throws FTPConnectionClosedException, IOException, Exception{
-		List<String> urls = new ArrayList<String>();
-		imageMagicUtil.convertType(new String[]{"D:\\house\\ui\\src\\main\\resources\\photo\\红包.ai"}, "D:\\house\\ui\\src\\main\\resources\\photo\\red.png");
+		/*
+		 * List<String> urls = new ArrayList<String>(); imageMagicUtil.convertType(new
+		 * String[]{"D:\\house\\ui\\src\\main\\resources\\photo\\红包.ai"},
+		 * "D:\\house\\ui\\src\\main\\resources\\photo\\red.png");
+		 */
+		canvasInfoService.userDeleteCanvasWithMaterials(5L, 1L);
 		
 		return "";
 	}
@@ -91,9 +95,12 @@ public class TestController {
 	
 	@RequestMapping(value="base")
 	public String base() throws FTPConnectionClosedException, IOException, Exception{
-			File file = new File("C:\\Users\\25002\\Desktop\\photo\\12.jpg");
-			InputStream input = new FileInputStream(file);
-			ftpUtil.uploadToFtp(input, "123.jpg", false, "/12345678902/"+UserConstants.FTP_PNG_DIRECTORY);
+		/*
+		 * File file = new File("C:\\Users\\25002\\Desktop\\photo\\12.jpg"); InputStream
+		 * input = new FileInputStream(file); ftpUtil.uploadToFtp(input, "123.jpg",
+		 * false, "/12345678902/"+UserConstants.FTP_PNG_DIRECTORY);
+		 */
+		
 	        return "";
 	}
 
