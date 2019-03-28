@@ -5,7 +5,7 @@ $(document).ready(function(){
 		url:'/uploadMaterial/getMaterialTypes',
 		type:'post',
 		data:{
-			userId: '1'
+			userId: '5'
 		},
 		success:function(data){
 			typeData = JSON.parse(data);
@@ -37,14 +37,14 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userid=1',
+		url:'/canvasInfo/getCanvasByUserId?userid=5',
 		type:'get',
 		success:function(data){
 			console.log(data);
-			var canvasInfo = data;
+			var canvasInfo = data.object.canvasInfo;
 			var appendOptions = '';
-			for(var i=0; i < canvasInfo.object.length; i++){
-				appendOptions += '<option value="'+canvasInfo.object[i].id+'">'+canvasInfo.object[i].canvasName+'</option>';
+			for(var i=0; i < canvasInfo.length; i++){
+				appendOptions += '<option value="'+canvasInfo[i].canvasId+'">'+canvasInfo[i].canvasName+'</option>';
 			}
 			$("#personal_sketchpad").append(appendOptions);
 		},
@@ -88,7 +88,7 @@ $(document).ready(function(){
 	/*提交上传的素材信息*/
 	$("#upload_material").click(function() {
 		var formdata = new FormData();
-		formdata.append("userId",1);
+		formdata.append("userId",5);
 		formdata.append("imageName",$("#material_title_content").val());
 		formdata.append("imageLabel",$("#material_label_content").val());
 		formdata.append("personalCanvasId",$("#personal_sketchpad").val());

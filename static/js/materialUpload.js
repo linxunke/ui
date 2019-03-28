@@ -5,7 +5,7 @@ $(document).ready(function(){
 		url:'/uploadMaterial/getMaterialTypes',
 		type:'post',
 		data:{
-			userId: '1'
+			userId: '5'
 		},
 		success:function(data){
 			typeData = JSON.parse(data);
