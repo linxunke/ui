@@ -130,7 +130,7 @@ $(document).ready(function(){
 	});
 	$("#downloadModels").click(function(){
 		var $eleForm = $("<form method='get'></form>");
-        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/files/downloadFiles?fileName=图标制作模板.ai");
+        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadfile/图标制作模板.ai");
         $(document.body).append($eleForm);
         //提交表单，实现下载
         $eleForm.submit();
