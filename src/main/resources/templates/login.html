@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>登陆</title>
+<link rel="stylesheet" th:href="@{/css/login.css}" type="text/css">
+</head>
+<body>
+	<div class="background">
+		<div class="head">
+			<div class="nav_list logo">
+				<img src="../img/logo.png">
+			</div>
+			<div class="nav_list home">
+				<a href="#">首页</a>
+			</div>
+			<div class="nav_list material_library">
+				<a href="#">素材库</a>
+			</div>
+			<div class="nav_list work_management">
+				<a href="#">作品管理</a>
+			</div>
+			<div class="nav_list search_box">
+				<img src="../img/搜图.png" class="search_map" alt=""> <input
+					type="text" value="春节" class="search_content" /> <img
+					src="../img/搜索.png" alt="" class="search_btn">
+			</div>
+			<div class="nav_list update">
+				<img src="../img/上传.png">
+			</div>
+			<div class="nav_list message">
+				<img src="../img/消息.png">
+			</div>
+			<div class="nav_list need_sign_in">
+				<img src="../img/未登录.png">
+			</div>
+		</div>
+		<div class="word">登录智慧集，分享设计</div>
+		<div class="login">
+			<div class="login_top">
+				<div class="top_left">
+					<div class="top_left_head">
+						<b style="color: black;">密码登录</b>
+					</div>
+					<br />
+					<hr class="hrr" style="width: 324px;">
+				</div>
+				<div class="top_right">
+					<img alt="" src="../img/切换二维码.png">
+				</div>
+			</div>
+			<div class="login_middle">
+				<form action="">
+					<input id="login_input1" class="login_input" placeholder="手机号"><br />
+					<input id="login_input2" class="login_input" type="password"
+						placeholder="密码"> <input id="login_btn" type="submit"
+						value="登录" onclick="Save(),Login()">
+
+				</form>
+			</div>
+			<div class="login_floor">
+				<br />
+				<div class="box" style="color: black;">
+					<input type="checkbox" id="ck_rmbUser" checked="checked" />记住用户名和密码<br />
+				</div>
+				<div class="a_link">
+					<a href="/userpage/toRegist" style="color: black;">注册新账号</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div></div>
+	<script th:src="@{/js/jquery/jquery.min.js}" type="text/javascript"></script>
+	<script th:src="@{/js/jquery/jquery.cookie.js}" type="text/javascript"></script>
+	<script th:src="@{/js/head.js}" type="text/javascript"></script>
+	<script th:src="@{/js/login_js.js}" type="text/javascript"></script>
+	<script th:src="@{/js/jquery/md5.js}" type="text/javascript"></script>
+</body>
+</html>

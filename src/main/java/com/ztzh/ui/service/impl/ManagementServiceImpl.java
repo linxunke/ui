@@ -3,6 +3,7 @@ package com.ztzh.ui.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
@@ -10,7 +11,7 @@ import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.service.ManagementService;
 import com.ztzh.ui.utils.GetSYSTime;
 
-//@Service
+@Service
 public class ManagementServiceImpl implements ManagementService{
 
 	@Autowired
@@ -32,10 +33,9 @@ public class ManagementServiceImpl implements ManagementService{
 		return canvasInfoDomainMapper.selectCanvasInfoByUserId(userId);
 	}
 	
-	@SuppressWarnings("null")
 	@Override
 	public boolean addCanvas(Long userId, String canvasName, String canvasDesc) {
-		CanvasInfoDomain canvasInfo = null;
+		CanvasInfoDomain canvasInfo = new CanvasInfoDomain();
 		canvasInfo.setUserId(userId);
 		canvasInfo.setCanvasName(canvasName);
 		canvasInfo.setDescribeInfo(canvasDesc);
@@ -46,10 +46,9 @@ public class ManagementServiceImpl implements ManagementService{
 		return true;
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public boolean updateCanvas(Long canvasId, String canvasName, String canvasDesc) {
-		CanvasInfoDomain canvasInfo = null;
+		CanvasInfoDomain canvasInfo = new CanvasInfoDomain();
 		canvasInfo.setId(canvasId);
 		canvasInfo.setCanvasName(canvasName);
 		canvasInfo.setDescribeInfo(canvasDesc);

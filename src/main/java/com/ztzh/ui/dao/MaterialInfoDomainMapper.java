@@ -1,5 +1,10 @@
 package com.ztzh.ui.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 
 public interface MaterialInfoDomainMapper {
@@ -14,4 +19,11 @@ public interface MaterialInfoDomainMapper {
     int updateByPrimaryKeySelective(MaterialInfoDomain record);
 
     int updateByPrimaryKey(MaterialInfoDomain record);
+    
+    List<MaterialInfoDomain> selectByCanvasId(Long canvasId);
+    
+    int deleteByCanvasId(@Param("canvasId") Long canvasId,@Param("userId") Long userId);
+    
+    
+    int updateByCanvasInfoIdPrivate (@Param("materialInfoDomain") MaterialInfoDomain record,@Param("canvasId") Long canvasId,@Param("userId") Long userId);
 }

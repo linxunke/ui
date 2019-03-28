@@ -6,7 +6,7 @@ import java.util.Date;
 public class CanvasInfoDomain implements Serializable{
 	
 	private static final long serialVersionUID = 7656017338131623779L;
-
+	
 	private Long id;
 
     private Long userId;

@@ -14,9 +14,12 @@ public class ResponseVo {
 	 * 失败code
 	 */
 	public static String STATUS_FAILED = "500";
-	
 	public static String STATUS_VALUE_FALSE = "01";
 	public static String STATUS_ACCOUNT_OR_PASSWORD_FALSE = "02";
+	/**
+	 * 创建用户私人文件夹不成功
+	 */
+	public static String FAILED_CREATED_FTP_DIRECTORY = "03";
 	
 	public String status;
 	public String message;

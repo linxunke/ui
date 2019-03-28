@@ -9,7 +9,7 @@ public class ManagementCanvasBo {
 	public String canvasDesc;
 
 	public int materialCount;
-	public Date lastMaterialUploadTime;
+	public Date lastMaterialUploadTime;	
 	public String lastMaterialUrl;
 
 	public Long getCanvasId() {

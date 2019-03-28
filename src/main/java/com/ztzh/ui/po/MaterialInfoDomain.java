@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class MaterialInfoDomain implements Serializable{
 
-	private static final long serialVersionUID = -8366586613293380956L;
+	private static final long serialVersionUID = -8856692392646182850L;
 
 	private Long id;
 
@@ -25,11 +25,13 @@ public class MaterialInfoDomain implements Serializable{
 
     private String thumbnailUrl;
 
+    private String pngUrl;
+
     private Date uploadTime;
 
     private Integer colorType;
 
-    private String colorPercentage;
+    private Float colorPercentage;
 
     private Integer isValid;
 
@@ -105,6 +107,14 @@ public class MaterialInfoDomain implements Serializable{
         this.thumbnailUrl = thumbnailUrl == null ? null : thumbnailUrl.trim();
     }
 
+    public String getPngUrl() {
+        return pngUrl;
+    }
+
+    public void setPngUrl(String pngUrl) {
+        this.pngUrl = pngUrl == null ? null : pngUrl.trim();
+    }
+
     public Date getUploadTime() {
         return uploadTime;
     }
@@ -121,12 +131,12 @@ public class MaterialInfoDomain implements Serializable{
         this.colorType = colorType;
     }
 
-    public String getColorPercentage() {
+    public Float getColorPercentage() {
         return colorPercentage;
     }
 
-    public void setColorPercentage(String colorPercentage) {
-        this.colorPercentage = colorPercentage == null ? null : colorPercentage.trim();
+    public void setColorPercentage(Float colorPercentage) {
+        this.colorPercentage = colorPercentage;
     }
 
     public Integer getIsValid() {
@@ -136,18 +146,4 @@ public class MaterialInfoDomain implements Serializable{
     public void setIsValid(Integer isValid) {
         this.isValid = isValid;
     }
-
-	@Override
-	public String toString() {
-		return "MaterialInfoDomain [id=" + id + ", createUserId="
-				+ createUserId + ", canvasInfoIdPrivate=" + canvasInfoIdPrivate
-				+ ", canvasInfoIdPublic=" + canvasInfoIdPublic
-				+ ", materialName=" + materialName + ", materialDescription="
-				+ materialDescription + ", materialType=" + materialType
-				+ ", materialUrl=" + materialUrl + ", thumbnailUrl="
-				+ thumbnailUrl + ", uploadTime=" + uploadTime + ", colorType="
-				+ colorType + ", colorPercentage=" + colorPercentage
-				+ ", isValid=" + isValid + "]";
-	}
-    
 }

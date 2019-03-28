@@ -38,8 +38,9 @@
 				<div id="under_add_mark">创建新画板</div>
 			</div>
 			<div class="every_board" id="unsorted_board">
-				<div class="edit_button">
+				<div id="edit_button" class="edit_button">
 					<img class="edit_img" src="../img/编辑.png">
+					<span class="canvas-id"></span>
 				</div>
 				<div class="board_covers" >
 					<img alt="" src="">
@@ -61,6 +62,9 @@
 					2009-03-19
 					<!-- 这里需要获取 -->
 				</div>
+				<div class="board_id">
+				<!-- 这里需要获取 -->
+				</div>
 			</div>
 			
 		</div>
@@ -79,9 +83,24 @@
 		
 		</div>
 		<div id="show_foot">
-		<div id="first_delete"><a href="">删除</a>画板及包含的全部素材   </div>
-		<div id="second_delete">只<a href="">删除</a>画板，所含素材移至"未分类"画板  </div>
 		<div id="sure">确认 </div>
+		</div>
+	</div>
+	<div id="close2"></div>
+	<div id="show_div2">
+		<div id="show_title2">
+			<h3>编辑画板</h3>
+		</div>
+		<div id="show_content2">
+		<div id="show_input12">画板名称：<input id="show_text2" type="text"><br></div>
+		
+		<div id="show_input22">描述：<textarea id="show_textarea2" rows="3" cols="48"></textarea></div>
+		
+		</div>
+		<div id="show_foot2">
+		<div id="first_delete"><p id="deleteAll" class="delete">删除</p><p>画板及包含的全部素材</p></div>
+		<div id="second_delete"><p>只</p><p id="deleteToOther" class="delete">删除</p><p>画板，所含素材移至"未分类"画板</p></div>
+		<div id="sure2">确认 </div>
 		</div>
 	</div>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>

@@ -85,8 +85,27 @@
     		<artifactId>fastjson</artifactId>
     		<version>1.2.47</version>
 		</dependency>
+		
+		<dependency>
+     		<groupId>commons-net</groupId>
+     		<artifactId>commons-net</artifactId>
+     		<version>3.3</version>
+ 		</dependency>
+ 		
+ 		<!-- 图像引擎 -->
+		<dependency>
+   	 		<groupId>org.im4java</groupId>
+    		<artifactId>im4java</artifactId>
+    		<version>1.4.0</version>
+		</dependency>
+		<!-- base64 -->
+		<dependency>
+    		<groupId>com.github.livesense</groupId>
+    		<artifactId>org.liveSense.fragment.sun.misc</artifactId>
+    		<version>1.0.5</version>
+		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>

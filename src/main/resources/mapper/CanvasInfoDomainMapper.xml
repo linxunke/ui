@@ -10,6 +10,14 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="is_valid" jdbcType="INTEGER" property="isValid" />
   </resultMap>
+  <resultMap id="CanvasResultMap" type="com.ztzh.ui.bo.ManagementCanvasBo">
+  	<result column="id" jdbcType="BIGINT" property="canvasId" />
+  	<result column="canvas_name" jdbcType="BIGINT" property="canvasName" />
+  	<result column="describe_info" jdbcType="BIGINT" property="canvasDesc" />
+  	<result column="number" jdbcType="BIGINT" property="materialCount" />
+  	<result column="upload_time" jdbcType="BIGINT" property="lastMaterialUploadTime" />
+  	<result column="thumbnail_url" jdbcType="BIGINT" property="lastMaterialUrl" />
+  </resultMap>
   <sql id="Base_Column_List">
     id, user_id, canvas_name, describe_info, canvas_type, create_time, is_valid
   </sql>
@@ -106,31 +114,52 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ztzh.ui.po.CanvasInfoDomain">
     update canvas_info
-    set user_id = #{userId,jdbcType=BIGINT},
+    set <!-- user_id = #{userId,jdbcType=BIGINT}, -->
       canvas_name = #{canvasName,jdbcType=VARCHAR},
-      describe_info = #{describeInfo,jdbcType=VARCHAR},
-      canvas_type = #{canvasType,jdbcType=INTEGER},
+      describe_info = #{describeInfo,jdbcType=VARCHAR}
+      <!-- canvas_type = #{canvasType,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      is_valid = #{isValid,jdbcType=INTEGER}
+      is_valid = #{isValid,jdbcType=INTEGER} -->
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectCountByUserId" parameterType="com.ztzh.ui.po.CanvasInfoDomain">
+
+  <select id="selectCountByUserId" parameterType="java.lang.Long" resultType="java.lang.Integer">
   select 
-  count(1)
+  count(user_id)
   from canvas_info
   where user_id = #{userId,jdbcType=BIGINT} and is_valid = 1
   </select>
-  <select id="selectCanvasInfoByUserId" parameterType="com.ztzh.ui.po.CanvasInfoDomain" resultMap="BaseResultMap">
-  select c.canvas_name as canvas_name,c.describe_info as describe_info, c.upload_time as upload_time, 
+  <select id="selectCanvasInfoByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  select c.id as id, c.canvas_name as canvas_name,c.describe_info as describe_info, c.upload_time as upload_time, 
   d.thumbnail_url,c.number 
-  from (select a.canvas_name as canvas_name,a.describe_info as describe_info,b.upload_time as upload_time, 
+  from (select a.id as id, a.canvas_name as canvas_name,a.describe_info as describe_info,b.upload_time as upload_time, 
   b.number as number 
   from canvas_info as a 
   left join 
   (SELECT canvas_info_id_private, max(upload_time) as upload_time, COUNT(1) as number 
-  from material_info where create_user_id= #{userId,jdbcType=BIGINT} and is_valid=1 
+  from material_info where create_user_id= #{userId,jdbcType=BIGINT} 
   GROUP BY canvas_info_id_private) as b on a.id=b.canvas_info_id_private 
-  where a.is_valid=1 and user_id = #{userId,jdbcType=BIGINT}) as c 
-  left join material_info d on c.upload_time = d.upload_time
+  where a.is_valid=1 and user_id =#{userId,jdbcType=BIGINT} ) as c 
+  left join material_info d on c.upload_time = d.upload_time <!-- limit 0,2 -->
+</select>
+  <select id="selectByUserId" resultMap="CanvasResultMap" parameterType="java.lang.Long">
+  select c.id as id, c.canvas_name as canvas_name,c.describe_info as describe_info, c.upload_time as upload_time, 
+  d.thumbnail_url,c.number 
+  from (select a.id as id, a.canvas_name as canvas_name,a.describe_info as describe_info,b.upload_time as upload_time, 
+  b.number as number 
+  from canvas_info as a 
+  left join 
+  (SELECT canvas_info_id_private, max(upload_time) as upload_time, COUNT(1) as number 
+  from material_info where create_user_id= #{userId,jdbcType=BIGINT} 
+  GROUP BY canvas_info_id_private) as b on a.id=b.canvas_info_id_private 
+  where a.is_valid=1 and user_id =#{userId,jdbcType=BIGINT} ) as c 
+  left join material_info d on c.upload_time = d.upload_time <!-- limit 0,2 -->
+  </select>
+  
+   <select id="selectByCanvasName" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"></include>
+  	from canvas_info where canvas_name = #{canvasName,jdbcType=VARCHAR}
+  	and user_id = #{userId,jdbcType=BIGINT}
   </select>
 </mapper>
