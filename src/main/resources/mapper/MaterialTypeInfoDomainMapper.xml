@@ -112,4 +112,10 @@
                     #{listItem}
                   </foreach>
   </delete>
+  
+  <insert id="addMaterialTypeInfo" parameterType="com.ztzh.ui.po.MaterialTypeInfoDomain">
+  insert into material_type_info 
+  	(materail_info_id,material_type_code_parent,material_type_code_child,material_style_code,create_time) 
+  	values (#{materailInfoId},#{materialTypeCodeParent},#{materialTypeCodeChild},#{materialStyleCode},#{createTime})
+  </insert>
 </mapper>

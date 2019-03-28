@@ -14,7 +14,10 @@ import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.bo.UploadMaterialsBo;
 import com.ztzh.ui.dao.MaterialInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeDomainMapper;
+import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
+import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.po.MaterialTypeDomain;
+import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.service.UploadMaterialsService;
 
@@ -28,8 +31,12 @@ public class UploadMaterialsServiceImpl implements UploadMaterialsService{
 	MaterialInfoDomainMapper materialInfoDomainMapper;
 	
 	@Autowired
-	ElasticSearchService elasticSearchService;
+
+	MaterialTypeInfoDomainMapper materialTypeInfoDomainMapper;
 	
+	@Autowired
+	ElasticSearchService elasticSearchService;
+
 	@Override
 	public UploadMaterialsBo getMaterialTypes() {
 		UploadMaterialsBo uploadMaterialsBo = new UploadMaterialsBo();
@@ -43,6 +50,11 @@ public class UploadMaterialsServiceImpl implements UploadMaterialsService{
 	}
 	
 	@Override
+	public int addMaterialInfo(MaterialInfoDomain materialInfo) {
+		return materialInfoDomainMapper.addMaterialInfo(materialInfo);
+	}
+	
+	@Override
 	public boolean putAllMaterialInfoInElasticsearch() {
 		boolean result = false;
 		List<MaterialInfoIndex> materialInfoIndexList = materialInfoDomainMapper.getValidMaterialInfoForIndex();
@@ -52,4 +64,17 @@ public class UploadMaterialsServiceImpl implements UploadMaterialsService{
 		return result;
 	}
 
+	@Override
+	public int addMaterialTypeInfo(List<MaterialTypeInfoDomain> typesInfoList) {
+		int result = 1;
+		for (int i = 0; i < typesInfoList.size(); i++) {
+			result *= materialTypeInfoDomainMapper.addMaterialTypeInfo(typesInfoList.get(i));
+		}
+		return result;
+	}
+
+	@Override
+	public Long getMaterialIdByMaterialUrl(String materialUrl) {
+		return materialInfoDomainMapper.selectMaterialIdByMaterialUrl(materialUrl);
+	}
 }

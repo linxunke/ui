@@ -25,8 +25,11 @@ public interface MaterialInfoDomainMapper {
     
     int deleteByCanvasId(@Param("canvasId") Long canvasId,@Param("userId") Long userId);
     
-    
     int updateByCanvasInfoIdPrivate (@Param("materialInfoDomain") MaterialInfoDomain record,@Param("canvasId") Long canvasId,@Param("userId") Long userId);
     
+    int addMaterialInfo(MaterialInfoDomain materialInfo);
+    
+    Long selectMaterialIdByMaterialUrl(String materialUrl);
+
     List<MaterialInfoIndex> getValidMaterialInfoForIndex();
 }

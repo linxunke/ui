@@ -5,7 +5,8 @@ import com.ztzh.ui.bo.RegisterResultBo;
 import com.ztzh.ui.po.UserInfoDomain;
 
 public interface UserService {
-
+	public UserInfoDomain getUserInfoById(Long userId);
+	
 	public RegisterResultBo register(UserInfoDomain user);
 
 	public String encrypt(String password);

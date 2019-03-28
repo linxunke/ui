@@ -16,6 +16,7 @@ import org.im4java.process.ArrayListOutputConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ImageMagickUtil {
 	 /** * ImageMagick的路径 */
+	
 	@Value("${imagemagickpath.address}")
     private  String imageMagickPath;
 	

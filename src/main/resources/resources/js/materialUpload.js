@@ -3,7 +3,10 @@ $(document).ready(function(){
 	/*获取分类的类别信息*/
 	$.ajax({
 		url:'/uploadMaterial/getMaterialTypes',
-		type:'get',
+		type:'post',
+		data:{
+			userId: '1'
+		},
 		success:function(data){
 			typeData = JSON.parse(data);
 			console.log(typeData);
@@ -41,7 +44,7 @@ $(document).ready(function(){
 			var canvasInfo = data;
 			var appendOptions = '';
 			for(var i=0; i < canvasInfo.object.length; i++){
-				appendOptions += '<option>'+canvasInfo.object[i].canvasName+'</option>';
+				appendOptions += '<option value="'+canvasInfo.object[i].id+'">'+canvasInfo.object[i].canvasName+'</option>';
 			}
 			$("#personal_sketchpad").append(appendOptions);
 		},
@@ -69,7 +72,6 @@ $(document).ready(function(){
 			if(selectedTypeCode == materialSegmentations[i].parentCode){
 				type_module +='<option value="'+materialSegmentations[i].typeCode+'">'+materialSegmentations[i].typeName+'</option>';
 			}
-			
 		}
 		type_module += '</select></div></div><div class="material_type_info"><div class="type_info_title">风格</div><div class="type_info_content">'+
 			'<select class="material_type_select material_style_text"">';
@@ -79,11 +81,60 @@ $(document).ready(function(){
 			type_module +='<option value="'+materialStyles[i].typeCode+'">'+materialStyles[i].typeName+'</option>';
 		}
 		type_module += '</select></div></div><input type="button" class="type_info_manage delete_type_info_div" value="-" onclick="deleteInfoModule(this)"/></div>';
-		
 		var $material_type_module = $(".material_type_module");
 		$material_type_module.append(type_module);
 	});
 	
+	/*提交上传的素材信息*/
+	$("#upload_material").click(function() {
+		var formdata = new FormData();
+		formdata.append("userId",1);
+		formdata.append("imageName",$("#material_title_content").val());
+		formdata.append("imageLabel",$("#material_label_content").val());
+		formdata.append("personalCanvasId",$("#personal_sketchpad").val());
+		var typeArray = new Array();
+		for(var i = 0; i <$(".material_total_info").length; i++){
+			typeArray[i] = new Array(3);
+		}
+		var index = 0;
+		$(".material_total_info").each(function() {
+			typeArray[index][0] = $(this).find(".material_type_text").val();
+			typeArray[index][1] = $(this).find(".material_segmentation_text").val();
+			typeArray[index][2] = $(this).find(".material_style_text").val();
+			index += 1;
+		});
+		formdata.append("typeArray",JSON.stringify(typeArray));
+		formdata.append("resourceFile",document.getElementById("file").files[0]);
+		formdata.append("previewImg",document.getElementById("myCan").toDataURL());
+		formdata.append("pngFileSrc",document.getElementById("target").src);
+		$.ajax({
+			url:'/uploadMaterial/commitMaterialInfos',
+			type:'post',
+			data:formdata,
+			contentType: false,
+	        processData: false,
+			success:function(data){
+				var resultData = JSON.parse(data);
+				console.log(resultData);
+				if(resultData.status == '200'){
+					alert(resultData.message);
+					window.location.href = "/test2/toMaterialUpload";
+				}else if(resultData.status == '500'){
+					alert(resultData.message);
+				}
+			},
+			error:function (data) {
+				console.log(data);
+			}
+		});
+	});
+	$("#downloadModels").click(function(){
+		var $eleForm = $("<form method='get'></form>");
+        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadFiles/model.ai");
+        $(document.body).append($eleForm);
+        //提交表单，实现下载
+        $eleForm.submit();
+	});
 });
 
 /*类型下拉框的值改变时，对应修改细分下拉框的值*/
@@ -103,6 +154,7 @@ function changeSelectText(Obj) {
 //删除类别模块
 function deleteInfoModule(obj){
 	var $module = $(obj);
+	/*删除整个类别模块的内容*/
 	$module.parent().remove();
 }
 
@@ -141,23 +193,37 @@ function getFileUrl(sourceId) {
 function changeFile() {
     var url = getFileUrl("file");//根据id获取文件路径
     var fileObj = document.getElementById("file").files[0];
-    var formdata = new FormData(); // FormData 对象
-    formdata.append("file", fileObj); // 文件对象
-    $.ajax({
-		url:'/uploadMaterial/getMaterialFiles',
-		type:'post',
-		enctype:'multipart/form-data',
-		data:formdata,
-		contentType: false,
-        processData: false,
-		success:function(data){
-			console.log("11");
-		},
-		error:function(){
-			console.log('error happened----');
-		}
-	});
-    preImg(url);
+    /*console.log(fileObj.type);*/
+    /*需要添加psd格式的判断*/
+    /* *********** */
+    /*if(fileObj.type == 'application/postscript'){*/
+    	var formdata = new FormData(); // FormData 对象
+        formdata.append("file", fileObj); // 文件对象
+        $.ajax({
+    		url:'/uploadMaterial/getMaterialFiles',
+    		type:'post',
+    		enctype:'multipart/form-data',
+    		data:formdata,
+    		contentType: false,
+            processData: false,
+    		success:function(data){
+    			var resultData = JSON.parse(data);
+    			console.log(resultData);
+    			if(resultData.status == '200'){
+    				/*拼接图片的地址*/
+    				var realUrl = window.location.protocol + "//" + window.location.host + "/images/" + resultData.object;
+    				preImg(realUrl);
+    			}else if(resultData.status == '500'){
+    				alert(resultData.message);
+    			}
+    		},
+    		error:function(){
+    			console.log('error happened----');
+    		}
+    	});
+    /*}else{
+    	alert("当前不支持类型为"+fileObj.type+"的文件,请重新选择文件!");
+    }*/
     return false;
 }
 
@@ -200,7 +266,7 @@ function initJcrop(){
     $target.Jcrop({
       onChange: updatePreview,
       onSelect: updatePreview,
-      aspectRatio: xsize / ysize
+      aspectRatio: 1.3
     },function(){
     //初始化后回调函数
     // 获取图片实际显示的大小

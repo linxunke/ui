@@ -53,8 +53,8 @@ public class FileUpload {
             IOUtils.closeQuietly(fos);
         }
         logger.info("文件名称:{}",filename);
-        logger.info(filepath+"/" + filename);
-        return filepath+"/" + filename;
+        logger.info(filepath+"\\" + filename);
+        return filepath+"\\" + filename;
     }
     
     public static void base64ToFile(String base64, String realPath, String fileName){
@@ -69,7 +69,7 @@ public class FileUpload {
     	FileOutputStream fos = null;
     	try{
     		byte[] bytes = Base64.getDecoder().decode(base64);
-    		file = new File(filePath+"/"+fileName);
+    		file = new File(filePath+"//"+fileName);
     		fos = new FileOutputStream(file);
     		bos = new BufferedOutputStream(fos);
     		bos.write(bytes);
@@ -101,6 +101,17 @@ public class FileUpload {
     	for(File file:files) {
     		file.delete();
     	}
+    }
+    public static String convertPath(String oldPath){
+    	String newPath="";
+    	for(int i = 0; i <oldPath.length(); i++){
+    		if(oldPath.charAt(i) == '\\'){
+    			newPath += "\\\\";
+    		}else {
+				newPath += oldPath.charAt(i);
+			}
+    	}
+    	return newPath;
     }
 
 }

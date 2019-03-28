@@ -277,4 +277,16 @@
     where is_valid = 1
   </select>
   
+  <insert id="addMaterialInfo" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
+		insert into material_info
+		 (create_user_id,canvas_info_id_private,canvas_info_id_public,material_name,material_description,
+		material_type,material_url,thumbnail_url,png_url,upload_time,color_type,color_percentage,is_valid)
+		values 
+		(#{createUserId},#{canvasInfoIdPrivate},#{canvasInfoIdPublic},#{materialName},#{materialDescription},
+		#{materialType},#{materialUrl},#{thumbnailUrl},#{pngUrl},#{uploadTime},#{colorType},
+		#{colorPercentage},#{isValid})
+	</insert>
+	<select id="selectMaterialIdByMaterialUrl" parameterType="java.lang.String" resultType="java.lang.Long">
+		select id from material_info where material_url = #{materialUrl}
+	</select>
 </mapper>

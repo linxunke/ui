@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ztzh.ui.po.CanvasInfoDomain;
+import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.service.CanvasInfoService;
+import com.ztzh.ui.vo.CanvasResponseVo;
 import com.ztzh.ui.vo.ResponseVo;
 
 @RestController
@@ -23,16 +24,20 @@ public class CanvasInfoController {
 
 	@RequestMapping(value = "getCanvasByUserId", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	public String getCanvasInfo(
-			@RequestParam(value = "userid", required = false) String userid) {
+	public String getCanvasInfo(@RequestParam(value = "userid", required = false) String userid) {
 		logger.info(userid);
-		List<CanvasInfoDomain> userCanvas = canvasInfoService
+		List<ManagementCanvasBo> userCanvas = canvasInfoService
 				.selectCanvasByUserId(Long.parseLong(userid));
+		System.out.println(userCanvas.get(0));
+		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userid));
+		CanvasResponseVo canvasVo = new CanvasResponseVo();
+		canvasVo.setCanvasCount(canvasCount);
+		canvasVo.setCanvasInfo(userCanvas);
 		ResponseVo responseVo = new ResponseVo();
 		if (userCanvas.size() > 0) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取个人画板信息成功");
-			responseVo.setObject(userCanvas);
+			responseVo.setObject(canvasVo);
 		} else {
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
 			responseVo.setMessage("获取个人画板信息失败");

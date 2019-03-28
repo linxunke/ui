@@ -1,6 +1,6 @@
 package com.ztzh.ui.service.impl;
 
-import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.constants.CanvasInfoConstants;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
@@ -42,6 +43,7 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	FTPUtil ftpUtil;
 	
 
+	
 	@SuppressWarnings("unused")
 	@Override
 	@Transactional
@@ -66,10 +68,6 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
 		logger.info("总共删除{}件素材",countDeletedMaterials);
 	}
-	@Override
-	public List<CanvasInfoDomain> selectCanvasByUserId(Long userId) {
-		return canvasInfoDomainMapper.selectByUserId(userId);
-	}
 	
 	@SuppressWarnings("unused")
 	@Override
@@ -89,4 +87,35 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		
 	}
 
+	@Override
+	public int canvasCount(Long userId) {
+		return canvasInfoDomainMapper.selectCountByUserId(userId);
+	}
+	@Override
+	public List<ManagementCanvasBo> selectCanvasByUserId(Long userId) {
+		return canvasInfoDomainMapper.selectByUserId(userId);
+	}
+	@SuppressWarnings("null")
+	@Override
+	public boolean addCanvas(Long userId, String canvasName, String canvasDesc) {
+		CanvasInfoDomain canvasInfo = null;
+		canvasInfo.setUserId(userId);
+		canvasInfo.setCanvasName(canvasName);
+		canvasInfo.setDescribeInfo(canvasDesc);
+		canvasInfo.setCanvasType(2);
+		canvasInfo.setCreateTime(GetSYSTime.systemTime());
+		canvasInfo.setIsValid(1);
+		canvasInfoDomainMapper.insert(canvasInfo);
+		return true;
+	}
+	@SuppressWarnings("null")
+	@Override
+	public boolean updateCanvas(Long canvasId, String canvasName, String canvasDesc) {
+		CanvasInfoDomain canvasInfo = null;
+		canvasInfo.setId(canvasId);
+		canvasInfo.setCanvasName(canvasName);
+		canvasInfo.setDescribeInfo(canvasDesc);
+		canvasInfoDomainMapper.updateByPrimaryKey(canvasInfo);
+		return true;
+	}
 }

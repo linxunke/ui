@@ -26,10 +26,23 @@ public class UserPageController {
 	public String toRegist() {
 		return "/register";
 	}
-	
+
+	@RequestMapping(value="head",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
+	public String head(){
+		return "/head";
+	}
+	@RequestMapping(value="work_manage",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
+	public String manage(){
+		return "/work_management";
+	}
+	//下面的是测试用，随意更改
+	@RequestMapping(value="test",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
+	public String test(){
+		return "/test";
+	}
 	@RequestMapping(value="toLogin",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
 	public String toLogin(){
 		return "/login";
+
 	}
-	
 }

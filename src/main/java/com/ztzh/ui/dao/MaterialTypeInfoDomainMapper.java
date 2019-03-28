@@ -20,4 +20,6 @@ public interface MaterialTypeInfoDomainMapper {
     int updateByPrimaryKey(MaterialTypeInfoDomain record);
     
     int deleteByMaterialInfoIds(@Param("materialInfoIds")List<Long> materialInfoIds);
+    
+    int addMaterialTypeInfo(MaterialTypeInfoDomain materialTypeInfo);
 }
