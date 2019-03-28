@@ -257,4 +257,24 @@
     where canvas_info_id_private = #{canvasId,jdbcType=BIGINT}
     and create_user_id = #{userId,jdbcType=BIGINT}
   </update>
+   <select id="getValidMaterialInfoForIndex" resultType="com.ztzh.ui.bo.MaterialInfoIndex">
+    select 
+     id AS id,
+     create_user_id AS createUserId,
+     canvas_info_id_private AS canvasInfoIdPrivate,
+     canvas_info_id_public AS canvasInfoIdPublic,
+     material_name AS materialName, 
+     material_description AS materialDescription,
+     material_type AS materialType,
+     material_url AS materialUrl,
+     thumbnail_url AS thumbNail,
+     png_url AS pngUrl,
+     upload_time AS uploadTime, 
+     color_type AS colorType,
+     color_percentage AS colorPercentage, 
+     is_valid AS isValid
+    from material_info
+    where is_valid = 1
+  </select>
+  
 </mapper>

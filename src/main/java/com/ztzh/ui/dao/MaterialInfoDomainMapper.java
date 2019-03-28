@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 
@@ -26,4 +27,6 @@ public interface MaterialInfoDomainMapper {
     
     
     int updateByCanvasInfoIdPrivate (@Param("materialInfoDomain") MaterialInfoDomain record,@Param("canvasId") Long canvasId,@Param("userId") Long userId);
+    
+    List<MaterialInfoIndex> getValidMaterialInfoForIndex();
 }
