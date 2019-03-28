@@ -114,12 +114,26 @@ $(document).ready(function(){
 			contentType: false,
 	        processData: false,
 			success:function(data){
-				console.log(data);
+				var resultData = JSON.parse(data);
+				console.log(resultData);
+				if(resultData.status == '200'){
+					alert(resultData.message);
+					window.location.href = "/test2/toMaterialUpload";
+				}else if(resultData.status == '500'){
+					alert(resultData.message);
+				}
 			},
 			error:function (data) {
 				console.log(data);
 			}
 		});
+	});
+	$("#downloadModels").click(function(){
+		var $eleForm = $("<form method='get'></form>");
+        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/files/downloadFiles?fileName=图标制作模板.ai");
+        $(document.body).append($eleForm);
+        //提交表单，实现下载
+        $eleForm.submit();
 	});
 });
 
@@ -179,26 +193,37 @@ function getFileUrl(sourceId) {
 function changeFile() {
     var url = getFileUrl("file");//根据id获取文件路径
     var fileObj = document.getElementById("file").files[0];
-    var formdata = new FormData(); // FormData 对象
-    formdata.append("file", fileObj); // 文件对象
-    $.ajax({
-		url:'/uploadMaterial/getMaterialFiles',
-		type:'post',
-		enctype:'multipart/form-data',
-		data:formdata,
-		contentType: false,
-        processData: false,
-		success:function(data){
-			var resultData = JSON.parse(data);
-			console.log(resultData);
-			/*拼接图片的地址*/
-			var realUrl = window.location.protocol + "//" + window.location.host + "/images/" + resultData.object;
-			preImg(realUrl);
-		},
-		error:function(){
-			console.log('error happened----');
-		}
-	});
+    /*console.log(fileObj.type);*/
+    /*需要添加psd格式的判断*/
+    /* *********** */
+    /*if(fileObj.type == 'application/postscript'){*/
+    	var formdata = new FormData(); // FormData 对象
+        formdata.append("file", fileObj); // 文件对象
+        $.ajax({
+    		url:'/uploadMaterial/getMaterialFiles',
+    		type:'post',
+    		enctype:'multipart/form-data',
+    		data:formdata,
+    		contentType: false,
+            processData: false,
+    		success:function(data){
+    			var resultData = JSON.parse(data);
+    			console.log(resultData);
+    			if(resultData.status == '200'){
+    				/*拼接图片的地址*/
+    				var realUrl = window.location.protocol + "//" + window.location.host + "/images/" + resultData.object;
+    				preImg(realUrl);
+    			}else if(resultData.status == '500'){
+    				alert(resultData.message);
+    			}
+    		},
+    		error:function(){
+    			console.log('error happened----');
+    		}
+    	});
+    /*}else{
+    	alert("当前不支持类型为"+fileObj.type+"的文件,请重新选择文件!");
+    }*/
     return false;
 }
 
