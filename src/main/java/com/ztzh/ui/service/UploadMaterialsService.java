@@ -11,4 +11,5 @@ public interface UploadMaterialsService {
 	public int addMaterialInfo(MaterialInfoDomain materialInfo);
 	public int addMaterialTypeInfo(List<MaterialTypeInfoDomain> typesInfoList);
 	public Long getMaterialIdByMaterialUrl(String materialUrl);
+	public boolean putAllMaterialInfoInElasticsearch();
 }
