@@ -28,7 +28,6 @@ public class CanvasInfoController {
 		logger.info(userid);
 		List<ManagementCanvasBo> userCanvas = canvasInfoService
 				.selectCanvasByUserId(Long.parseLong(userid));
-		System.out.println(userCanvas.get(0));
 		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userid));
 		CanvasResponseVo canvasVo = new CanvasResponseVo();
 		canvasVo.setCanvasCount(canvasCount);

@@ -1,0 +1,138 @@
+@CHARSET "UTF-8";
+*{
+    margin: 0;
+    padding: 0;
+    color: rgba(223, 225, 230, 1);
+    border: 0px;
+    text-decoration: none;
+    list-style: none;
+}
+.head{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 1440px;
+    height: 56px;
+    background-color: #F5F5F9;
+}
+.nav{
+    width: 100%;
+    height: 56px;
+    background-color: rgba(40, 40, 40, 1);
+}
+.nav_list{
+    float: left;
+}
+.nav_logo{
+    float: left;
+    position: absolute;
+    left: 232px;
+    top: 10px;
+    width: 120px;
+    height: 36px;
+
+}
+.home{
+    position: absolute;
+    left: 357px;
+    top: 19px;
+    width: 28px;
+    height: 20px;
+    color: rgba(223, 225, 230, 1);
+    font-size: 14px;
+    text-align: left;
+    font-family: PingFangSC-Semibold;
+}
+.material_library{
+    position: absolute;
+    left: 409px;
+    top: 19px;
+    width: 42px;
+    height: 20px;
+    opacity: 0.6;
+    color: rgba(255, 255, 255, 1);
+    font-size: 14px;
+    text-align: left;
+    font-family: PingFangSC-Regular;
+}
+.work_management{
+    position: absolute;
+    left: 475px;
+    top: 19px;
+    width: 56px;
+    height: 20px;
+    opacity: 0.6;
+    color: rgba(255, 255, 255, 1);
+    font-size: 14px;
+    text-align: left;
+    font-family: PingFangSC-Regular;
+}
+.search_box{
+    position: absolute;
+    left: 910px;
+    top: 15px;
+    width: 200px;
+    height: 28px;
+    opacity: 0.2;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 1);
+    background-color: rgba(40, 40, 40, 1);
+}
+.search_map{
+    margin-left: 10px;
+    margin-right: 10px;
+    display: inline-block;
+    float: left;
+    width: 24px;
+    height: 24px;
+}
+.search_map{
+    cursor: pointer;
+}
+.search_content{
+    display: inline-block;
+    width: 120px;
+    float: left;
+    line-height: 28px;
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(40, 40, 40, 1);
+}
+.search_btn{
+    margin-left: 10px;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+}
+.search_btn:hover{
+    cursor: pointer;
+}
+.update{
+    position: absolute;
+    left: 1132px;
+    top: 18px;
+    width: 24px;
+    height: 24px;
+}
+.update:hover{
+    cursor: pointer;
+}
+.message{
+    position: absolute;
+    left: 1168px;
+    top: 17px;
+    width: 24px;
+    height: 24px;
+}
+.message:hover{
+    cursor: pointer;
+}
+.need_sign_in{
+    position: absolute;
+    left: 1209px;
+    top: 17px;
+    width: 24px;
+    height: 24px;
+}
+.need_sign_in:hover{
+    cursor: pointer;
+}

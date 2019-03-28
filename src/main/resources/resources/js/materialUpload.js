@@ -37,7 +37,7 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userid=1',
+		url:'/canvasInfo/getCanvasByUserId?userId=1',
 		type:'get',
 		success:function(data){
 			console.log(data);
@@ -130,7 +130,7 @@ $(document).ready(function(){
 	});
 	$("#downloadModels").click(function(){
 		var $eleForm = $("<form method='get'></form>");
-        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadFiles/model.ai");
+        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadfile/图标制作模板.ai");
         $(document.body).append($eleForm);
         //提交表单，实现下载
         $eleForm.submit();
