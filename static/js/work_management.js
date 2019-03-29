@@ -23,6 +23,7 @@ $(document).ready(function () {
         type:'post',
        success:function (data) {
     	   var result = JSON.parse(data);
+    	   document.getElementById("manage_boardcount").innerHTML = "共有"+result.object.canvasCount+"个画板作品";
     	   console.log(result);	   
     	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
     		   var div = document.createElement('div');
