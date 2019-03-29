@@ -6,9 +6,9 @@ import com.ztzh.ui.bo.ManagementCanvasBo;
 
 public interface CanvasInfoService {
 	
-	public void userDeleteCanvasWithMaterials(Long canvasId, Long userId);
+	public boolean userDeleteCanvasWithMaterials(Long canvasId, Long userId);
 	
-	public void userDeleteCanvasWithoutMaterials(Long canvasId, Long userId);
+	public boolean userDeleteCanvasWithoutMaterials(Long canvasId, Long userId);
 	
 	public int canvasCount(Long userId);
 	

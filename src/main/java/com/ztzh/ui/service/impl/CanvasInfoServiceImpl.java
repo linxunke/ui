@@ -47,7 +47,7 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	@SuppressWarnings("unused")
 	@Override
 	@Transactional
-	public void userDeleteCanvasWithMaterials(Long canvasId, Long userId) {
+	public boolean userDeleteCanvasWithMaterials(Long canvasId, Long userId) {
 		logger.info("开始删除画板canvasId:{}",canvasId);
 		int count = canvasInfoDomainMapper.deleteByPrimaryKey(canvasId);
 		logger.info("开始删除数据库中素材数据");
@@ -64,15 +64,18 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		logger.info("删除磁盘中的素材文件成功");
 		int countDeletedMaterials = materialInfoDomainMapper.deleteByCanvasId(canvasId, userId);
 		//删除分类中的数据
-		int materialTypeInfoCount = materialTypeInfoDomainMapper.deleteByMaterialInfoIds(materialIdList);
-		int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
+		if(materialIdList.size()>0) {
+			int materialTypeInfoCount = materialTypeInfoDomainMapper.deleteByMaterialInfoIds(materialIdList);
+			int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
+		}
 		logger.info("总共删除{}件素材",countDeletedMaterials);
+		return true;
 	}
 	
 	@SuppressWarnings("unused")
 	@Override
 	@Transactional
-	public void userDeleteCanvasWithoutMaterials(Long canvasId, Long userId) {
+	public boolean userDeleteCanvasWithoutMaterials(Long canvasId, Long userId) {
 		logger.info("开始删除画板canvasId:{}",canvasId);
 		int count = canvasInfoDomainMapper.deleteByPrimaryKey(canvasId);
 		logger.info("开始将所属该画板的素材转移到未分类画板中");
@@ -84,7 +87,7 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		materialInfoDomain.setUploadTime(GetSYSTime.systemTime());
 		int updateCount = materialInfoDomainMapper.updateByCanvasInfoIdPrivate(materialInfoDomain,canvasId,userId);
 		logger.info("总共将{}件素材转入未分类",updateCount);
-		
+		return true;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 var main_div =1;
-var userid = 1;
+var userid = 6;
 $(document).ready(function () {
     var btn = document.getElementById('manage_add_btn');
     var cover = document.getElementById('cover_layer');
@@ -13,7 +13,7 @@ $(document).ready(function () {
     	edit[i].click=update;
     }*/
     
-    var userid = 1;//拿到user id  显示具体画板数量,拿到已有的画板的信息，for循环添加div
+    var userid = 6;//拿到user id  显示具体画板数量,拿到已有的画板的信息，for循环添加div
     $.ajax({
     	url:'/canvasInfo/getCanvasByUserId',
     	data:{
@@ -31,8 +31,20 @@ $(document).ready(function () {
     		  document.getElementById("board_list").appendChild(div);
     		  //下面需要后台传过来的信息innerHTML
     		  /*result.object.canvasInfo[i].lastMaterialUrl*/
-    		  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div class="board_covers" ><img src="'+window.location.protocol + "//" + window.location.host + result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTime+'</div><div id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
-    		  console.log(div.id);
+    		  if(result.object.canvasInfo[i].canvasName =="未分类"){
+    			  $("#"+div.id).html('<div'+
+        				  ' class="board_covers" ><img style="width:160px;height:auto;margin-left:30px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTime+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    		  }else{
+    		  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
+    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
+    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
+    				  ' class="board_covers" ><img style="width:160px;height:auto;margin-left:30px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTime+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    		  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
+    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
+    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
+    				  ' class="board_covers" ><img style="width:160px;height:auto;margin-left:30px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTime+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    		  
+    		  }console.log(div.id);
     		  
     	   }
     	   
@@ -61,7 +73,7 @@ $(document).ready(function () {
     	show.style.display = "none";
     	var boardName = $("#show_text").val();
         var board_des = $("#show_textarea").val();
-        var userid = 1;
+        var userid = 6;
         console.log(boardName+"++"+board_des);
     	//添加div
     	var main = document.getElementById('unsorted_board');
@@ -88,11 +100,17 @@ $(document).ready(function () {
                     },
                     dataType:'text',
                     type:'post',
-                   success:function (data) {
-                	   console.log("添加画板成功");
+                    success:function (data) {
+                    	var resultData = JSON.parse(data);
+                		if(resultData.status == '200'){
+                			alert(resultData.message);
+                			document.location.reload();
+                		}else if(resultData.status == '500'){
+            				alert(resultData.message);
+            			}
                     },
                     error:function () {
-                    	 console.log("添加画板失败");
+                    	console.log('error happened----');
                     }
                 });
             }
@@ -177,11 +195,18 @@ function update(canvasId){
         	},
         	dataType:'text',
         	Type:'post',
-        	succuss:function(data){
-        		windows.location.href="/userpage/work_management";
+        	success:function(data){
+        		var resultData = JSON.parse(data);
+        		if(resultData.status == '200'){
+        			alert(resultData.message);
+        			document.location.reload();
+        		}else if(resultData.status == '500'){
+    				alert(resultData.message);
+    			}
+        		
         	},
         	error:function(){
-        		console.log("更改画板信息失败");
+        		console.log("error happened----");
         	}
         });
 	});
@@ -194,11 +219,17 @@ function update(canvasId){
         	},
         	dataType:'text',
         	Type:'post',
-        	succuss:function(data){
-        		windows.location.href="/userpage/work_management";
+        	success:function(data){
+        		var resultData = JSON.parse(data);
+        		if(resultData.status == '200'){
+        			alert(resultData.message);
+        			document.location.reload();
+        		}else if(resultData.status == '500'){
+    				alert(resultData.message);
+    			}
         	},
         	error:function(){
-        		console.log("更改画板信息失败");
+        		console.log('error happened----');
         	}
         });
 	});
@@ -211,11 +242,18 @@ function update(canvasId){
         	},
         	dataType:'text',
         	Type:'post',
-        	succuss:function(data){
-        		windows.location.href="/userpage/work_management";
+        	success:function(data){
+        		var resultData = JSON.parse(data);
+        		console.log(resultData.status);
+        		if(resultData.status == '200'){
+        			alert(resultData.message);
+        			document.location.reload();
+        		}else if(resultData.status == '500'){
+    				alert(resultData.message);
+    			}
         	},
         	error:function(){
-        		console.log("更改画板信息失败");
+        		console.log('error happened----');
         	}
         });
 	});

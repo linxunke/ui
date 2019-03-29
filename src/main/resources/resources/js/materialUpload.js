@@ -5,7 +5,7 @@ $(document).ready(function(){
 		url:'/uploadMaterial/getMaterialTypes',
 		type:'post',
 		data:{
-			userId: '5'
+			userId: '6'
 		},
 		success:function(data){
 			typeData = JSON.parse(data);
@@ -37,7 +37,7 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userid=5',
+		url:'/canvasInfo/getCanvasByUserId?userid=6',
 		type:'get',
 		success:function(data){
 			console.log(data);
@@ -88,7 +88,7 @@ $(document).ready(function(){
 	/*提交上传的素材信息*/
 	$("#upload_material").click(function() {
 		var formdata = new FormData();
-		formdata.append("userId",5);
+		formdata.append("userId",6);
 		formdata.append("imageName",$("#material_title_content").val());
 		formdata.append("imageLabel",$("#material_label_content").val());
 		formdata.append("personalCanvasId",$("#personal_sketchpad").val());
@@ -118,7 +118,7 @@ $(document).ready(function(){
 				console.log(resultData);
 				if(resultData.status == '200'){
 					alert(resultData.message);
-					window.location.href = "/test2/toMaterialUpload";
+					window.location.href = "/userpage/toMaterialUpload";
 				}else if(resultData.status == '500'){
 					alert(resultData.message);
 				}
@@ -130,7 +130,7 @@ $(document).ready(function(){
 	});
 	$("#downloadModels").click(function(){
 		var $eleForm = $("<form method='get'></form>");
-        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadFiles/model.ai");
+        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadfile/图标制作模板.ai");
         $(document.body).append($eleForm);
         //提交表单，实现下载
         $eleForm.submit();
