@@ -3,7 +3,7 @@
 .manage_all {
 	margin: 0;
 	padding: 0;
-	width: 1440px;
+	width: 100%;
 	height: 1024px;
 	color: #A1A6B3;
 	background-color: black;
@@ -11,12 +11,12 @@
 
 .manage_head {
 	background-color: rgba(40, 40, 40, 1);
-	width: 1440px;
+	width: 100%;
 	height: 56px;
 }
 
 .manage_userdoing {
-	width: 1440px;
+	width: 100%;
 	height: 96px;
 	background-color: rgba(40, 40, 40, 1);
 }
@@ -109,7 +109,7 @@
 }
 
 .manage_drawing_board_list {
-	width: 1440px;
+	width: 100%;
 	height: 872px;
 	background-color: rgba(245, 245, 249, 1);
 }

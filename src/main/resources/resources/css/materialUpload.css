@@ -191,7 +191,7 @@ body{
 
 .material_footer{
 	height:544px;
-	width: 1440px;
+	width: 100%;
 	background-color: white;
 }
 .foot_head_list{

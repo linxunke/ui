@@ -8,6 +8,7 @@ $(document).ready(function () {
     var close2 = document.getElementById('close2');
     var show2 = document.getElementById('show_div2');
     var sure = document.getElementById('sure');
+    getUserName(6);
     /*var edit = document.getElementsByClassName('edit_button');
     for(i in edit){
     	edit[i].click=update;
@@ -23,6 +24,7 @@ $(document).ready(function () {
         type:'post',
        success:function (data) {
     	   var result = JSON.parse(data);
+    	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");
     	   console.log(result);	   
     	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
     		   var div = document.createElement('div');
@@ -62,7 +64,6 @@ $(document).ready(function () {
     });
     var boardName = $("#show_text").val();
     var board_des = $("#show_textarea").val();
-    console.log(boardName+"++"+board_des);
     btn.addEventListener('click', function(){
     	cover.style.display = "block";
     	close.style.display = "block";
@@ -83,17 +84,17 @@ $(document).ready(function () {
         var userid = 6;
         console.log(boardName+"++"+board_des);
     	//添加div
-    	var main = document.getElementById('unsorted_board');
+    	/*var main = document.getElementById('unsorted_board');
         var div = document.createElement('div');
         div.className = "every_board";
         div.id = "unsorted_board"+main_div;
         document.getElementById("board_list").appendChild(div);
         //下面需要后台传过来的信息innerHTML
-        /*result.object.canvasInfo[i].lastMaterialUrl  这里固定一个默认图片*/
-        /*div.innerHTML = main.innerHTML;*/
+        result.object.canvasInfo[i].lastMaterialUrl  这里固定一个默认图片
+        
         $("#"+div.id).html('<div class="edit_button"><img class="edit_img" src="../img/编辑.png"><span class="canvas-id">/span></div><div class="board_covers" ><img src=""></div><div class="board_name">'+boardName+'</div><div class="drawing_count">0</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date"></div><div id="board_id">canvasId</div>');
         
-        main_div++;	
+        main_div++;	*/
         
         if(boardName != "" && board_des != ""){
                 /*异步传输画板的信息*/
@@ -111,6 +112,19 @@ $(document).ready(function () {
                     	var resultData = JSON.parse(data);
                 		if(resultData.status == '200'){
                 			alert(resultData.message);
+                			//添加div
+                	    	var main = document.getElementById('unsorted_board');
+                	        var div = document.createElement('div');
+                	        div.className = "every_board";
+                	        div.id = "unsorted_board"+main_div;
+                	        document.getElementById("board_list").appendChild(div);
+                	        //下面需要后台传过来的信息innerHTML
+                	        /*result.object.canvasInfo[i].lastMaterialUrl  这里固定一个默认图片*/
+                	        /*div.innerHTML = main.innerHTML;*/
+                	        
+                	        $("#"+div.id).html('<div class="edit_button"><img class="edit_img" src="../img/编辑.png"><span class="canvas-id">/span></div><div class="board_covers" ><img src=""></div><div class="board_name">'+boardName+'</div><div class="drawing_count">0</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date"></div><div id="board_id">canvasId</div>');
+                	        
+                	        main_div++;	
                 			document.location.reload();
                 		}else if(resultData.status == '500'){
             				alert(resultData.message);
@@ -225,7 +239,7 @@ function update(canvasId){
         		userid:userid
         	},
         	dataType:'text',
-        	Type:'post',
+        	type:'post',
         	success:function(data){
         		var resultData = JSON.parse(data);
         		if(resultData.status == '200'){
@@ -263,6 +277,30 @@ function update(canvasId){
         		console.log('error happened----');
         	}
         });
-	});
-	
+	});	
 }
+function getUserName(userid){
+	$.ajax({
+    	url:'/user/getUserName',
+    	data:{
+    		userid:userid
+    	},
+    	type:'post',
+    	success:function(data){/*
+    		var resultData = JSON.parse(data);*/
+    		var resultData = data;
+    		console.log(data);
+    		if(resultData.status == '200'){
+    			console.log();
+    			$("#manage_username").html(resultData.object.userNickname);
+    			$("#manage_userhead").append('<img style="width:64px;height:64px;border-radius: 64px" src="'+window.location.protocol + "//" + window.location.host + '//' + resultData.object.userPhotoUrl + '">');
+    			
+    		}else if(resultData.status == '500'){
+				alert(resultData.message);
+			}
+    	},
+    	error:function(){
+    		console.log('getUserName error happened----');
+    	}
+    });
+	}

@@ -25,7 +25,6 @@ public interface CanvasInfoDomainMapper {
 
     int updateByPrimaryKey(CanvasInfoDomain record);
     
-
     int selectCountByUserId(Long userId);
     
     ArrayList<ManagementCanvasBo> selectCanvasInfoByUserId(Long userId);

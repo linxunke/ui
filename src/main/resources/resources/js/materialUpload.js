@@ -107,6 +107,7 @@ $(document).ready(function(){
 		formdata.append("resourceFile",document.getElementById("file").files[0]);
 		formdata.append("previewImg",document.getElementById("myCan").toDataURL());
 		formdata.append("pngFileSrc",document.getElementById("target").src);
+		$("#upload_material").attr("disabled",true);
 		$.ajax({
 			url:'/uploadMaterial/commitMaterialInfos',
 			type:'post',
@@ -123,14 +124,14 @@ $(document).ready(function(){
 					alert(resultData.message);
 				}
 			},
-			error:function (data) {
-				console.log(data);
+			error:function () {
+				alert("提交失败，请重新提交！");
 			}
 		});
 	});
 	$("#downloadModels").click(function(){
 		var $eleForm = $("<form method='get'></form>");
-        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadfile/图标制作模板.ai");
+        $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadFiles/model.ai");
         $(document.body).append($eleForm);
         //提交表单，实现下载
         $eleForm.submit();
