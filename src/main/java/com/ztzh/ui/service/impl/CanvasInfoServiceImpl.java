@@ -62,8 +62,10 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		logger.info("删除磁盘中的素材文件成功");
 		int countDeletedMaterials = materialInfoDomainMapper.deleteByCanvasId(canvasId, userId);
 		//删除分类中的数据
-		int materialTypeInfoCount = materialTypeInfoDomainMapper.deleteByMaterialInfoIds(materialIdList);
-		int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
+		if(materialIdList.size()>0) {
+			int materialTypeInfoCount = materialTypeInfoDomainMapper.deleteByMaterialInfoIds(materialIdList);
+			int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
+		}
 		logger.info("总共删除{}件素材",countDeletedMaterials);
 		return true;
 	}

@@ -5,7 +5,7 @@ $(document).ready(function(){
 		url:'/uploadMaterial/getMaterialTypes',
 		type:'post',
 		data:{
-			userId: '1'
+			userId: '6'
 		},
 		success:function(data){
 			typeData = JSON.parse(data);
@@ -37,7 +37,7 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userid=1',
+		url:'/canvasInfo/getCanvasByUserId?userid=6',
 		type:'get',
 		success:function(data){
 			console.log(data);
@@ -88,7 +88,7 @@ $(document).ready(function(){
 	/*提交上传的素材信息*/
 	$("#upload_material").click(function() {
 		var formdata = new FormData();
-		formdata.append("userId",1);
+		formdata.append("userId",6);
 		formdata.append("imageName",$("#material_title_content").val());
 		formdata.append("imageLabel",$("#material_label_content").val());
 		formdata.append("personalCanvasId",$("#personal_sketchpad").val());
@@ -107,6 +107,7 @@ $(document).ready(function(){
 		formdata.append("resourceFile",document.getElementById("file").files[0]);
 		formdata.append("previewImg",document.getElementById("myCan").toDataURL());
 		formdata.append("pngFileSrc",document.getElementById("target").src);
+		$("#upload_material").attr("disabled",true);
 		$.ajax({
 			url:'/uploadMaterial/commitMaterialInfos',
 			type:'post',
@@ -118,8 +119,7 @@ $(document).ready(function(){
 				console.log(resultData);
 				if(resultData.status == '200'){
 					alert(resultData.message);
-					$("#upload_material").attr("disabled",true);
-					window.location.href = "/test2/toMaterialUpload";
+					window.location.href = "/userpage/toMaterialUpload";
 				}else if(resultData.status == '500'){
 					alert(resultData.message);
 				}

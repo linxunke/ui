@@ -28,10 +28,7 @@ public class Test2Controller {
 		return "/cutpic";
 	}
 
-	@RequestMapping(value="toMaterialUpload")
-	public String toMaterialUpload(){
-		return "materialUpload";
-	}
+
 
 	
 
