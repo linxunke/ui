@@ -1,6 +1,5 @@
 package com.ztzh.ui.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
 import com.ztzh.ui.utils.FTPUtil;
-import com.ztzh.ui.utils.FileUpload;
 import com.ztzh.ui.utils.GetSYSTime;
 
 @Service
@@ -94,7 +92,7 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	}
 	@Override
 	public List<ManagementCanvasBo> selectCanvasByUserId(Long userId) {
-		return canvasInfoDomainMapper.seleyUserId(userId);
+		return canvasInfoDomainMapper.selectByUserId(userId);
 	}
 	@SuppressWarnings("null")
 	@Override

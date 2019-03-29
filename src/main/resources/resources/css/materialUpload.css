@@ -33,8 +33,7 @@ body{
 	/* margin-left: 20px;
 	margin-top: 40px; */
 	width: 380px;
-	height: 280px;
-	width:100%;
+	height: auto;
 	border: 8px solid white;
 	background-color: rgba(245, 245, 249, 1);
 }
@@ -192,7 +191,7 @@ body{
 
 .material_footer{
 	height:544px;
-	width: 1440px;
+	width: 100%;
 	background-color: white;
 }
 .foot_head_list{

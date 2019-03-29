@@ -25,7 +25,6 @@ public class CanvasInfoController {
 	@RequestMapping(value = "getCanvasByUserId", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public String getCanvasInfo(@RequestParam(value = "userid", required = false) String userid) {
-		logger.info(userid);
 		List<ManagementCanvasBo> userCanvas = canvasInfoService
 				.selectCanvasByUserId(Long.parseLong(userid));
 		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userid));

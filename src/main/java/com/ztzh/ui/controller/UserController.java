@@ -124,4 +124,23 @@ public class UserController {
 		logger.info(responseVo.toString());
 		return responseVo.toString();
 	}
+	@RequestMapping(value = "getUserName", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
+	public String getUserNameByUserid(
+			@RequestParam(value = "userid", required = true) String userid){
+		ResponseVo responseVo = new ResponseVo();
+		UserInfoDomain user = userService.getUserInfoById(Long.parseLong(userid));
+		if(user.getUserNickname()==null){
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("获取用户信息失败");
+			responseVo.setObject(null);
+		}else{
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setMessage("获取用户画板信息成功");
+			responseVo.setObject(user);
+		}
+				return responseVo.toString();
+		
+	}
+			
 }

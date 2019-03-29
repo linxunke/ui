@@ -25,16 +25,11 @@ public interface CanvasInfoDomainMapper {
 
     int updateByPrimaryKey(CanvasInfoDomain record);
     
-//<<<<<<< HEAD
     int selectCountByUserId(Long userId);
     
     ArrayList<ManagementCanvasBo> selectCanvasInfoByUserId(Long userId);
     
-    
-//=======
     List<ManagementCanvasBo> selectByUserId(Long userId);
     
     CanvasInfoDomain selectByCanvasName(@Param("canvasName")String canvasName,@Param("userId")Long userId);
-
-//>>>>>>> c8d3bc38bba75996d9de5971d890761e0e4c36f0/
 }

@@ -50,9 +50,14 @@ public class ManagementController {
 			@RequestParam(value = "canvasDesc", required = true) String canvasDesc) {
 		ResponseVo responseVo = new ResponseVo();
 		/*responseVo.setUserId("1");*/
+		if(canvasName==null || canvasDesc==null){
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("请填写完整信息");
+			return responseVo.toString();
+		}
 		boolean reasult = managementService.addCanvas(Long.parseLong(userid),
 				canvasName, canvasDesc);
-		if (reasult == true) {
+		if (reasult) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("画板添加成功！");
 			
