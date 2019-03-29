@@ -214,6 +214,7 @@ function changeFile() {
     				/*拼接图片的地址*/
     				var realUrl = window.location.protocol + "//" + window.location.host + "/images/" + resultData.object;
     				preImg(realUrl);
+    				console.log(realWidth + "--" + realHeight);
     			}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
