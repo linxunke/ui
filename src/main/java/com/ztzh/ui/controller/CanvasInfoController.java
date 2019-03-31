@@ -24,11 +24,11 @@ public class CanvasInfoController {
 
 	@RequestMapping(value = "getCanvasByUserId", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	public String getCanvasInfo(@RequestParam(value = "userid", required = false) String userid) {
-		logger.info("userid{}",userid);
+	public String getCanvasInfo(@RequestParam(value = "userId", required = false) String userId) {
+		logger.info("开始获取用户userId:{}的画板信息",userId);
 		List<ManagementCanvasBo> userCanvas = canvasInfoService
-				.selectCanvasByUserId(Long.parseLong(userid));
-		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userid));
+				.selectCanvasByUserId(Long.parseLong(userId));
+		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userId));
 		CanvasResponseVo canvasVo = new CanvasResponseVo();
 		canvasVo.setCanvasCount(canvasCount);
 		canvasVo.setCanvasInfo(userCanvas);
@@ -42,7 +42,7 @@ public class CanvasInfoController {
 			responseVo.setMessage("获取个人画板信息失败");
 			responseVo.setObject(null);
 		}
-		responseVo.setUserId(userid);
+		responseVo.setUserId(userId);
 		return responseVo.toString();
 	}
 }

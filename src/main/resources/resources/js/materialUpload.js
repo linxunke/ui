@@ -1,11 +1,11 @@
 var typeData; /*存储数据库中已经查询到的所有分类的信息，分为3部分（类别，细分，风格）*/
 $(document).ready(function(){
+	var userId = getParameter('userId'); 
 	/*获取分类的类别信息*/
 	$.ajax({
-		url:'/uploadMaterial/getMaterialTypes',
+		url:'/uploadMaterial/getMaterialTypes?userId='+userId,
 		type:'post',
 		data:{
-			userId: '6'
 		},
 		success:function(data){
 			typeData = JSON.parse(data);
@@ -37,7 +37,7 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userid=6',
+		url:'/canvasInfo/getCanvasByUserId?userId='+userId,
 		type:'get',
 		success:function(data){
 			console.log(data);
@@ -87,8 +87,9 @@ $(document).ready(function(){
 	
 	/*提交上传的素材信息*/
 	$("#upload_material").click(function() {
+		var userId = getParameter('userId'); 
 		var formdata = new FormData();
-		formdata.append("userId",6);
+		formdata.append("userId",userId);
 		formdata.append("imageName",$("#material_title_content").val());
 		formdata.append("imageLabel",$("#material_label_content").val());
 		formdata.append("personalCanvasId",$("#personal_sketchpad").val());
@@ -119,7 +120,7 @@ $(document).ready(function(){
 				console.log(resultData);
 				if(resultData.status == '200'){
 					alert(resultData.message);
-					window.location.href = "/userpage/toMaterialUpload";
+					window.location.href = "/userpage/toMaterialUpload?userId="+resultData.userId;
 				}else if(resultData.status == '500'){
 					alert(resultData.message);
 				}
@@ -198,7 +199,9 @@ function changeFile() {
     /*需要添加psd格式的判断*/
     /* *********** */
     /*if(fileObj.type == 'application/postscript'){*/
-    	var formdata = new FormData(); // FormData 对象
+    var userId = getParameter('userId'); 
+	var formdata = new FormData();
+	formdata.append("userId",userId);
         formdata.append("file", fileObj); // 文件对象
         $.ajax({
     		url:'/uploadMaterial/getMaterialFiles',

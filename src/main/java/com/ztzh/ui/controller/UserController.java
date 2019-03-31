@@ -149,9 +149,9 @@ public class UserController {
 	@RequestMapping(value = "getUserName", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public String getUserNameByUserid(
-			@RequestParam(value = "userid", required = true) String userid){
+			@RequestParam(value = "userId", required = true) String userId){
 		ResponseVo responseVo = new ResponseVo();
-		UserInfoDomain user = userService.getUserInfoById(Long.parseLong(userid));
+		UserInfoDomain user = userService.getUserInfoById(Long.parseLong(userId));
 		if(user.getUserNickname()==null){
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
 			responseVo.setMessage("获取用户信息失败");

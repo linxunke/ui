@@ -1,6 +1,6 @@
 var main_div =1;
-var userid = 6;
 $(document).ready(function () {
+	var userId = getParameter('userId'); 
     var btn = document.getElementById('manage_add_btn');
     var cover = document.getElementById('cover_layer');
     var close = document.getElementById('close');
@@ -8,17 +8,14 @@ $(document).ready(function () {
     var close2 = document.getElementById('close2');
     var show2 = document.getElementById('show_div2');
     var sure = document.getElementById('sure');
-    getUserName(6);
+    getUserName(userId);
     /*var edit = document.getElementsByClassName('edit_button');
     for(i in edit){
     	edit[i].click=update;
     }*/
-    
-    var userid = 6;//拿到user id  显示具体画板数量,拿到已有的画板的信息，for循环添加div
     $.ajax({
-    	url:'/canvasInfo/getCanvasByUserId',
+    	url:'/canvasInfo/getCanvasByUserId?userId='+userId,
     	data:{
-    		userid:userid
     	},
     	dataType:'text',
         type:'post',
@@ -99,11 +96,10 @@ $(document).ready(function () {
         if(boardName != "" && board_des != ""){
                 /*异步传输画板的信息*/
                 $.ajax({
-                    url:'/managementCon/managementAdd',
+                    url:'/managementCon/managementAdd?userId='+userId,
                     data:{
                     	canvasName:boardName,
-                    	canvasDesc:board_des,
-                    	userid:userid
+                    	canvasDesc:board_des
                     	
                     },
                     dataType:'text',
@@ -120,12 +116,10 @@ $(document).ready(function () {
                 	        document.getElementById("board_list").appendChild(div);
                 	        //下面需要后台传过来的信息innerHTML
                 	        /*result.object.canvasInfo[i].lastMaterialUrl  这里固定一个默认图片*/
-                	        /*div.innerHTML = main.innerHTML;*/
-                	        
+                	        /*div.innerHTML = main.innerHTML;*/   	        
                 	        $("#"+div.id).html('<div class="edit_button"><img class="edit_img" src="../img/编辑.png"><span class="canvas-id">/span></div><div class="board_covers" ><img src=""></div><div class="board_name">'+boardName+'</div><div class="drawing_count">0</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date"></div><div id="board_id">canvasId</div>');
-                	        
                 	        main_div++;	
-                			document.location.reload();
+                			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
                 		}else if(resultData.status == '500'){
             				alert(resultData.message);
             			}
@@ -198,6 +192,7 @@ function update(canvasId){
 	cover.style.display = "block";
 	close2.style.display = "block";
 	show2.style.display = "block";
+	var userId = getParameter('userId');
 	var canvasid = canvasId;
 	console.log("canvasid="+canvasid);
 	sure2.addEventListener('click',function(){
@@ -208,7 +203,7 @@ function update(canvasId){
         var board_des = $("#show_textarea2").val();
         console.log(boardName+"++"+board_des+"++"+canvasid);
         $.ajax({
-        	url:'/managementCon/managementUpdate',
+        	url:'/managementCon/managementUpdate?userId='+userId,
         	data:{
         		canvasid:canvasid,
         		boardName:boardName,
@@ -220,7 +215,7 @@ function update(canvasId){
         		var resultData = JSON.parse(data);
         		if(resultData.status == '200'){
         			alert(resultData.message);
-        			document.location.reload();
+        			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
         		}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
@@ -233,10 +228,9 @@ function update(canvasId){
 	});
 	deleteAll.addEventListener('click',function(){
 		$.ajax({
-        	url:'/managementCon/managementDeleteAll',
+        	url:'/managementCon/managementDeleteAll?userId='+userId,
         	data:{
-        		canvasid:canvasid,
-        		userid:userid
+        		canvasid:canvasid
         	},
         	dataType:'text',
         	type:'post',
@@ -244,7 +238,7 @@ function update(canvasId){
         		var resultData = JSON.parse(data);
         		if(resultData.status == '200'){
         			alert(resultData.message);
-        			document.location.reload();
+        			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
         		}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
@@ -256,10 +250,9 @@ function update(canvasId){
 	});
 	deleteToOther.addEventListener('click',function(){
 		$.ajax({
-        	url:'/managementCon/managementDeleteToUnsort',
+        	url:'/managementCon/managementDeleteToUnsort?userId='+userId,
         	data:{
-        		canvasid:canvasid,
-        		userid:userid
+        		canvasid:canvasid
         	},
         	dataType:'text',
         	Type:'post',
@@ -268,7 +261,7 @@ function update(canvasId){
         		console.log(resultData.status);
         		if(resultData.status == '200'){
         			alert(resultData.message);
-        			document.location.reload();
+        			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
         		}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
@@ -279,11 +272,10 @@ function update(canvasId){
         });
 	});	
 }
-function getUserName(userid){
+function getUserName(userId){
 	$.ajax({
-    	url:'/user/getUserName',
+    	url:'/user/getUserName?userId='+userId,
     	data:{
-    		userid:userid
     	},
     	type:'post',
     	success:function(data){/*
