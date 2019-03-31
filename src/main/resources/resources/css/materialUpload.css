@@ -19,20 +19,24 @@ body{
 }
 #material_source{
 	float: left;
+	width:300px;
+	height:300px;
 	margin-top: 30px;
+	border: 2px solid grey;
 }
 
 #myCan{
+	position:absolute;
+	left:350px;
 	margin-left: 20px;
 	margin-top: 70px;
 	width: 160px;
 	height:120px;
-	border: 1px solid grey;
+	border: 2px solid grey;
 }
 #target{
-	/* margin-left: 20px;
-	margin-top: 40px; */
-	width: 380px;
+	max-width: 300px;
+	max-height:300px;
 	height: auto;
 	border: 8px solid white;
 	background-color: rgba(245, 245, 249, 1);
@@ -155,6 +159,7 @@ body{
     background: #fafafa;
     border: 1px solid #ddd;
     border-radius: 4px;
+    text-decoration:none;
     overflow: hidden;
     display: inline-block;
     *display: inline;

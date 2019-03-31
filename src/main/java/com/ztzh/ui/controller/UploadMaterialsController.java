@@ -117,6 +117,11 @@ public class UploadMaterialsController {
 			imageMagickUtil.convertType(imagePath, newPath);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("后台转换文件成功");
+			/*psd转换文件会生成n个png图片，选择原文件名后缀+ "-0" 的那一个*/
+			if("psd".equals(resourceFileType)){
+				newPath = catchPngUrl + tempStrs[tempStrs.length - 1].split("\\.")[0]
+				 + "-0" + ".png";
+			}
 			File f = new File(newPath);
 			responseVo.setObject(f.getName());
 		} catch (IOException | InterruptedException | IM4JavaException e) {
