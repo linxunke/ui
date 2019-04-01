@@ -2,10 +2,6 @@
 *{
     margin: 0;
     padding: 0;
-    color: rgba(223, 225, 230, 1);
-    border: 0px;
-    text-decoration: none;
-    list-style: none;
 }
 body{
     position: absolute;
@@ -22,6 +18,12 @@ body{
 }
 .nav_list{
     float: left;
+}
+.nav_list a{
+	color: rgba(223, 225, 230, 1);
+    border: 0px;
+    text-decoration: none;
+    list-style: none;
 }
 .logo{
     float: left;
@@ -93,6 +95,7 @@ body{
     width: 120px;
     float: left;
     line-height: 28px;
+    border:none;
     color: rgba(255, 255, 255, 1);
     background-color: rgba(40, 40, 40, 1);
 }

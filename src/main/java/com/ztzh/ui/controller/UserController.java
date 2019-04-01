@@ -1,9 +1,18 @@
 package com.ztzh.ui.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +25,7 @@ import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.UserInfoDomain;
 import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.service.UserService;
+import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.FileUpload;
 import com.ztzh.ui.vo.ResponseVo;
 
@@ -32,15 +42,19 @@ public class UserController {
 	
 	@Autowired
 	UploadFileService uploadFileService;
+	
+	@Autowired
+	FTPUtil ftpUtil;
 
 	@RequestMapping(value = "register", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
+	@Transactional
 	public Object register(
 			@RequestParam(value = "account", required = true) String account,
 			@RequestParam(value = "nickname", required = true) String nickname,
 			@RequestParam(value = "wechat", required = true) String wechat,
 			@RequestParam(value = "password", required = true) String password,
-			@RequestParam(value = "file", required = true) String file) {
+			@RequestParam(value = "file", required = true) String file) throws FTPConnectionClosedException, FileNotFoundException, IOException, Exception {
 		UserInfoDomain user = new UserInfoDomain();
 		user.setUserAccount(account);
 		user.setUserNickname(nickname);
@@ -61,13 +75,21 @@ public class UserController {
 			fileName = account + ".jpg";
 		}
 		photoUrl.append("/" + fileName);
-		user.setUserPhotoUrl(photoUrl.toString());
+		user.setUserPhotoUrl(UserConstants.FTP_PHOTO_DIRECTORY+"//"+fileName);
 		RegisterResultBo result = userService.register(user);
 		ResponseVo responseVo = new ResponseVo();
 		if (result.getCode() == UserConstants.CHECK_DATA_LENGTH_TRUE) {
 			// 跳转页面
 			logger.info("成功创建用户");
 			FileUpload.base64ToFile(base64, photoAddress, fileName);
+			String photoRealPath = photoAddress.replace("/", "\\")+"\\"+fileName;
+			File photoFile = new File(photoRealPath);
+			//写入ftp
+			ftpUtil.uploadToFtp(new FileInputStream(photoFile), fileName, false, UserConstants.FTP_PHOTO_DIRECTORY);
+			//删除缓存文件
+			List<String> deleteAddressList = new ArrayList<String>();
+			deleteAddressList.add(photoUrl.toString());
+			FileUpload.deleteFiles(deleteAddressList);
 			logger.info("开始创建用户的文件夹");
 			boolean isCreatedAllDirectory = false;
 			boolean isCreatedMaterialDirectory = false;
@@ -124,4 +146,23 @@ public class UserController {
 		logger.info(responseVo.toString());
 		return responseVo.toString();
 	}
+	@RequestMapping(value = "getUserName", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
+	public String getUserNameByUserid(
+			@RequestParam(value = "userid", required = true) String userid){
+		ResponseVo responseVo = new ResponseVo();
+		UserInfoDomain user = userService.getUserInfoById(Long.parseLong(userid));
+		if(user.getUserNickname()==null){
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("获取用户信息失败");
+			responseVo.setObject(null);
+		}else{
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setMessage("获取用户信息成功");
+			responseVo.setObject(user);
+		}
+				return responseVo.toString();
+		
+	}
+			
 }

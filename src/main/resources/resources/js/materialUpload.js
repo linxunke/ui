@@ -37,14 +37,14 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userId=1',
+		url:'/canvasInfo/getCanvasByUserId?userid=1',
 		type:'get',
 		success:function(data){
 			console.log(data);
-			var canvasInfo = data;
+			var canvasInfo = data.object.canvasInfo;
 			var appendOptions = '';
-			for(var i=0; i < canvasInfo.object.length; i++){
-				appendOptions += '<option value="'+canvasInfo.object[i].id+'">'+canvasInfo.object[i].canvasName+'</option>';
+			for(var i=0; i < canvasInfo.length; i++){
+				appendOptions += '<option value="'+canvasInfo[i].canvasId+'">'+canvasInfo[i].canvasName+'</option>';
 			}
 			$("#personal_sketchpad").append(appendOptions);
 		},
@@ -107,6 +107,7 @@ $(document).ready(function(){
 		formdata.append("resourceFile",document.getElementById("file").files[0]);
 		formdata.append("previewImg",document.getElementById("myCan").toDataURL());
 		formdata.append("pngFileSrc",document.getElementById("target").src);
+		$("#upload_material").attr("disabled",true);
 		$.ajax({
 			url:'/uploadMaterial/commitMaterialInfos',
 			type:'post',
@@ -118,13 +119,13 @@ $(document).ready(function(){
 				console.log(resultData);
 				if(resultData.status == '200'){
 					alert(resultData.message);
-					window.location.href = "/test2/toMaterialUpload";
+					window.location.href = "/userpage/toMaterialUpload";
 				}else if(resultData.status == '500'){
 					alert(resultData.message);
 				}
 			},
-			error:function (data) {
-				console.log(data);
+			error:function () {
+				alert("提交失败，请重新提交！");
 			}
 		});
 	});

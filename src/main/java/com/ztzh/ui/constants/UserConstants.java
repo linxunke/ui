@@ -26,4 +26,8 @@ public class UserConstants {
      * FTP图片路径
      */
 	public static String FTP_PNG_DIRECTORY = "/png";
+	/**
+	 * FTP photo路径
+	 */
+	public static String FTP_PHOTO_DIRECTORY = "/photo";
 }

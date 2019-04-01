@@ -45,4 +45,9 @@ public class UserPageController {
 		return "/login";
 
 	}
+	
+	@RequestMapping(value="toMaterialUpload")
+	public String toMaterialUpload(){
+		return "materialUpload";
+	}
 }

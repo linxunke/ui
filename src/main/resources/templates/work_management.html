@@ -5,13 +5,40 @@
 <title>作品管理</title>
 <link rel="stylesheet" th:href="@{/css/work_management.css}"
 	type="text/css">
-
+<link rel="stylesheet" th:href="@{/css/nav.css}"
+	type="text/css" />
 </head>
-<body style="margin: 0;">
+<body>
 	<div class="manage_all">
 		<div class="manage_head">
-			<iframe MARGINWIDTH=0 MARGINHEIGHT=0 HSPACE=0 VSPACE=0 FRAMEBORDER=0
-				SCROLLING=no src="/userpage/head" height="56px" width="1440px"></iframe>
+			<div class="nav">
+		<div class="nav_list logo">
+			<img src="../img/logo.png">
+		</div>
+		<div class="nav_list home">
+			<a href="#">首页</a>
+		</div>
+		<div class="nav_list material_library">
+			<a href="#">素材库</a>
+		</div>
+		<div class="nav_list work_management">
+			<a href="#">作品管理</a>
+		</div>
+		<div class="nav_list search_box">
+			<img src="../img/搜图.png" class="search_map" alt="">
+			<input type="text" value="春节" class="search_content" />
+			<img src="../img/搜索.png" alt="" class="search_btn">
+		</div>
+		<div class="nav_list update">
+			<img src="../img/上传.png">
+		</div>
+		<div class="nav_list message">
+			<img src="../img/消息.png">
+		</div>
+		<div class="nav_list need_sign_in">
+			<img src="../img/未登录.png">
+		</div>
+	</div>
 		</div>
 		<div class="manage_userdoing">
 			<div class="userdoing" id="manage_userhead"></div>
@@ -30,43 +57,21 @@
 			</div>
 		</div>
 		<div class="manage_drawing_board_list" id="board_list">
-		<div class="empty"></div>
+			<div class="empty"></div>
 			<div id="manage_add_board">
 				<div class="addButtonForBoard" id="manage_add_btn">
 					<img id="add_mark" src="../img/新增画板.png">
 				</div>
 				<div id="under_add_mark">创建新画板</div>
 			</div>
-			<div class="every_board" id="unsorted_board">
-				<div id="edit_button" class="edit_button">
-					<img class="edit_img" src="../img/编辑.png">
-					<span class="canvas-id"></span>
-				</div>
-				<div class="board_covers" >
-					<img alt="" src="">
-				</div>
-				<div class="board_name">
-					未分类
-					<!-- 这里需要获取 -->
-				</div>
-				<div class="drawing_count">
-					28
-					<!-- 这里需要获取 -->
-				</div>
-				<img class="download_logo" src="../img/下载.png">
-				<div class="download_count">
-					2008
-					<!-- 这里需要获取 -->
-				</div>
-				<div class="upload_date">
-					2009-03-19
-					<!-- 这里需要获取 -->
-				</div>
-				<div class="board_id">
-				<!-- 这里需要获取 -->
-				</div>
+			<div class="pageTransition">
+				<a class="pageButton" id="homePage">首页</a>
+				<a class="pageButton" id="lastPage">上一页  /</a>
+				<a class="pageButton" id="nextPage">下一页</a>
+				<span class="pageButton" id="currentPage">第<span id="currentPageNumber">1</span>页</span>
+				<span class="pageButton" id="totalPage">共几页</span>
+				<a class="pageButton" id="finalPage">末页</a>
 			</div>
-			
 		</div>
 	</div>
 	<!-- 遮罩层 -->
@@ -98,13 +103,14 @@
 		
 		</div>
 		<div id="show_foot2">
-		<div id="first_delete"><p id="deleteAll" class="delete">删除</p><p>画板及包含的全部素材</p></div>
-		<div id="second_delete"><p>只</p><p id="deleteToOther" class="delete">删除</p><p>画板，所含素材移至"未分类"画板</p></div>
+		<div id="first_delete"><a id="deleteAll" class="delete">删除</a><p>画板及包含的全部素材</p></div>
+		<div id="second_delete"><p>只</p><a id="deleteToOther" class="delete">删除</a><p>画板，所含素材移至"未分类"画板</p></div>
 		<div id="sure2">确认 </div>
 		</div>
 	</div>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
+	<script th:src="@{/js/jquery/jquery.cookie.js}" type="text/javascript"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
 	<script type="text/javascript" th:src="@{/js/work_management.js}"></script>
 </body>

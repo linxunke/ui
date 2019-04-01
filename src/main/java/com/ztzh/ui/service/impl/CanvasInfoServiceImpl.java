@@ -1,6 +1,5 @@
 package com.ztzh.ui.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,6 @@ import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
 import com.ztzh.ui.utils.FTPUtil;
-import com.ztzh.ui.utils.FileUpload;
 import com.ztzh.ui.utils.GetSYSTime;
 
 @Service
@@ -47,7 +45,7 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	@SuppressWarnings("unused")
 	@Override
 	@Transactional
-	public void userDeleteCanvasWithMaterials(Long canvasId, Long userId) {
+	public boolean userDeleteCanvasWithMaterials(Long canvasId, Long userId) {
 		logger.info("开始删除画板canvasId:{}",canvasId);
 		int count = canvasInfoDomainMapper.deleteByPrimaryKey(canvasId);
 		logger.info("开始删除数据库中素材数据");
@@ -64,15 +62,18 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		logger.info("删除磁盘中的素材文件成功");
 		int countDeletedMaterials = materialInfoDomainMapper.deleteByCanvasId(canvasId, userId);
 		//删除分类中的数据
-		int materialTypeInfoCount = materialTypeInfoDomainMapper.deleteByMaterialInfoIds(materialIdList);
-		int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
+		if(materialIdList.size()>0) {
+			int materialTypeInfoCount = materialTypeInfoDomainMapper.deleteByMaterialInfoIds(materialIdList);
+			int materialHistoryCollectionCount = materialHistoryCollectionDomainMapper.deleteByMaterialInfoIds(materialIdList);
+		}
 		logger.info("总共删除{}件素材",countDeletedMaterials);
+		return true;
 	}
 	
 	@SuppressWarnings("unused")
 	@Override
 	@Transactional
-	public void userDeleteCanvasWithoutMaterials(Long canvasId, Long userId) {
+	public boolean userDeleteCanvasWithoutMaterials(Long canvasId, Long userId) {
 		logger.info("开始删除画板canvasId:{}",canvasId);
 		int count = canvasInfoDomainMapper.deleteByPrimaryKey(canvasId);
 		logger.info("开始将所属该画板的素材转移到未分类画板中");
@@ -84,7 +85,7 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		materialInfoDomain.setUploadTime(GetSYSTime.systemTime());
 		int updateCount = materialInfoDomainMapper.updateByCanvasInfoIdPrivate(materialInfoDomain,canvasId,userId);
 		logger.info("总共将{}件素材转入未分类",updateCount);
-		
+		return true;
 	}
 
 	@Override
@@ -92,8 +93,9 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		return canvasInfoDomainMapper.selectCountByUserId(userId);
 	}
 	@Override
-	public List<ManagementCanvasBo> selectCanvasByUserId(Long userId) {
-		return canvasInfoDomainMapper.selectByUserId(userId);
+	public List<ManagementCanvasBo> selectCanvasByUserId(Long userId,int currentPage,int pageSize) {
+		int firstCanvas = (currentPage-1)*pageSize;
+		return canvasInfoDomainMapper.selectByUserId(userId,firstCanvas,pageSize);
 	}
 	@SuppressWarnings("null")
 	@Override

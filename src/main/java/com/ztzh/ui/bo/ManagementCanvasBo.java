@@ -1,5 +1,6 @@
 package com.ztzh.ui.bo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ManagementCanvasBo {
@@ -11,7 +12,17 @@ public class ManagementCanvasBo {
 	public int materialCount;
 	public Date lastMaterialUploadTime;	
 	public String lastMaterialUrl;
+	public String lastMaterialUploadTimeFormate;
 
+	public String getLastMaterialUploadTimeFormate() {
+		if(this.lastMaterialUploadTime!=null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			return sdf.format(this.lastMaterialUploadTime);
+		}else {
+			return "";
+		}
+		
+	}
 	public Long getCanvasId() {
 		return canvasId;
 	}

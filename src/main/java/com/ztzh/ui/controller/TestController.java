@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
+import org.im4java.core.IM4JavaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,9 @@ public class TestController {
 	}
 	
 	@GetMapping("/delete")
-    public void upload() {
-		canvasInfoService.userDeleteCanvasWithMaterials(3L, 3L);
+    public void upload() throws IOException, InterruptedException, IM4JavaException {
+		String[] s = {"D:\\catch\\mouse.ai"};
+		imageMagicUtil.convertType(s, "D:\\catch\\12.png");
  
     }
 	
