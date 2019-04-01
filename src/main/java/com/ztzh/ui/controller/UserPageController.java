@@ -50,4 +50,9 @@ public class UserPageController {
 	public String toMaterialUpload(){
 		return "materialUpload";
 	}
+	
+	@RequestMapping(value="toMaterialManage")
+	public String toMaterialManage(){
+		return "materialManage";
+	}
 }
