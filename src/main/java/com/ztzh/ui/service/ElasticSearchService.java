@@ -22,6 +22,6 @@ public interface ElasticSearchService {
 	 * @param size 每页大小
 	 * @return
 	 */
-	public Page<MaterialInfoIndex> findDocument(NativeSearchQueryBuilder queryBuilder, int page, int size);
+	public Page<MaterialInfoIndex> findDocument(int page, int size);
 
 }

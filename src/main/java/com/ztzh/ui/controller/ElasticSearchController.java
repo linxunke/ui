@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +31,7 @@ public class ElasticSearchController {
 	@RequestMapping(value = "/createMaterialInfoIndex", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public String createMaterialInfoIndex() {
+		elasticSearchService.deleteIndex("materialinfo");
 		boolean result = elasticSearchService.createIndex(MaterialInfoIndex.class);
 		ResponseVo responseVo = new ResponseVo();
 		if(result) {
@@ -55,6 +58,13 @@ public class ElasticSearchController {
 			responseVo.setMessage("源文件放入到搜索引擎中失败");
 		}
 		return responseVo.toString();
+	}
+	
+	@RequestMapping(value="queryByParam", method = {RequestMethod.GET,
+			RequestMethod.POST}, produces = "application/json;charset=UTF-8")
+	public List<MaterialInfoIndex> queryByParam() {
+		Page<MaterialInfoIndex> items = elasticSearchService.findDocument(0, 10);
+		return items.getContent();
 	}
 	
 

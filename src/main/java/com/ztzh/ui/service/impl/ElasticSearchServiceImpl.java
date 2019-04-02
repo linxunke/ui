@@ -3,13 +3,21 @@ package com.ztzh.ui.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
+import org.elasticsearch.index.search.MatchQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +33,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	@Autowired
 	private ElasticsearchTemplate elasticsearchTemplate;
 	
-	@SuppressWarnings("rawtypes")
 	
 	@Autowired
 	private MaterialInfoIndexRepository materialInfoIndexRepository;
@@ -65,11 +72,21 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 
 
 	@Override
-	public Page<MaterialInfoIndex> findDocument(NativeSearchQueryBuilder queryBuilder, int page, int size) {
-		PageRequest pageRequest = new PageRequest(page, size);
-		queryBuilder.withPageable(pageRequest);
-		Page<MaterialInfoIndex> items = materialInfoIndexRepository.search(queryBuilder.build());
+	public Page<MaterialInfoIndex> findDocument(int page, int size) {
+		//QueryBuilder queryBuilder = QueryBuilders.termQuery("materialName", "lxk");
+		SearchQuery searchQuery = getEntitySearchQuery(page,size,"lxk");
+		Page<MaterialInfoIndex> items = materialInfoIndexRepository.search(searchQuery);
 		return items;
 	}
+	
+	private SearchQuery getEntitySearchQuery(int pageNumber, int pageSize, String searchContent) {
+        QueryBuilder functionScoreQueryBuilder = QueryBuilders.matchQuery("materialName", searchContent);
+
+        // 设置分页
+        Pageable pageable = new PageRequest(pageNumber, pageSize);
+        return new NativeSearchQueryBuilder()
+                .withPageable(pageable)
+                .withQuery(functionScoreQueryBuilder).build();
+    }
 
 }
