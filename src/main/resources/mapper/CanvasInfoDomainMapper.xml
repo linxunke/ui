@@ -159,7 +159,28 @@
    <select id="selectByCanvasName" resultMap="BaseResultMap">
   	select
   	<include refid="Base_Column_List"></include>
-  	from canvas_info where canvas_name = #{canvasName,jdbcType=VARCHAR}
-  	and user_id = #{userId,jdbcType=BIGINT}
+  	from canvas_info where is_valid=1
+      and  canvas_name = #{canvasName,jdbcType=VARCHAR}
+      and  user_id = #{userId,jdbcType=BIGINT}
   </select>
+  
+  <select id="getMaterialInfosOfCanvasByMaterialInfoId" resultType="com.ztzh.ui.bo.IconUrlBo">
+  select a.id as materialInfoId,
+         b.id as canvasId,
+         a.png_url as pngUrl 
+         from material_info as a, 
+         canvas_info as b 
+         where a.canvas_info_id_private=b.id
+         and a.is_valid=1
+         <if test="materialInfoIdList.size()>0">
+         and  a.id in <foreach close=")" collection="materialInfoIdList" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+         </if>
+         <if test="materialInfoIdList.size()==0">
+         and  a.id in <![CDATA[('')]]>
+         </if>
+  
+  </select>
+  
 </mapper>
