@@ -289,4 +289,25 @@
 	<select id="selectMaterialIdByMaterialUrl" parameterType="java.lang.String" resultType="java.lang.Long">
 		select id from material_info where material_url = #{materialUrl}
 	</select>
+	
+	<select id="getIconMaterialBoByThumbnailUrls" resultType="com.ztzh.ui.bo.IconMaterialBo">
+		select a.id as materialInfoId, 
+		       a.thumbnail_url as thumbnailUrl
+		from material_info as a,
+		     material_type_info as b
+		    where a.id = b.materail_info_id
+		    and b.material_type_code_parent = '01'
+			and a.thumbnail_url in
+		<foreach close=")" collection="thumbnailUrls" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+	</select>
+		<select id="getIconUrlsByCanvasId" parameterType="java.lang.String" resultType="java.lang.String">
+		select png_url as pngUrl from material_info 
+		where  canvas_info_id_private = #{canvasId}
+		and canvas_info_id_public = #{canvasId}
+		limit 20 
+	</select>
+	
+	
 </mapper>

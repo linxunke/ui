@@ -3,6 +3,7 @@ package com.ztzh.ui.dao;
 
 import java.util.ArrayList;
 
+import com.ztzh.ui.bo.IconUrlBo;
 import com.ztzh.ui.bo.ManagementCanvasBo;
 
 import java.util.List;
@@ -33,5 +34,7 @@ public interface CanvasInfoDomainMapper {
     List<ManagementCanvasBo> selectByUserId(Long userId);
     
     CanvasInfoDomain selectByCanvasName(@Param("canvasName")String canvasName,@Param("userId")Long userId);
+
+	List<IconUrlBo> getMaterialInfosOfCanvasByMaterialInfoId(@Param("materialInfoIdList") List<String> materialInfoIdList);
 
 }

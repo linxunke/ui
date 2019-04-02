@@ -11,6 +11,8 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.IdentifyCmd;
+import org.im4java.core.ImageCommand;
+import org.im4java.core.ImageMagickCmd;
 import org.im4java.core.MontageCmd;
 import org.im4java.process.ArrayListOutputConsumer;
 import org.slf4j.Logger;
@@ -33,7 +35,7 @@ public class ImageMagickUtil {
 	@Value("${imagemagickpath.address}")
     private  String imageMagickPath;
 	
-	@Value("${material.catch.operation.url}")
+	@Value("${material.catch.png.url}")
     private  String catchOperationUrl;
 	
 	@Value("${imagemagickpath.running.system}")
@@ -299,14 +301,41 @@ public class ImageMagickUtil {
 	
 	public String iconDisplay(List<String> urls) throws IOException, InterruptedException, IM4JavaException {
 		IMOperation op = new IMOperation();
-		for(String url:urls) {
-			op.addImage(url);
+		op.addImage(this.getClass().getResource("/resources/img/iconBackground.png").getPath().substring(1).replace("/", "\\"));
+		op.compose("atop");
+		
+		/*
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,10,10).composite();
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,55,10).composite();
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,100,10).composite();
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,145,10).composite();
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,190,10).composite();
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,10,50).composite();
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,10,90).composite();
+		 * op.addImage("E:\\catch\\png\\a51155d627054fc885e6ce1a0ca0b0f2.png");
+		 * op.geometry(15,15,10,130).composite();
+		 */
+		 
+		
+		
+		int count = 0;
+		for(int i=0;i<urls.size();i++) { 
+			op.addImage(urls.get(i));
+			op.geometry(15,15,10+(count%5*45),10+(count/5*40)).composite();
+			count++;
 		}
-		op.title("5*4");
-		op.geometry(30*30);
+		 
 		String resultImageUrl = catchOperationUrl+UUID.randomUUID().toString().replace("-", "")+".png";
 		op.addImage(resultImageUrl);
-		MontageCmd cmd = new MontageCmd();
+		ConvertCmd cmd = new ConvertCmd();
+		/* MontageCmd cmd = new MontageCmd(); */
 		if(runningSystem.equals("windows")) {
 			cmd.setSearchPath(imageMagickPath);
 		}
