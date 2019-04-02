@@ -92,13 +92,126 @@
 	</div>
 	<div class="body">
 		<div class="material_show_body">
-			<div class="each_material_div">
+			<div class="each_material_div" onclick="showModal()">
 				<div class="material_image_div">
 					<img class="material_img" src="../img/6759847096808.png">
-					<div class="custom_checkedbox" onclick="change_checked_status(this)" onmouseenter="show_custom_checkedbox(this)" onmouseleave="hiden_custom_checkedbox(this)"></div>
+					<div class="custom_checkedbox" onclick="change_checked_status(this)" onmouseenter="show_custom_checkedbox(this)" onmouseleave="hiden_custom_checkedbox(this)">
+						<span></span>
+						<input class="checked_status" type="text" value="unchecked" style="display: none"/>
+					</div>
 				</div>
 				<div class="material_name_div">
+					<span class="material_id" style="display: none"></span>
 					<span class="material_name">面包</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<div class="page_modual">
+			<div class="float_l page_modual_each"><a id="lastPage">上一页</a></div>
+			<div class="float_l page_modual_each">
+				<input id="currentPage" type="number"/>
+				<input id="search_by_page" type="button" value="跳转">
+			</div>
+			<div class="float_l page_modual_each"><a id="nextPage">下一页</a></div>
+			<div class="float_l page_modual_each">共<span id="pageNum">32</span>页</div>
+		</div>
+	</div>
+	<div class="modal">
+		<div class="modal_content">
+			<header class="modal_header">
+				<h4>更新</h4>
+				<button id="closeModal" onclick="closeModal()">×</button>
+			</header>
+			<div class="modal_body">
+				<div class="float_l modal_material_div">
+					<div class="material_img_div">
+						<img src="../img/splitImg.jpg" id="material_img_preview">
+					</div>
+				</div>
+				<div class="float_l modal_materialInfo_div">
+					<div class="material_info_div">
+						<div class="material_info_title float_l">名称</div>
+						<div class="material_info_content float_l">
+							<input id="material_content_name" type="text"/>
+							<input type="button" id="add_material_type_div" value="+"/>
+						</div>
+					</div>
+					<div style="margin-top: 20px;">
+						<div class="material_info_div">
+							<div class="float_l material_type_div_each">
+								<span class="material_type_name">类型</span>
+								<div class="material_type_content float_l">
+									<select id="material_parent_type_select">
+										<option value="">项目</option>
+										<option value="">图标</option>
+									</select>
+								</div>
+							</div>
+							<div class="float_l material_type_div_each">
+								<span class="material_type_name">细分</span>
+								<div class="material_type_content float_l">
+									<select id="material_child_type_select">
+										<option value="">天府手机银行</option>
+										<option value="">移动金融</option>
+									</select>
+								</div>
+							</div>
+							<div class="float_l material_type_div_each" style="margin-right: 0">
+								<span class="material_type_name">风格</span>
+								<div class="material_type_content float_l">
+									<select id="material_style_type_select">
+										<option value="">2.5D</option>
+										<option value="">扁平</option>
+									</select>
+								</div>
+							</div>
+							<div class="float_l">
+								<input type="button" class="remove_parent_type_div" value="-"/>
+							</div>
+						</div>
+						
+						
+					</div>
+					<div class="material_info_div">
+						<div class="material_info_title float_l">标签</div>
+						<div class="material_info_content float_l">
+							<input id="material_content_label" type="text"/>
+						</div>
+					</div>
+					<div class="material_info_div">
+						<div class="material_info_title float_l">个人画板</div>
+						<div class="material_info_content float_l">
+							<select id="personal_canvas_select">
+								<option>11</option>
+								<option>11</option>
+								<option>11</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div>
+						<button id="download_material_png" class="download_btn">
+							<span>PNG</span>
+							<select id="material_png_size_select">
+								<option>512x512</option>
+								<option>16x16</option>
+								<option>32x32</option>
+								<option>64x64</option>
+								<option>72x72</option>
+								<option>96x96</option>
+								<option>128x128</option>
+								<option>256x256</option>
+								<option>1024x1024</option>
+							</select>
+						</button>
+						<button id="download_material_svg" class="download_btn">SVG</button>
+						<button id="download_material_ai" class="download_btn">AI</button>
+					</div>
+					<button id="deleteMaterial">删除</button>
+					<button id="updateMaterial">更新</button>
 				</div>
 			</div>
 		</div>
