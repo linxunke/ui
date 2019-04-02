@@ -93,10 +93,11 @@ public class UploadMaterialsController {
 	@RequestMapping(value = "/getMaterialFiles", method = { RequestMethod.POST,
 			RequestMethod.GET })
 	public String getMaterialFiles(
-			@RequestParam(value = "file") MultipartFile file) {
+			@RequestParam(value = "file") MultipartFile file,
+			@RequestParam(value = "userId") String userId) {
 		ResponseVo responseVo = new ResponseVo();
 		/*从session中获取userId,并添加到responseVo*/
-		responseVo.setUserId("1");
+		responseVo.setUserId(userId);
 		String resource = FileUpload.writeUploadFile(file, catchResourceUrl);
 		/*对上传的文件类型做转换*/
 		String resourceFileType = this.getFileType(resource);
@@ -117,6 +118,11 @@ public class UploadMaterialsController {
 			imageMagickUtil.convertType(imagePath, newPath);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("后台转换文件成功");
+			/*psd转换文件会生成n个png图片，选择原文件名后缀+ "-0" 的那一个*/
+			if("psd".equals(resourceFileType)){
+				newPath = catchPngUrl + tempStrs[tempStrs.length - 1].split("\\.")[0]
+				 + "-0" + ".png";
+			}
 			File f = new File(newPath);
 			responseVo.setObject(f.getName());
 		} catch (IOException | InterruptedException | IM4JavaException e) {

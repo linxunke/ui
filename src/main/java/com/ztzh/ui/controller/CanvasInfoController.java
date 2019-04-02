@@ -26,12 +26,12 @@ public class CanvasInfoController {
 
 	@RequestMapping(value = "getCanvasByUserId", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	public String getCanvasInfo(@RequestParam(value = "userid", required = false) String userid,
+	public String getCanvasInfo(@RequestParam(value = "userId", required = false) String userId,
 			@RequestParam(value = "currentPage", required = false) int currentPage) {
-		logger.info("userid{}",userid);
+		logger.info("开始获取用户userId:{}的画板信息",userId);
 		logger.info("currentPage{}",currentPage);
 		//1.查询总条数，调用noteDao里的方法获取
-		int totalCount = canvasInfoService.canvasCount(Long.parseLong(userid));
+		int totalCount = canvasInfoService.canvasCount(Long.parseLong(userId));
 		logger.info("totalCount{}",totalCount);
 		//2.计算总页数
 		int pageCount = totalCount%pageSize == 0 ? totalCount/pageSize:(totalCount/pageSize+1);
@@ -41,11 +41,11 @@ public class CanvasInfoController {
 			currentPage = pageCount;
 		}
 		List<ManagementCanvasBo> userCanvas = canvasInfoService
-				.selectCanvasByUserId(Long.parseLong(userid),currentPage,pageSize);
-		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userid));
+				.selectCanvasByUserId(Long.parseLong(userId),currentPage,pageSize);
+		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userId));
 		CanvasResponseVo canvasVo = new CanvasResponseVo();
 		/*//1.查询总条数，调用noteDao里的方法获取
-		int totalCount = canvasInfoService.canvasCount(Long.parseLong(userid));
+		int totalCount = canvasInfoService.canvasCount(Long.parseLong(userId));
 		//2.计算总页数
 		int pageCount = totalCount%pageSize == 0 ? totalCount/pageSize:(totalCount/pageSize+1);*/
 		canvasVo.setCanvasCount(canvasCount);
@@ -61,7 +61,7 @@ public class CanvasInfoController {
 			responseVo.setMessage("获取个人画板信息失败");
 			responseVo.setObject(null);
 		}
-		responseVo.setUserId(userid);
+		responseVo.setUserId(userId);
 		return responseVo.toString();
 	}
 }

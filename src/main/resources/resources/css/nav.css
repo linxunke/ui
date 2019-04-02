@@ -138,3 +138,10 @@ body{
 .need_sign_in:hover{
     cursor: pointer;
 }
+
+.float_l{
+	float: left;
+}
+.clear_float{
+	clear: both;
+}

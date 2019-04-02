@@ -83,8 +83,8 @@ public class TestController {
 		 * String[]{"D:\\house\\ui\\src\\main\\resources\\photo\\红包.ai"},
 		 * "D:\\house\\ui\\src\\main\\resources\\photo\\red.png");
 		 */
-		canvasInfoService.userDeleteCanvasWithMaterials(5L, 1L);
-		
+		String[] a = {"E:\\中天智慧\\中天智慧素材管理系统\\源文件\\test.psd"};
+		imageMagicUtil.convertType(a, "D:\\catch\\photo\\1.pdf");
 		return "";
 	}
 	

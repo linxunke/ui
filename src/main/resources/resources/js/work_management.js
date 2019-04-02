@@ -1,10 +1,8 @@
 var main_div =1;
-var userid = 1;
-/*var currentPage=1;*/
-//存储一个带7天期限的cookie
-/*$.cookie("currentPage", currentPage, { expires: 7 });
-currentPage=$.cookie("currentPage");*/
+var userId = getParameter('userId'); 
+var Page;
 $(document).ready(function () {
+	
     var btn = document.getElementById('manage_add_btn');
     var cover = document.getElementById('cover_layer');
     var close = document.getElementById('close');
@@ -12,20 +10,21 @@ $(document).ready(function () {
     var close2 = document.getElementById('close2');
     var show2 = document.getElementById('show_div2');
     var sure = document.getElementById('sure');
-    document.getElementById('currentPageNumber').innerHTML=$.cookie("currentPage");
+   /* if($.cookie("currentPage")==undefined){
+    	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+    }else{
+    	document.getElementById('currentPageNumber').innerHTML=$.cookie("currentPage");
+    	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+    }
+    
     //查看当前页面
-    console.log("currentPage="+$.cookie("currentPage"));
-    getUserName(1);
-    /*var edit = document.getElementsByClassName('edit_button');
-    for(i in edit){
-    	edit[i].click=update;
-    }*/
+    console.log("currentPage="+$.cookie("currentPage"));*/
     var currentPage = document.getElementById('currentPageNumber').innerHTML;
-    var userid = 1;//拿到user id  显示具体画板数量,拿到已有的画板的信息，for循环添加div
+    getUserName(userId);
+    
     $.ajax({
-    	url:'/canvasInfo/getCanvasByUserId',
+    	url:'/canvasInfo/getCanvasByUserId?userId='+userId,
     	data:{
-    		userid:userid,
     		currentPage:currentPage
     	},
     	dataType:'text',
@@ -35,7 +34,8 @@ $(document).ready(function () {
     	   
     	   PageCount = result.object.PageCount;
     	   $.cookie("PageCount", PageCount, { expires: 7 });
-    	   
+    	   Page=$.cookie("PageCount");
+    	   document.getElementById('tatolPage').innerHTML=PageCount;
     	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");
     	   console.log(result);	   
     	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
@@ -111,11 +111,10 @@ $(document).ready(function () {
         if(boardName != "" && board_des != ""){
                 /*异步传输画板的信息*/
                 $.ajax({
-                    url:'/managementCon/managementAdd',
+                    url:'/managementCon/managementAdd?userId='+userId,
                     data:{
                     	canvasName:boardName,
-                    	canvasDesc:board_des,
-                    	userid:userid
+                    	canvasDesc:board_des
                     	
                     },
                     dataType:'text',
@@ -132,12 +131,10 @@ $(document).ready(function () {
                 	        document.getElementById("board_list").appendChild(div);
                 	        //下面需要后台传过来的信息innerHTML
                 	        /*result.object.canvasInfo[i].lastMaterialUrl  这里固定一个默认图片*/
-                	        /*div.innerHTML = main.innerHTML;*/
-                	        
+                	        /*div.innerHTML = main.innerHTML;*/   	        
                 	        $("#"+div.id).html('<div class="edit_button"><img class="edit_img" src="../img/编辑.png"><span class="canvas-id">/span></div><div class="board_covers" ><img src=""></div><div class="board_name">'+boardName+'</div><div class="drawing_count">0</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date"></div><div id="board_id">canvasId</div>');
-                	        
                 	        main_div++;	
-                			document.location.reload();
+                			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
                 		}else if(resultData.status == '500'){
             				alert(resultData.message);
             			}
@@ -151,94 +148,11 @@ $(document).ready(function () {
         	alert("请填写完整信息！");
         }
     });
-    /*edit.addEventListener('click',function(){
-    	cover.style.display = "block";
-    	close2.style.display = "block";
-    	show2.style.display = "block";
-    });*/
-    /*function update(){
-    	cover.style.display = "block";
-    	close2.style.display = "block";
-    	show2.style.display = "block";
-    	var canvasid = $(this).find("span").val();
-    	sure2.addEventListener('click',function(){
-        	cover.style.display = "none";
-        	close2.style.display = "none";
-        	show2.style.display = "none";
-        	var boardName = $("#show_text").val();
-            var board_des = $("#show_textarea").val();
-            var canvasid = $(this).find("span").val();   
-            console.log(boardName+"++"+board_des+"++"+canvasid);
-    	});
-    	
-    }*/
     close2.addEventListener('click', function(){
     	cover.style.display = "none";
     	close2.style.display = "none";
     	show2.style.display = "none";
     });
-    /*function setCookie(page,value)
-    {
-    var Days = 30;
-    var exp = new Date();
-    exp.setTime(exp.getTime() + Days*24*60*60*1000);
-    document.cookie = name + "="+  + ";expires=" + exp.toGMTString();
-    }*/
-    homePage.addEventListener('click', function(){
-    	currentPage = 1;
-    	$.cookie("currentPage", currentPage, { expires: 7 });
-    	document.location.reload();
-    });
-    lastPage.addEventListener('click', function(){
-    	if(currentPage>1){
-    		currentPage = parseInt(currentPage)-1;
-    	}else{
-    		currentPage = parseInt(currentPage);
-    	}
-    	$.cookie("currentPage", currentPage, { expires: 7 });
-    	document.location.reload();
-    });
-    nextPage.addEventListener('click', function(){
-    	if(currentPage<$.cookie("PageCount")){
-    		currentPage = parseInt(currentPage)+1;
-    	}else{
-    		currentPage = parseInt(currentPage);
-    	}
-    	$.cookie("currentPage", currentPage, { expires: 7 });
-    	console.log("currentPage111="+currentPage);
-    	
-    	document.location.reload();
-    });
-    finalPage.addEventListener('click', function(){
-    	currentPage = $.cookie("PageCount");
-    	$.cookie("currentPage", currentPage, { expires: 7 });
-    	document.location.reload();
-    });
-    /*sure2.addEventListener('click',function(){
-    	cover.style.display = "none";
-    	close2.style.display = "none";
-    	show2.style.display = "none";
-    	var boardName = $("#show_text").val();
-        var board_des = $("#show_textarea").val();
-        var canvasid = $(this).find("span").val();   
-        console.log(boardName+"++"+board_des+"++"+canvasid);
-        $.ajax({
-        	url:'/managementCon/managementUpdate',
-        	data:{
-        		boardName:boardName,
-        		board_des:board_des
-        	},
-        	dataType:'',
-        	Type:'',
-        	succuss:function(data){
-        		
-        	},
-        	error:function(){
-        		
-        	}
-        });
-    	
-    });*/
 });
 var cover = document.getElementById('cover_layer');
 var close2 = document.getElementById('close2');
@@ -247,6 +161,7 @@ function update(canvasId){
 	cover.style.display = "block";
 	close2.style.display = "block";
 	show2.style.display = "block";
+	var userId = getParameter('userId');
 	var canvasid = canvasId;
 	console.log("canvasid="+canvasid);
 	sure2.addEventListener('click',function(){
@@ -257,7 +172,7 @@ function update(canvasId){
         var board_des = $("#show_textarea2").val();
         console.log(boardName+"++"+board_des+"++"+canvasid);
         $.ajax({
-        	url:'/managementCon/managementUpdate',
+        	url:'/managementCon/managementUpdate?userId='+userId,
         	data:{
         		canvasid:canvasid,
         		boardName:boardName,
@@ -269,7 +184,7 @@ function update(canvasId){
         		var resultData = JSON.parse(data);
         		if(resultData.status == '200'){
         			alert(resultData.message);
-        			document.location.reload();
+        			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
         		}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
@@ -282,10 +197,9 @@ function update(canvasId){
 	});
 	deleteAll.addEventListener('click',function(){
 		$.ajax({
-        	url:'/managementCon/managementDeleteAll',
+        	url:'/managementCon/managementDeleteAll?userId='+userId,
         	data:{
-        		canvasid:canvasid,
-        		userid:userid
+        		canvasid:canvasid
         	},
         	dataType:'text',
         	type:'post',
@@ -293,7 +207,7 @@ function update(canvasId){
         		var resultData = JSON.parse(data);
         		if(resultData.status == '200'){
         			alert(resultData.message);
-        			document.location.reload();
+        			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
         		}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
@@ -305,10 +219,9 @@ function update(canvasId){
 	});
 	deleteToOther.addEventListener('click',function(){
 		$.ajax({
-        	url:'/managementCon/managementDeleteToUnsort',
+        	url:'/managementCon/managementDeleteToUnsort?userId='+userId,
         	data:{
-        		canvasid:canvasid,
-        		userid:userid
+        		canvasid:canvasid
         	},
         	dataType:'text',
         	Type:'post',
@@ -317,7 +230,7 @@ function update(canvasId){
         		console.log(resultData.status);
         		if(resultData.status == '200'){
         			alert(resultData.message);
-        			document.location.reload();
+        			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
         		}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
@@ -328,11 +241,10 @@ function update(canvasId){
         });
 	});	
 }
-function getUserName(userid){
+function getUserName(userId){
 	$.ajax({
-    	url:'/user/getUserName',
+    	url:'/user/getUserName?userId='+userId,
     	data:{
-    		userid:userid
     	},
     	type:'post',
     	success:function(data){/*
@@ -352,4 +264,89 @@ function getUserName(userid){
     		console.log('getUserName error happened----');
     	}
     });
+}
+function homePage(){
+	$(".every_board").remove();
+	currentPage = 1;
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);
+    
+}
+function lastPage(){
+	$(".every_board").remove();
+	if(currentPage>1){
+		currentPage = parseInt(currentPage)-1;
+	}else{
+		currentPage = parseInt(currentPage);
 	}
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);
+}
+function nextPage(){
+	$(".every_board").remove();
+	if(currentPage<Page){
+		currentPage = parseInt(currentPage)+1;
+	}else{
+		currentPage = parseInt(currentPage);
+	}
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);   
+}
+function finalPage(){
+	$(".every_board").remove();
+	currentPage = Page;
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);   
+}
+
+function sendAjax(currentPage){
+	$.ajax({
+    	url:'/canvasInfo/getCanvasByUserId?userId='+userId,
+    	data:{
+    		currentPage:currentPage
+    	},
+    	dataType:'text',
+        type:'post',
+       success:function (data) {
+    	   var result = JSON.parse(data);
+    	   
+    	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");
+    	   console.log(result);	   
+    	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
+    		   var div = document.createElement('div');
+    		  div.className = "every_board";
+    		  div.id = "every_board" + i;
+    		  document.getElementById("board_list").appendChild(div);
+    		  //下面需要后台传过来的信息innerHTML
+    		  /*result.object.canvasInfo[i].lastMaterialUrl*/
+    		  if(result.object.canvasInfo[i].canvasName =="未分类"){
+    			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
+    				  $("#"+div.id).html('<div'+
+        				  ' class="board_covers" ><img style="width:160px;height:auto;margin-left:30px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }else{
+    				  $("#"+div.id).html('<div'+
+            				  ' class="board_covers" ><img style="width:160px;height:auto;margin-left:30px" src=""></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }
+    		  }else{
+    			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
+    		  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
+    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
+    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
+    				  ' class="board_covers" ><img style="width:160px;height:auto;margin-left:30px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }else{
+    				  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
+    	    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
+    	    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
+    	    				  ' class="board_covers" ><img style="width:160px;height:auto;margin-left:30px" src=""></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }
+    		  }
+    		  
+    	   }
+    	   
+        },
+        error:function () {
+        	console.log("载入个人画板失败");
+        }
+    });
+}
+

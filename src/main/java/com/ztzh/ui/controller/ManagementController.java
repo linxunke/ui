@@ -30,7 +30,7 @@ public class ManagementController {
 	@RequestMapping(value = "managementMain", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object management(
-			@RequestParam(value = "userid", required = true) Long userId) {
+			@RequestParam(value = "userId", required = true) Long userId) {
 		// 返回画板个数，各个画板具体所需信息
 		CanvasResponseVo responseVo = new CanvasResponseVo();
 		ArrayList<ManagementCanvasBo> list = managementService
@@ -45,17 +45,17 @@ public class ManagementController {
 	@RequestMapping(value = "managementAdd", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object addCanvas(
-			@RequestParam(value = "userid", required = true) String userid,
+			@RequestParam(value = "userId", required = true) String userId,
 			@RequestParam(value = "canvasName", required = true) String canvasName,
 			@RequestParam(value = "canvasDesc", required = true) String canvasDesc) {
 		ResponseVo responseVo = new ResponseVo();
-		/*responseVo.setUserId("1");*/
+		responseVo.setUserId(userId);
 		if(canvasName==null || canvasDesc==null){
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
 			responseVo.setMessage("请填写完整信息");
 			return responseVo.toString();
 		}
-		boolean reasult = managementService.addCanvas(Long.parseLong(userid),
+		boolean reasult = managementService.addCanvas(Long.parseLong(userId),
 				canvasName, canvasDesc);
 		if (reasult) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
@@ -72,12 +72,13 @@ public class ManagementController {
 	@RequestMapping(value = "managementUpdate", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object updateCanvas(
+			@RequestParam(value = "userId", required = true) String userId,
 			@RequestParam(value = "canvasid", required = true) String canvasid,
 			@RequestParam(value = "boardName", required = true) String canvasName,
 			@RequestParam(value = "board_des", required = true) String canvasDesc) {
 		Long canvasId = Long.parseLong(canvasid);
 		ResponseVo responseVo = new ResponseVo();
-		/*responseVo.setUserId("1");*/
+		responseVo.setUserId(userId);
 		boolean reasult = managementService.updateCanvas(canvasId, canvasName, canvasDesc);
 		if (reasult == true) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
@@ -94,10 +95,11 @@ public class ManagementController {
 	@RequestMapping(value = "managementDeleteToUnsort", method = {
 			RequestMethod.GET, RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object deleteToUnsort(
-			@RequestParam(value = "userid", required = true) Long userId,
+			@RequestParam(value = "userId", required = true) Long userId,
 			@RequestParam(value = "canvasid", required = true) Long canvasId) {
 		boolean reasult = canvasInfoService.userDeleteCanvasWithoutMaterials(canvasId, userId);
 		ResponseVo responseVo = new ResponseVo();
+		responseVo.setUserId(userId.toString());
 		if (reasult == true) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("删除画板成功！");
@@ -113,10 +115,11 @@ public class ManagementController {
 	@RequestMapping(value = "managementDeleteAll", method = {
 			RequestMethod.GET, RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object deleteAll(
-			@RequestParam(value = "userid", required = true) Long userId,
+			@RequestParam(value = "userId", required = true) Long userId,
 			@RequestParam(value = "canvasid", required = true) Long canvasId) {
 		boolean reasult = canvasInfoService.userDeleteCanvasWithMaterials(canvasId, userId);
 		ResponseVo responseVo = new ResponseVo();
+		responseVo.setUserId(userId.toString());
 		if (reasult == true) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("删除画板成功！");
