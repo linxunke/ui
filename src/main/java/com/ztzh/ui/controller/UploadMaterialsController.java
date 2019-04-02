@@ -58,9 +58,6 @@ public class UploadMaterialsController {
 	@Autowired
 	FTPUtil ftpUtil;
 
-	@Value("${material.catch.operation.url}")
-	private String catchOperationUrl;
-
 	@Value("${material.catch.png.url}")
 	private String catchPngUrl;
 

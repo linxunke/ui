@@ -37,7 +37,7 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userId='+userId,
+		url:'/canvasInfo/getCanvasByUserId?userId='+userId+"&onlyData=1",
 		type:'get',
 		success:function(data){
 			console.log(data);
