@@ -142,7 +142,7 @@
   where a.is_valid=1 and user_id =#{userId,jdbcType=BIGINT} ) as c 
   left join material_info d on c.upload_time = d.upload_time <!-- limit 0,2 -->
 </select>
-  <select id="selectByUserId" resultMap="CanvasResultMap" parameterType="java.lang.Long">
+  <select id="selectByUserId" resultMap="CanvasResultMap" > <!-- parameterType="java.lang.Long" -->
   select c.id as id, c.canvas_name as canvas_name,c.describe_info as describe_info, c.upload_time as upload_time, 
   d.thumbnail_url,c.number 
   from (select a.id as id, a.canvas_name as canvas_name,a.describe_info as describe_info,b.upload_time as upload_time, 
@@ -153,7 +153,7 @@
   from material_info where create_user_id= #{userId,jdbcType=BIGINT} 
   GROUP BY canvas_info_id_private) as b on a.id=b.canvas_info_id_private 
   where a.is_valid=1 and user_id =#{userId,jdbcType=BIGINT} ) as c 
-  left join material_info d on c.upload_time = d.upload_time <!-- limit 0,2 -->
+  left join material_info d on c.upload_time = d.upload_time limit #{firstCanvas},#{pageSize}
   </select>
   
    <select id="selectByCanvasName" resultMap="BaseResultMap">

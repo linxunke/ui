@@ -18,6 +18,7 @@ import com.ztzh.ui.bo.IconUrlBo;
 import com.ztzh.ui.bo.IconUrlResultBo;
 import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.service.CanvasInfoService;
+import com.ztzh.ui.utils.QueryByPage;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.utils.ImageMagickUtil;
 import com.ztzh.ui.vo.CanvasResponseVo;
@@ -45,11 +46,24 @@ public class CanvasInfoController {
 	@RequestMapping(value = "getCanvasByUserId", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public String getCanvasInfo(@RequestParam(value = "userId", required = false) String userId,
+			@RequestParam(value = "currentPage", required = false) int currentPage,
 			@RequestParam(value = "onlyData", required = false) String onlyData) {
 		logger.info("开始获取用户userId:{}的画板信息",userId);
+		logger.info("currentPage{}",currentPage);
 		ResponseVo responseVo = new ResponseVo();
+		//1.查询总条数，调用noteDao里的方法获取
+		int totalCount = canvasInfoService.canvasCount(Long.parseLong(userId));
+		logger.info("totalCount{}",totalCount);
+		//2.计算总页数
+		int pageSize = 9;
+		int pageCount = totalCount%pageSize == 0 ? totalCount/pageSize:(totalCount/pageSize+1);
+		if(currentPage < 1){
+			currentPage = 1;
+		}else if(currentPage > pageCount){
+			currentPage = pageCount;
+		}
 		List<ManagementCanvasBo> userCanvas = canvasInfoService
-				.selectCanvasByUserId(Long.parseLong(userId));
+				.selectCanvasByUserId(Long.parseLong(userId),currentPage,pageSize);
 		//拼接图标判断
 		if(!"1".equals(onlyData)) {
 			//判断哪些源素材为图标类型
@@ -100,8 +114,13 @@ public class CanvasInfoController {
 		}
 		int canvasCount = canvasInfoService.canvasCount(Long.parseLong(userId));
 		CanvasResponseVo canvasVo = new CanvasResponseVo();
+		/*//1.查询总条数，调用noteDao里的方法获取
+		int totalCount = canvasInfoService.canvasCount(Long.parseLong(userId));
+		//2.计算总页数
+		int pageCount = totalCount%pageSize == 0 ? totalCount/pageSize:(totalCount/pageSize+1);*/
 		canvasVo.setCanvasCount(canvasCount);
 		canvasVo.setCanvasInfo(userCanvas);
+		canvasVo.setPageCount(pageCount);
 		if (userCanvas.size() > 0) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取个人画板信息成功");

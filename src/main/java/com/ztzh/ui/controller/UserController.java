@@ -158,7 +158,7 @@ public class UserController {
 			responseVo.setObject(null);
 		}else{
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
-			responseVo.setMessage("获取用户画板信息成功");
+			responseVo.setMessage("获取用户信息成功");
 			responseVo.setObject(user);
 		}
 				return responseVo.toString();

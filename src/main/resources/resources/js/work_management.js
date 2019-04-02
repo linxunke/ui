@@ -1,6 +1,8 @@
 var main_div =1;
+var userId = getParameter('userId'); 
+var Page;
 $(document).ready(function () {
-	var userId = getParameter('userId'); 
+	
     var btn = document.getElementById('manage_add_btn');
     var cover = document.getElementById('cover_layer');
     var close = document.getElementById('close');
@@ -8,19 +10,32 @@ $(document).ready(function () {
     var close2 = document.getElementById('close2');
     var show2 = document.getElementById('show_div2');
     var sure = document.getElementById('sure');
+   /* if($.cookie("currentPage")==undefined){
+    	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+    }else{
+    	document.getElementById('currentPageNumber').innerHTML=$.cookie("currentPage");
+    	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+    }
+    
+    //查看当前页面
+    console.log("currentPage="+$.cookie("currentPage"));*/
+    var currentPage = document.getElementById('currentPageNumber').innerHTML;
     getUserName(userId);
-    /*var edit = document.getElementsByClassName('edit_button');
-    for(i in edit){
-    	edit[i].click=update;
-    }*/
+    
     $.ajax({
     	url:'/canvasInfo/getCanvasByUserId?userId='+userId,
     	data:{
+    		currentPage:currentPage
     	},
     	dataType:'text',
         type:'post',
        success:function (data) {
     	   var result = JSON.parse(data);
+    	   
+    	   PageCount = result.object.PageCount;
+    	   $.cookie("PageCount", PageCount, { expires: 7 });
+    	   Page=$.cookie("PageCount");
+    	   document.getElementById('tatolPage').innerHTML=PageCount;
     	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");
     	   console.log(result);	   
     	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
@@ -78,7 +93,7 @@ $(document).ready(function () {
     	show.style.display = "none";
     	var boardName = $("#show_text").val();
         var board_des = $("#show_textarea").val();
-        var userid = 6;
+        var userid = 1;
         console.log(boardName+"++"+board_des);
     	//添加div
     	/*var main = document.getElementById('unsorted_board');
@@ -133,57 +148,11 @@ $(document).ready(function () {
         	alert("请填写完整信息！");
         }
     });
-    /*edit.addEventListener('click',function(){
-    	cover.style.display = "block";
-    	close2.style.display = "block";
-    	show2.style.display = "block";
-    });*/
-    /*function update(){
-    	cover.style.display = "block";
-    	close2.style.display = "block";
-    	show2.style.display = "block";
-    	var canvasid = $(this).find("span").val();
-    	sure2.addEventListener('click',function(){
-        	cover.style.display = "none";
-        	close2.style.display = "none";
-        	show2.style.display = "none";
-        	var boardName = $("#show_text").val();
-            var board_des = $("#show_textarea").val();
-            var canvasid = $(this).find("span").val();   
-            console.log(boardName+"++"+board_des+"++"+canvasid);
-    	});
-    	
-    }*/
     close2.addEventListener('click', function(){
     	cover.style.display = "none";
     	close2.style.display = "none";
     	show2.style.display = "none";
     });
-    /*sure2.addEventListener('click',function(){
-    	cover.style.display = "none";
-    	close2.style.display = "none";
-    	show2.style.display = "none";
-    	var boardName = $("#show_text").val();
-        var board_des = $("#show_textarea").val();
-        var canvasid = $(this).find("span").val();   
-        console.log(boardName+"++"+board_des+"++"+canvasid);
-        $.ajax({
-        	url:'/managementCon/managementUpdate',
-        	data:{
-        		boardName:boardName,
-        		board_des:board_des
-        	},
-        	dataType:'',
-        	Type:'',
-        	succuss:function(data){
-        		
-        	},
-        	error:function(){
-        		
-        	}
-        });
-    	
-    });*/
 });
 var cover = document.getElementById('cover_layer');
 var close2 = document.getElementById('close2');
@@ -295,4 +264,92 @@ function getUserName(userId){
     		console.log('getUserName error happened----');
     	}
     });
+}
+function homePage(){
+	$(".every_board").remove();
+	currentPage = 1;
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);
+    
+}
+function lastPage(){
+	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+	$(".every_board").remove();
+	if(currentPage>1){
+		currentPage = parseInt(currentPage)-1;
+	}else{
+		currentPage = parseInt(currentPage);
 	}
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);
+}
+function nextPage(){
+	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+	$(".every_board").remove();
+	if(currentPage<Page){
+		currentPage = parseInt(currentPage)+1;
+	}else{
+		currentPage = parseInt(currentPage);
+	}
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);   
+}
+function finalPage(){
+	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+	$(".every_board").remove();
+	currentPage = Page;
+	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	sendAjax(currentPage);   
+}
+
+function sendAjax(currentPage){
+	$.ajax({
+    	url:'/canvasInfo/getCanvasByUserId?userId='+userId,
+    	data:{
+    		currentPage:currentPage
+    	},
+    	dataType:'text',
+        type:'post',
+       success:function (data) {
+    	   var result = JSON.parse(data);
+    	   
+    	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");
+    	   console.log(result);	   
+    	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
+    		   var div = document.createElement('div');
+    		  div.className = "every_board";
+    		  div.id = "every_board" + i;
+    		  document.getElementById("board_list").appendChild(div);
+    		  //下面需要后台传过来的信息innerHTML
+    		  /*result.object.canvasInfo[i].lastMaterialUrl*/
+    		  if(result.object.canvasInfo[i].canvasName =="未分类"){
+    			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
+    				  $("#"+div.id).html('<div'+
+        				  ' class="board_covers" ><img style="width:220px;height:160" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }else{
+    				  $("#"+div.id).html('<div'+
+            				  ' class="board_covers" ><img style="width:220px;height:160" src=""></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }
+    		  }else{
+    			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
+    		  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
+    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
+    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
+    				  ' class="board_covers" ><img style="width:220px;height:160" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }else{
+    				  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
+    	    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
+    	    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
+    	    				  ' class="board_covers" ><img style="width:220px;height:160" src=""></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    			  }
+    		  }
+    		  
+    	   }
+    	   
+        },
+        error:function () {
+        	console.log("载入个人画板失败");
+        }
+    });
+}
+

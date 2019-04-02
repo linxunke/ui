@@ -321,10 +321,17 @@
 		     material_type_info as b
 		    where a.id = b.materail_info_id
 		    and b.material_type_code_parent = '01'
-			and a.thumbnail_url in
-		<foreach close=")" collection="thumbnailUrls" item="listItem" open="(" separator=",">
+		    <if test="thumbnailUrls.size()>0">
+		    and a.thumbnail_url in
+				<foreach close=")" collection="thumbnailUrls" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
+		    </if>
+		    <if test="thumbnailUrls.size()==0">
+		    and a.thumbnail_url in
+				<![CDATA[('')]]>
+		    </if>
+			
 	</select>
 		<select id="getIconUrlsByCanvasId" parameterType="java.lang.String" resultType="java.lang.String">
 		select png_url as pngUrl from material_info 

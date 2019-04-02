@@ -31,7 +31,7 @@ public interface CanvasInfoDomainMapper {
     ArrayList<ManagementCanvasBo> selectCanvasInfoByUserId(Long userId);
     
 
-    List<ManagementCanvasBo> selectByUserId(Long userId);
+    List<ManagementCanvasBo> selectByUserId(@Param("userId")Long userId,@Param("firstCanvas")int firstCanvas,@Param("pageSize")int pageSize);
     
     CanvasInfoDomain selectByCanvasName(@Param("canvasName")String canvasName,@Param("userId")Long userId);
 

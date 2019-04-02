@@ -30,7 +30,7 @@ public class ManagementController {
 	@RequestMapping(value = "managementMain", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object management(
-			@RequestParam(value = "userid", required = true) Long userId) {
+			@RequestParam(value = "userId", required = true) Long userId) {
 		// 返回画板个数，各个画板具体所需信息
 		CanvasResponseVo responseVo = new CanvasResponseVo();
 		ArrayList<ManagementCanvasBo> list = managementService

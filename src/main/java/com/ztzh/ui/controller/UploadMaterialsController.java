@@ -90,10 +90,11 @@ public class UploadMaterialsController {
 	@RequestMapping(value = "/getMaterialFiles", method = { RequestMethod.POST,
 			RequestMethod.GET })
 	public String getMaterialFiles(
-			@RequestParam(value = "file") MultipartFile file) {
+			@RequestParam(value = "file") MultipartFile file,
+			@RequestParam(value = "userId") String userId) {
 		ResponseVo responseVo = new ResponseVo();
 		/*从session中获取userId,并添加到responseVo*/
-		responseVo.setUserId("1");
+		responseVo.setUserId(userId);
 		String resource = FileUpload.writeUploadFile(file, catchResourceUrl);
 		/*对上传的文件类型做转换*/
 		String resourceFileType = this.getFileType(resource);

@@ -45,9 +45,20 @@ public class UserPageController {
 		return "/login";
 
 	}
-	
 	@RequestMapping(value="toMaterialUpload")
 	public String toMaterialUpload(){
 		return "materialUpload";
+	}
+
+	@RequestMapping(value="toSearchIndex")
+	public String toSearchIndex(){
+		return "/search_index";
+	}
+
+	
+	@RequestMapping(value="toMaterialManage")
+	public String toMaterialManage(){
+		return "materialManage";
+
 	}
 }

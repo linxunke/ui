@@ -56,16 +56,24 @@
 				<img src="../img/我的-上传.png">
 			</div>
 		</div>
-		<div class="manage_drawing_board_list" id="board_list">
 		<div class="empty"></div>
+		<div class="manage_drawing_board_list" id="board_list">
+			
 			<div id="manage_add_board">
 				<div class="addButtonForBoard" id="manage_add_btn">
 					<img id="add_mark" src="../img/新增画板.png">
 				</div>
 				<div id="under_add_mark">创建新画板</div>
 			</div>
-			
 		</div>
+		<div class="pageTransition">
+				<span class="pageButton" id="homePage" onclick="homePage()">首页</span>
+				<span class="pageButton" id="lastPage" onclick="lastPage()">上一页  /</span>
+				<span class="pageButton" id="nextPage" onclick="nextPage()">下一页</span>
+				<span class="pageButton" id="currentPage" >第<span id="currentPageNumber">1</span>页</span>
+				<span class="pageButton" id="totalPage">共<span id="tatolPage">?</span>页</span>
+				<span class="pageButton" id="finalPage" onclick="finalPage()">末页</span>
+			</div>
 	</div>
 	<!-- 遮罩层 -->
 	<div id="cover_layer"></div>
@@ -104,6 +112,7 @@
 	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
+	<script th:src="@{/js/jquery/jquery.cookie.js}" type="text/javascript"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
 	<script type="text/javascript" th:src="@{/js/work_management.js}"></script>
 </body>

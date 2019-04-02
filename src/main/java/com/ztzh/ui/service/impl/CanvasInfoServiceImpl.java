@@ -93,8 +93,9 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		return canvasInfoDomainMapper.selectCountByUserId(userId);
 	}
 	@Override
-	public List<ManagementCanvasBo> selectCanvasByUserId(Long userId) {
-		return canvasInfoDomainMapper.selectByUserId(userId);
+	public List<ManagementCanvasBo> selectCanvasByUserId(Long userId,int currentPage,int pageSize) {
+		int firstCanvas = (currentPage-1)*pageSize;
+		return canvasInfoDomainMapper.selectByUserId(userId,firstCanvas,pageSize);
 	}
 	@SuppressWarnings("null")
 	@Override

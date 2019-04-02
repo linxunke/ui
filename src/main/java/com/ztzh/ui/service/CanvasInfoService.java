@@ -12,7 +12,7 @@ public interface CanvasInfoService {
 	
 	public int canvasCount(Long userId);
 	
-	List<ManagementCanvasBo> selectCanvasByUserId(Long userId);
+	List<ManagementCanvasBo> selectCanvasByUserId(Long userId,int currentPage,int pageSize);
 
 	public boolean addCanvas(Long userId, String canvasName, String canvasDesc);
 	
