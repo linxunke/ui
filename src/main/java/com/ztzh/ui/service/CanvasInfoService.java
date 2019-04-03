@@ -3,6 +3,7 @@ package com.ztzh.ui.service;
 import java.util.List;
 
 import com.ztzh.ui.bo.ManagementCanvasBo;
+import com.ztzh.ui.po.CanvasInfoDomain;
 
 public interface CanvasInfoService {
 	
@@ -17,4 +18,8 @@ public interface CanvasInfoService {
 	public boolean addCanvas(Long userId, String canvasName, String canvasDesc);
 	
 	public boolean updateCanvas(Long canvasId, String canvasName , String canvasDesc);
+	
+	List<ManagementCanvasBo> selectAllCanvasByUserId(Long userId);
+	
+	public CanvasInfoDomain selectCanvasByCanvasId(Long canvasId);
 }

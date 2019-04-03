@@ -182,5 +182,9 @@
          </if>
   
   </select>
-  
+  <select id="selectAllCanvasInfoByUserId" resultMap="CanvasResultMap">
+  	select id,canvas_name 
+  		from canvas_info where is_valid = 1 
+  		 and user_id = #{userId,jdbcType=BIGINT}
+  </select>
 </mapper>

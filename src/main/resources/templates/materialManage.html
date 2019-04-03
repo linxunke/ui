@@ -43,11 +43,11 @@
 		<div class="head_div">
 			<div class="canvas_info_model">
 				<div class="float_l canvas_info_div">
-					<span class="user_name">sylvanas</span>
+					<span id="user_name"></span>
 				</div>
 				<div class="float_l canvas_info_div">
 					<div class="canvas_name_div">
-						<span class="canvas_name">画板</span>
+						<span class="canvas_name">画板画板画板画板</span>
 					</div>
 				</div>
 				<div class="float_l canvas_info_div">
@@ -92,15 +92,30 @@
 	</div>
 	<div class="body">
 		<div class="material_show_body">
-			<div class="each_material_div" onclick="showModal()">
+			<!-- 图片显示的模块 -->
+			<div class="each_material_icon_div">
 				<div class="material_image_div">
-					<img class="material_img" src="../img/6759847096808.png">
-					<div class="custom_checkedbox" onclick="change_checked_status(this)" onmouseenter="show_custom_checkedbox(this)" onmouseleave="hiden_custom_checkedbox(this)">
+					<img class="material_img"  onclick="showModal()" src="../img/6759847096808.png">
+					<div class="custom_checkedbox icon_checkedbox" onclick="change_checked_status(this)" onmouseenter="show_custom_checkedbox(this)" onmouseleave="hiden_custom_checkedbox(this)">
 						<span></span>
 						<input class="checked_status" type="text" value="unchecked" style="display: none"/>
 					</div>
 				</div>
 				<div class="material_name_div">
+					<span class="material_id" style="display: none"></span>
+					<span class="material_name">面包</span>
+				</div>
+			</div>
+			<!-- 图片显示的模块 -->
+			<div class="each_material_img_div">
+				<div class="material_image_block">
+					<div class="custom_checkedbox img_checkedbox" onclick="change_checked_status(this)" onmouseenter="show_custom_checkedbox(this)" onmouseleave="hiden_custom_checkedbox(this)">
+						<span></span>
+						<input class="checked_status" type="text" value="unchecked" style="display: none"/>
+					</div>
+					<img class="material_picture" src="../img/splitImg.jpg">
+				</div>
+				<div class="material_name_block">
 					<span class="material_id" style="display: none"></span>
 					<span class="material_name">面包</span>
 				</div>
@@ -111,7 +126,7 @@
 		<div class="page_modual">
 			<div class="float_l page_modual_each"><a id="lastPage">上一页</a></div>
 			<div class="float_l page_modual_each">
-				<input id="currentPage" type="number"/>
+				<input id="currentPage" type="number" value="1"/>
 				<input id="search_by_page" type="button" value="跳转">
 			</div>
 			<div class="float_l page_modual_each"><a id="nextPage">下一页</a></div>

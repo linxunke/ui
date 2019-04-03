@@ -20,4 +20,6 @@ public interface UserInfoDomainMapper {
     String getUserIdByAccount(String account);
     
     UserInfoDomain getUserInfoByAccount(String account);
+    
+    UserInfoDomain getUserInfoById(Long userId);
 }

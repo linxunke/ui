@@ -164,5 +164,21 @@ public class UserController {
 				return responseVo.toString();
 		
 	}
+	
+	@RequestMapping(value="getUserInfoById",method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
+	public String getUserInfoById(@RequestParam(value = "userId", required = true) String userId){
+		ResponseVo responseVo = new ResponseVo();
+		UserInfoDomain userInfoDomain = userService.getUserShowInfoById(new Long(userId));
+		if(userInfoDomain != null){
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setMessage("获取用户信息成功");
+			responseVo.setObject(userInfoDomain);
+		}else {
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("获取用户信息失败，可能用户不存在");
+		}
+		return responseVo.toString();
+	}
 			
 }
