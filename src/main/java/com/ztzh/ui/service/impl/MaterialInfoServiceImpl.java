@@ -13,6 +13,7 @@ import com.ztzh.ui.bo.IconUrlBo;
 import com.ztzh.ui.bo.IconUrlResultBo;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialInfoDomainMapper;
+import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.MaterialInfoService;
 
 @Service
@@ -42,6 +43,11 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	    	iconUrlResultBoList.add(iconUrlResultBo);
 	    }
 		return iconUrlResultBoList;
+	}
+
+	@Override
+	public List<MaterialInfoDomain> getMaterialListByCanvasId(Long canvasId) {
+		return materialInfoDomainMapper.selectByCanvasId(canvasId);
 	}
 
 }

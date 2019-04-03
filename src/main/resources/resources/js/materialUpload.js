@@ -44,7 +44,7 @@ $(document).ready(function(){
 			var canvasInfo = data.object;
 			var appendOptions = '';
 			for(var i=0; i < canvasInfo.length; i++){
-				appendOptions += '<option value="'+canvasInfo[i].canvasId+'">'+canvasInfo[i].canvasName+'</option>';
+				appendOptions += '<option value="'+canvasInfo[i].id+'">'+canvasInfo[i].canvasName+'</option>';
 			}
 			$("#personal_sketchpad").append(appendOptions);
 		},
@@ -89,8 +89,6 @@ $(document).ready(function(){
 	$("#upload_material").click(function() {
 		var userId = getParameter('userId'); 
 		var formdata = new FormData();
-		console.log(userId);
-		console.log($("#personal_sketchpad").val());
 		formdata.append("userId",parseInt(userId));
 		formdata.append("imageName",$("#material_title_content").val());
 		formdata.append("imageLabel",$("#material_label_content").val());

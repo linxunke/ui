@@ -2,7 +2,9 @@ package com.ztzh.ui.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.im4java.core.IM4JavaException;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import com.ztzh.ui.bo.IconUrlBo;
 import com.ztzh.ui.bo.IconUrlResultBo;
 import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.po.CanvasInfoDomain;
+import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
 import com.ztzh.ui.utils.QueryByPage;
 import com.ztzh.ui.service.MaterialInfoService;
@@ -179,7 +182,19 @@ public class CanvasInfoController {
 			@RequestParam(value = "canvasId", required = true) String canvasId){
 		ResponseVo responseVo = new ResponseVo();
 		CanvasInfoDomain canvasInfo = canvasInfoService.selectCanvasByCanvasId(new Long(canvasId));
-		
-		return null;
+		List<MaterialInfoDomain> materialList = materialInfoService.getMaterialListByCanvasId(new Long(canvasId));
+		if(canvasInfo != null && materialList.size() != 0){
+			Map<String,Object> result = new HashMap<String, Object>();
+			result.put("canvasInfo", canvasInfo);
+			result.put("materialList", materialList);
+			result.put("materialNum", materialList.size());
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setMessage("获取当前画板的信息及内容成功");
+			responseVo.setObject(result);
+		}else {
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("获取当前画板失败，信息为空");
+		}
+		return responseVo.toString();
 	}
 }

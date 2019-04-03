@@ -39,7 +39,7 @@ function change_checked_status(obj) {
 
 function init(userId,canvasId) {
 	getUserInfo(userId);
-	getCanvasInfoById(canvasId);
+	getCanvasInfoById(userId,canvasId);
 }
 
 function getUserInfo(userId) {
@@ -64,7 +64,7 @@ function getUserInfo(userId) {
 		}
 	});
 }
-function getCanvasInfoById(canvasId) {
+function getCanvasInfoById(userId,canvasId) {
 	$.ajax({
 		url:'/canvasInfo/getCanvasInfoById',
 		type:'get',
@@ -73,11 +73,7 @@ function getCanvasInfoById(canvasId) {
 		},
 		success:function(data){
 			console.log(data);
-			if(data.status == '200'){
-				
-			}else {
-				alert(data.message);
-			}
+			
 		},
 		error:function(){
 			console.log("error happened ....");
