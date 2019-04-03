@@ -339,6 +339,4 @@
 		and canvas_info_id_public = #{canvasId}
 		limit 20 
 	</select>
-	
-	
 </mapper>

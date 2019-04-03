@@ -29,7 +29,6 @@ public interface CanvasInfoDomainMapper {
     int selectCountByUserId(Long userId);
     
     ArrayList<ManagementCanvasBo> selectCanvasInfoByUserId(Long userId);
-    
 
     List<ManagementCanvasBo> selectByUserId(@Param("userId")Long userId,@Param("firstCanvas")int firstCanvas,@Param("pageSize")int pageSize);
     
@@ -37,4 +36,5 @@ public interface CanvasInfoDomainMapper {
 
 	List<IconUrlBo> getMaterialInfosOfCanvasByMaterialInfoId(@Param("materialInfoIdList") List<String> materialInfoIdList);
 
+	List<ManagementCanvasBo> selectAllCanvasInfoByUserId(@Param("userId") Long userId);
 }

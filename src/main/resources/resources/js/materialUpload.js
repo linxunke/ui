@@ -37,11 +37,11 @@ $(document).ready(function(){
 	
 	/*获取个人画板的信息*/
 	$.ajax({
-		url:'/canvasInfo/getCanvasByUserId?userId='+userId+"&onlyData=1",
+		url:'/canvasInfo/getAllCanvasInfoByUserId?userId='+userId+"&onlyData=1",
 		type:'get',
 		success:function(data){
 			console.log(data);
-			var canvasInfo = data.object.canvasInfo;
+			var canvasInfo = data.object;
 			var appendOptions = '';
 			for(var i=0; i < canvasInfo.length; i++){
 				appendOptions += '<option value="'+canvasInfo[i].canvasId+'">'+canvasInfo[i].canvasName+'</option>';

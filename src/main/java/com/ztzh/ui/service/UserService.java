@@ -18,4 +18,6 @@ public interface UserService {
 	public boolean checkUserAccountIsValue(String account);
 
 	public LoginResultBo login(String account, String password);
+	
+	public UserInfoDomain getUserShowInfoById(Long userId);
 }

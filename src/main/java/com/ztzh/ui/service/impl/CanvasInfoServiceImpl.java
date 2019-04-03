@@ -120,4 +120,14 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		canvasInfoDomainMapper.updateByPrimaryKey(canvasInfo);
 		return true;
 	}
+
+	@Override
+	public List<ManagementCanvasBo> selectAllCanvasByUserId(Long userId) {
+		return canvasInfoDomainMapper.selectAllCanvasInfoByUserId(userId);
+	}
+
+	@Override
+	public CanvasInfoDomain selectCanvasByCanvasId(Long canvasId) {
+		return canvasInfoDomainMapper.selectByPrimaryKey(canvasId);
+	}
 }

@@ -153,4 +153,9 @@ public class UserServiceImpl implements UserService {
 		return userInfoDomainMapper.selectByPrimaryKey(userId);
 	}
 
+	@Override
+	public UserInfoDomain getUserShowInfoById(Long userId) {
+		return userInfoDomainMapper.getUserInfoById(userId);
+	}
+
 }
