@@ -118,4 +118,21 @@
   	(materail_info_id,material_type_code_parent,material_type_code_child,material_style_code,create_time) 
   	values (#{materailInfoId},#{materialTypeCodeParent},#{materialTypeCodeChild},#{materialStyleCode},#{createTime})
   </insert>
+  
+  <delete id="deleteByMaterialInfoId" parameterType="java.lang.Long">
+    delete from material_type_info
+    where materail_info_id = #{materialInfoId,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insertBybatch" parameterType="java.util.List">
+  insert into material_type_info
+  	(materail_info_id,material_type_code_parent,material_type_code_child,material_style_code,create_time)
+  	values
+  	<foreach collection="materialTypeInfoDomains" item="item" index="index" separator=",">
+            (#{item.materailInfoId,jdbcType=BIGINT}, #{item.materialTypeCodeParent,jdbcType=VARCHAR},
+            #{item.materialTypeCodeChild,jdbcType=VARCHAR}, #{item.materialStyleCode,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+ 
 </mapper>

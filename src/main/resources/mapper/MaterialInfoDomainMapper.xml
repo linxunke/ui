@@ -342,4 +342,34 @@
 		and canvas_info_id_public = #{canvasId}
 		limit 20 
 	</select>
+	
+	<select id="queryByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+		 select 
+    	<include refid="Base_Column_List" />
+    	from material_info where
+    	<if test="idList.size()>0">
+		   id in
+				<foreach close=")" collection="idList" item="listItem" open="(" separator=",">
+                    #{listItem}
+                </foreach>
+		 </if>
+		 <if test="idList.size()==0">
+		    id in <![CDATA[('')]]>
+		 </if>
+	</select>
+	
+	<delete id="deleteByIds" parameterType="java.util.List">
+	delete from material_info
+	where
+	<if test="idList.size()>0">
+		id in
+		<foreach close=")" collection="idList" item="listItem"
+			open="(" separator=",">
+			#{listItem}
+		</foreach>
+	</if>
+	<if test="idList.size()==0">
+		id in <![CDATA[('')]]>
+	</if>
+  </delete>
 </mapper>
