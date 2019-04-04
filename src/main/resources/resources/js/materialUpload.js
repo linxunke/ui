@@ -92,7 +92,7 @@ $(document).ready(function(){
 		formdata.append("userId",parseInt(userId));
 		formdata.append("imageName",$("#material_title_content").val());
 		formdata.append("imageLabel",$("#material_label_content").val());
-		formdata.append("personalCanvasId",$("#personal_sketchpad").val());
+		formdata.append("personalCanvasId",parseInt($("#personal_sketchpad").val()));
 		var typeArray = new Array();
 		for(var i = 0; i <$(".material_total_info").length; i++){
 			typeArray[i] = new Array(3);

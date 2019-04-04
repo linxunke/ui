@@ -270,7 +270,8 @@
     <result column="png_url" jdbcType="VARCHAR" property="pngUrl" />
     <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
     <result column="color_type" jdbcType="INTEGER" property="colorType" />
-    <result column="color_percentage" jdbcType="REAL" property="colorPercentage" />  
+    <result column="color_percentage" jdbcType="REAL" property="colorPercentage" /> 
+    <result column="count_download" jdbcType="INTEGER" property="countDownload" />  
 <collection property="materialTypeInfoIndex" ofType="com.ztzh.ui.bo.MaterialTypeInfoIndex"  resultMap="ListResultMap" />  
 </resultMap>
 <resultMap id="ListResultMap" type="com.ztzh.ui.bo.MaterialTypeInfoIndex" >
@@ -279,7 +280,7 @@
 	<result column="material_style_code" property="materialStyleCode" jdbcType="VARCHAR" />
 </resultMap>
    <select id="getValidMaterialInfoForIndex" resultMap="ResultIndexMap">
-    select 
+    	select 
      a.id,
      a.create_user_id,
      a.canvas_info_id_private,
@@ -296,8 +297,10 @@
      a.is_valid,
      b.material_type_code_parent,
      b.material_type_code_child,
-     b.material_style_code
+     b.material_style_code,
+	(case when c.count_download is null then 0 else c.count_download end) as count_download
     from material_info as a left join material_type_info as b on a.id=b.materail_info_id
+		left join (	select c.material_info_id, count(c.id) as count_download from material_history_collection as c GROUP BY c.material_info_id) as c on a.id=c.material_info_id
     where a.is_valid = 1
   </select>
   
@@ -339,7 +342,6 @@
 		and canvas_info_id_public = #{canvasId}
 		limit 20 
 	</select>
-	
 	<select id="getMaterialNumOfCanvasByCanvasId" resultType="java.lang.Integer">
 		select count(id) from material_info where 
 			canvas_info_id_private = #{canvasId,jdbcType=BIGINT} and is_valid = 1
@@ -353,4 +355,33 @@
     		and is_valid = 1
     		LIMIT #{start},#{end}
 	</select>
+	<select id="queryByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+		 select 
+    	<include refid="Base_Column_List" />
+    	from material_info where
+    	<if test="idList.size()>0">
+		   id in
+				<foreach close=")" collection="idList" item="listItem" open="(" separator=",">
+                    #{listItem}
+                </foreach>
+		 </if>
+		 <if test="idList.size()==0">
+		    id in <![CDATA[('')]]>
+		 </if>
+	</select>
+	
+	<delete id="deleteByIds" parameterType="java.util.List">
+	delete from material_info
+	where
+	<if test="idList.size()>0">
+		id in
+		<foreach close=")" collection="idList" item="listItem"
+			open="(" separator=",">
+			#{listItem}
+		</foreach>
+	</if>
+	<if test="idList.size()==0">
+		id in <![CDATA[('')]]>
+	</if>
+  </delete>
 </mapper>

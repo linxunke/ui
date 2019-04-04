@@ -3,12 +3,17 @@ package com.ztzh.ui.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.index.search.MatchQuery;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +27,9 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
+import com.ztzh.ui.constants.MaterialTypeConstants;
 import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.service.MaterialInfoIndexRepository;
 
@@ -72,21 +79,49 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 
 
 	@Override
-	public Page<MaterialInfoIndex> findDocument(int page, int size) {
-		//QueryBuilder queryBuilder = QueryBuilders.termQuery("materialName", "lxk");
-		SearchQuery searchQuery = getEntitySearchQuery(page,size,"lxk");
+	public Page<MaterialInfoIndex> findMaterialDocument(int page, int size, MaterialESBo materialESBo) {
+		SearchQuery searchQuery = getEntitySearchQuery(page,size,materialESBo);
 		Page<MaterialInfoIndex> items = materialInfoIndexRepository.search(searchQuery);
 		return items;
 	}
 	
-	private SearchQuery getEntitySearchQuery(int pageNumber, int pageSize, String searchContent) {
-        QueryBuilder functionScoreQueryBuilder = QueryBuilders.matchQuery("materialName", searchContent);
-
+	/*
+	 * 拼接materialindex查询条件 
+	 */
+	private SearchQuery getEntitySearchQuery(int pageNumber, int pageSize, MaterialESBo materialESBo) {
+		NativeSearchQueryBuilder searchBuilder = new NativeSearchQueryBuilder();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        if(null!=materialESBo.getMaterialName()&&""!=materialESBo.getMaterialName()) {
+        	boolQueryBuilder.must(QueryBuilders.matchQuery("materialName", materialESBo.getMaterialName()));
+        }
+        if(null!=materialESBo.getMaterialDescription()&&""!=materialESBo.getMaterialDescription()) {
+        	boolQueryBuilder.must(QueryBuilders.matchQuery("materialDescription", materialESBo.getMaterialDescription()));
+        }
+        if(null!=materialESBo.getSort()&&""!=materialESBo.getSort()) {
+        	if(materialESBo.getSort().equals(MaterialTypeConstants.MATERIAL_TYPE_HOT_CODE)) {
+        		searchBuilder.withSort(SortBuilders.fieldSort("countDownload")
+                        .order(SortOrder.DESC));
+        	}else if(materialESBo.getSort().equals(MaterialTypeConstants.MATERIAL_TYPE_NEW_CODE)){
+        		searchBuilder.withSort(SortBuilders.fieldSort("uploadTime")
+                        .order(SortOrder.DESC));
+        	}
+        }
+        if(null!=materialESBo.getColorType()) {
+        	boolQueryBuilder.must(QueryBuilders.termQuery("colorType", materialESBo.getColorType()));
+        }
+        if(null!=materialESBo.getMaterialTypeCodeParent()&&""!=materialESBo.getMaterialTypeCodeParent()) {
+        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialESBo.getMaterialTypeCodeParent()));
+        }
+        if(null!=materialESBo.getMaterialTypeCodeChild()&&""!=materialESBo.getMaterialTypeCodeChild()) {
+        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeChild", materialESBo.getMaterialTypeCodeChild()));
+        }
+        if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
+        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+        }
         // 设置分页
         Pageable pageable = new PageRequest(pageNumber, pageSize);
-        return new NativeSearchQueryBuilder()
-                .withPageable(pageable)
-                .withQuery(functionScoreQueryBuilder).build();
+        return searchBuilder.withPageable(pageable)
+                .withQuery(boolQueryBuilder).build();
     }
 
 }
