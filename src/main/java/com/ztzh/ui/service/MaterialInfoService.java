@@ -10,4 +10,6 @@ public interface MaterialInfoService {
 	List<IconUrlResultBo> getDisplayUrlByThumbnailUrl(List<String> thumbnailUrls);
 	
 	List<MaterialInfoDomain> getMaterialListByCanvasId(Long canvasId);
+	
+	int getMaterialNumOfCanvasByCanvasId(long canvasId);
 }

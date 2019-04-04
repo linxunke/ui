@@ -50,4 +50,9 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		return materialInfoDomainMapper.selectByCanvasId(canvasId);
 	}
 
+	@Override
+	public int getMaterialNumOfCanvasByCanvasId(long canvasId) {
+		return materialInfoDomainMapper.getMaterialNumOfCanvasByCanvasId(canvasId);
+	}
+
 }

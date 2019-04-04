@@ -194,7 +194,7 @@ public class UploadMaterialsController {
 			try {
 				resourceIS.close();
 				//用resourceDir记录原文件的url(全路径)
-				resourceFileDir = resourceFileDir + "//" + resourceName
+				resourceFileDir = resourceFileDir + "//" + resourceName + "."
 						+ resourceFileType;
 			} catch (IOException e) {
 				logger.info("关闭源文件流失败");

@@ -38,4 +38,7 @@ public interface MaterialInfoDomainMapper {
 
 	List<String> getIconUrlsByCanvasId(@Param("canvasId") String canvasId);
     
+	int getMaterialNumOfCanvasByCanvasId(Long canvasId);
+	
+	List<MaterialInfoDomain> selectMaterialInfoWithCanvasIdByPage(@Param("canvasId")Long canvasId, @Param("start")int start, @Param("end")int end);
 }
