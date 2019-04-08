@@ -37,4 +37,6 @@ public interface CanvasInfoDomainMapper {
 	List<IconUrlBo> getMaterialInfosOfCanvasByMaterialInfoId(@Param("materialInfoIdList") List<String> materialInfoIdList);
 
 	List<ManagementCanvasBo> selectAllCanvasInfoByUserId(@Param("userId") Long userId);
+	
+	Object selectIconNumByCanvasId(Long canvasId);
 }

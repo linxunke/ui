@@ -12,6 +12,8 @@ public interface MaterialInfoService {
 	
 	List<MaterialInfoDomain> getMaterialListByCanvasId(Long canvasId);
 	
+	int getMaterialNumOfCanvasByCanvasId(long canvasId);
+	
 	ResponseVo updateMaterialsInfo(Long materialInfoId, String imageLabel, Long canvasId, String imageName, String typeArray) throws Exception;
 	
 	ResponseVo deleteMaterialsById(String materialIdsJson);

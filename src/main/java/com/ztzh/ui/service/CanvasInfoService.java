@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.po.CanvasInfoDomain;
+import com.ztzh.ui.utils.PageQueryUtil;
 
 public interface CanvasInfoService {
 	
@@ -22,4 +23,8 @@ public interface CanvasInfoService {
 	List<ManagementCanvasBo> selectAllCanvasByUserId(Long userId);
 	
 	public CanvasInfoDomain selectCanvasByCanvasId(Long canvasId);
+	
+	public boolean existIconInCanvasByCanvasId(Long canvasId);
+	
+	public PageQueryUtil getMaterialInfoWithCanvasIdByPage(int currentPage,int pageSize,Long canvasId);
 }

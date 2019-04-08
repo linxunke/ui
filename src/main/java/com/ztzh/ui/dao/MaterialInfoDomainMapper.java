@@ -44,4 +44,7 @@ public interface MaterialInfoDomainMapper {
 	
 	List<MaterialInfoIndex> getValidMaterialInfoForIndexByIds(@Param("materialInfoIds") List<Long> materialInfoIds);
     
+	int getMaterialNumOfCanvasByCanvasId(Long canvasId);
+	
+	List<MaterialInfoDomain> selectMaterialInfoWithCanvasIdByPage(@Param("canvasId")Long canvasId, @Param("start")int start, @Param("end")int end);
 }

@@ -342,7 +342,19 @@
 		and canvas_info_id_public = #{canvasId}
 		limit 20 
 	</select>
+	<select id="getMaterialNumOfCanvasByCanvasId" resultType="java.lang.Integer">
+		select count(id) from material_info where 
+			canvas_info_id_private = #{canvasId,jdbcType=BIGINT} and is_valid = 1
+	</select>
 	
+	<select id="selectMaterialInfoWithCanvasIdByPage" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />	
+    		from material_info	
+    		where canvas_info_id_private = #{canvasId,jdbcType=BIGINT} 
+    		and is_valid = 1
+    		LIMIT #{start},#{end}
+	</select>
 	<select id="queryByIds" parameterType="java.util.List" resultMap="BaseResultMap">
 		 select 
     	<include refid="Base_Column_List" />

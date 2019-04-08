@@ -25,6 +25,7 @@ import com.ztzh.ui.service.CanvasInfoService;
 import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.GetSYSTime;
+import com.ztzh.ui.utils.PageQueryUtil;
 
 @Service
 public class CanvasInfoServiceImpl implements CanvasInfoService{
@@ -157,5 +158,25 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	@Override
 	public CanvasInfoDomain selectCanvasByCanvasId(Long canvasId) {
 		return canvasInfoDomainMapper.selectByPrimaryKey(canvasId);
+	}
+
+	/*查看指定canvasId的画板中是否存在图标,存在true,不存在false*/
+	@Override
+	public boolean existIconInCanvasByCanvasId(Long canvasId) {
+		Object object = canvasInfoDomainMapper.selectIconNumByCanvasId(canvasId);
+		return object != null ? true:false;
+	}
+
+	@Override
+	public PageQueryUtil getMaterialInfoWithCanvasIdByPage(int currentPage, int pageSize,
+			Long canvasId) {
+		int infoTotalNumber = materialInfoDomainMapper.getMaterialNumOfCanvasByCanvasId(canvasId); //总条数
+		int pageNumber = infoTotalNumber % pageSize == 0 ? (infoTotalNumber / pageSize) : (infoTotalNumber / pageSize)+1; //总页数
+		PageQueryUtil pageQueryUtil = new PageQueryUtil(pageSize, currentPage, infoTotalNumber);
+		int start = (currentPage - 1) * pageSize;
+		int end = (currentPage >= pageNumber) ? (infoTotalNumber-start) : pageSize;
+		List<MaterialInfoDomain> resultList = materialInfoDomainMapper.selectMaterialInfoWithCanvasIdByPage(canvasId, start, end);
+		pageQueryUtil.setObject(resultList);
+		return pageQueryUtil;
 	}
 }

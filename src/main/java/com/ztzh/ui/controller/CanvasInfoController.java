@@ -22,6 +22,7 @@ import com.ztzh.ui.bo.ManagementCanvasBo;
 import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
+import com.ztzh.ui.utils.PageQueryUtil;
 import com.ztzh.ui.utils.QueryByPage;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.utils.ImageMagickUtil;
@@ -182,12 +183,11 @@ public class CanvasInfoController {
 			@RequestParam(value = "canvasId", required = true) String canvasId){
 		ResponseVo responseVo = new ResponseVo();
 		CanvasInfoDomain canvasInfo = canvasInfoService.selectCanvasByCanvasId(new Long(canvasId));
-		List<MaterialInfoDomain> materialList = materialInfoService.getMaterialListByCanvasId(new Long(canvasId));
-		if(canvasInfo != null && materialList.size() != 0){
+		int materialNum = materialInfoService.getMaterialNumOfCanvasByCanvasId(new Long(canvasId));
+		if(canvasInfo != null){
 			Map<String,Object> result = new HashMap<String, Object>();
 			result.put("canvasInfo", canvasInfo);
-			result.put("materialList", materialList);
-			result.put("materialNum", materialList.size());
+			result.put("materialNum", materialNum);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取当前画板的信息及内容成功");
 			responseVo.setObject(result);
@@ -197,4 +197,37 @@ public class CanvasInfoController {
 		}
 		return responseVo.toString();
 	}
+	
+	/*通过画板id和当前页数获得画板中的图片信息*/
+	@RequestMapping(value = "getMaterialListBycanvasId", method = {
+			RequestMethod.GET, RequestMethod.POST }, produces = "application/json;charset=UTF-8")
+	public String getMaterialInfoListByCanvasId(
+			@RequestParam(value = "canvasId", required = true) String canvasId,
+			@RequestParam(value = "userId", required = true) String userId,
+			@RequestParam(value = "currentPage", required = true) int currentPage){
+		logger.info("canvasId="+canvasId+"/n"+"userId"+userId+"/n"+"currentPage="+currentPage);
+		ResponseVo responseVo = new ResponseVo();
+		/*判断当前画板是否存在图标*/
+		boolean existIcon = canvasInfoService.existIconInCanvasByCanvasId(new Long(canvasId));
+		Map<String,Object> resultMap = new HashMap<String, Object>();
+		PageQueryUtil pageQueryUtil = new PageQueryUtil();
+		if(existIcon){
+			resultMap.put("existIcon", existIcon);
+			int pageSize = PageQueryUtil.PAGE_SIZE_IS_40;
+			pageQueryUtil = canvasInfoService.getMaterialInfoWithCanvasIdByPage(currentPage, pageSize, new Long(canvasId));
+			resultMap.put("pageInfoUtil", pageQueryUtil);
+		}else {
+			resultMap.put("existIcon", existIcon);
+			int pageSize = PageQueryUtil.PAGE_SIZE_IS_6;
+			pageQueryUtil = canvasInfoService.getMaterialInfoWithCanvasIdByPage(currentPage, pageSize, new Long(canvasId));
+			resultMap.put("pageInfoUtil", pageQueryUtil);
+		}
+		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+		responseVo.setMessage("获取画板中的图片信息成功！");
+		responseVo.setUserId(userId);
+		responseVo.setObject(resultMap);
+		return responseVo.toString();
+	}
+	
+	
 }

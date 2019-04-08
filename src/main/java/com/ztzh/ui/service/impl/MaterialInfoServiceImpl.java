@@ -72,6 +72,10 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	}
 
 	@Override
+	public int getMaterialNumOfCanvasByCanvasId(long canvasId) {
+		return materialInfoDomainMapper.getMaterialNumOfCanvasByCanvasId(canvasId);
+	}
+	
 	@Transactional
 	public ResponseVo updateMaterialsInfo(Long materialInfoId, String imageLabel, Long canvasId, String imageName, String typeArray) throws Exception {
 		logger.info("获取源文件基本信息");
@@ -156,7 +160,7 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		//有可能删除失败，后面需要一张事务表管理未删除掉的ftp文件
 		ftpUtil.deleteFtpFile(materialUrlList);
 		ftpUtil.deleteFtpFile(thumbnailUrlList);
-		ftpUtil.deleteFtpFile(pngUrlList);		
+		ftpUtil.deleteFtpFile(pngUrlList);
 	}
 
 }
