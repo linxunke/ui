@@ -372,4 +372,39 @@
 		id in <![CDATA[('')]]>
 	</if>
   </delete>
+  
+   <select id="getValidMaterialInfoForIndexByIds" resultMap="ResultIndexMap">
+    select 
+     a.id,
+     a.create_user_id,
+     a.canvas_info_id_private,
+     a.canvas_info_id_public,
+     a.material_name, 
+     a.material_description,
+     a.material_type,
+     a.material_url,
+     a.thumbnail_url,
+     a.png_url,
+     a.upload_time, 
+     a.color_type,
+     a.color_percentage, 
+     a.is_valid,
+     b.material_type_code_parent,
+     b.material_type_code_child,
+     b.material_style_code,
+	(case when c.count_download is null then 0 else c.count_download end) as count_download
+    from material_info as a left join material_type_info as b on a.id=b.materail_info_id
+		left join (	select c.material_info_id, count(c.id) as count_download from material_history_collection as c GROUP BY c.material_info_id) as c on a.id=c.material_info_id
+    where a.is_valid = 1
+   <if test="materialInfoIds.size()>0">
+		and a.id in
+		<foreach close=")" collection="materialInfoIds" item="listItem"
+			open="(" separator=",">
+			#{listItem}
+		</foreach>
+	</if>
+	<if test="materialInfoIds.size()==0">
+		and a.id in <![CDATA[('')]]>
+	</if>
+  </select>
 </mapper>

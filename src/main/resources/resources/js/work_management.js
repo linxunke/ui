@@ -51,7 +51,7 @@ $(document).ready(function () {
         				  ' class="board_covers" ><img style="width:220px;height:160px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }else{
     				  $("#"+div.id).html('<div'+
-            				  ' class="board_covers" ><img style="width:220px;height:160px" src=""></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+            				  ' class="board_covers" ><img style="width:220px;height:160px"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }
     		  }else{
     			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
@@ -328,7 +328,7 @@ function sendAjax(currentPage){
         				  ' class="board_covers" ><img style="width:220px;height:160" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }else{
     				  $("#"+div.id).html('<div'+
-            				  ' class="board_covers" ><img style="width:220px;height:160" src=""></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+            				  ' class="board_covers" ><img style="width:220px;height:160"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }
     		  }else{
     			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
@@ -340,7 +340,7 @@ function sendAjax(currentPage){
     				  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
     	    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
     	    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
-    	    				  ' class="board_covers" ><img style="width:220px;height:160" src=""></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    	    				  ' class="board_covers" ><img style="width:220px;height:160"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">2008</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }
     		  }
     		  

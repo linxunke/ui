@@ -41,5 +41,7 @@ public interface MaterialInfoDomainMapper {
 	List<MaterialInfoDomain> queryByIds(@Param("idList") List<Long> idList);
 	
 	int deleteByIds(@Param("idList") List<Long> idList);
+	
+	List<MaterialInfoIndex> getValidMaterialInfoForIndexByIds(@Param("materialInfoIds") List<Long> materialInfoIds);
     
 }

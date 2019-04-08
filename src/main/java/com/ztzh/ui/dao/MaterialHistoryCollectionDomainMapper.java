@@ -20,4 +20,6 @@ public interface MaterialHistoryCollectionDomainMapper {
     int updateByPrimaryKey(MaterialHistoryCollectionDomain record);
     
     int deleteByMaterialInfoIds(@Param("materialInfoIds")List<Long> materialInfoIds);
+    
+    int countByMaterialInfoId(Long materialInfoId);
 }
