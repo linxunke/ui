@@ -4,6 +4,7 @@
 	left: 0;
 	top: 0;
 	width: 100%;
+	min-width:1440px;
 	height: 1024px;
 	background-color: gray;
 }
@@ -38,19 +39,71 @@
 	font-family: PingFangSC-Regular;
 }
 #selectBox{
-	
+	width:90px;
+	height: 54px;
+	line-height: 60px;
+	text-align:center;
+	border-bottom: 2px solid;
+	background-color: yellow;
+}
+#selectBox:HOVER{
+	cursor: pointer;
 }
 #searchBox{
 	position:relative;
 	left: 23%;
 	top: 100px;
 	width: 720px;
-	height: 56px;	
+	height: 56px;
 	border-radius: 2px;
 	background-color: rgba(255, 255, 255, 1);
 }
+#combo_box{
+	position:relative;
+	left: 23%;
+	top: 44px;
+	width: 90px;
+	max-height: 600px;
+	border-radius: 2px;
+	background-color: rgba(255, 214, 48, 1);	
+	z-index: 9;	
+}
+
+.combo_box_head{
+	width: 90px;
+	height: 54px;
+	line-height: 60px;
+	border-radius: 2px;
+	text-align:center;
+	border-bottom: 2px solid;
+	border-bottom-color: yellow;
+}
+.combo_box_head:HOVER{
+	cursor: pointer;
+}
+.combo_box_child{
+	width: 90px;
+	height: 30px;
+	border-radius: 2px;
+	line-height: 30px;
+	text-align:center;
+	border-bottom: 1px solid;
+	border-bottom-color: yellow;
+	display: none;
+}
+.combo_box_child:HOVER{
+	cursor: pointer;
+}
+
 .search_camera{
-	background-color: red;
+	width:72px;
+	height: 56px;
+	
+}
+#search_camera{
+	position: relative;
+	top: 20%;
+	left:20%;
 }
 .searchBox_img{
 	position: relative;
@@ -61,7 +114,7 @@
 .searchBox_content{
 	width: 400px;
 	height: 56px;
-	background-color: silver;
+	font-size:20px;
 	border: none;
 }
 #searchBox_button{
@@ -70,4 +123,78 @@
 	float: right;
 	border-radius: 2px;
 	background-color: rgba(255, 214, 48, 1);
+}
+#search_show_three{
+	height:623px;
+	width:100%;
+	background-color: rgba(245, 245, 249, 1);
+}
+.photo{
+	width: 320px;
+	height: 270px;
+	float: left;
+	border-radius: 2px;
+	background-color: rgba(255, 255, 255, 1);
+	box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+}
+.photo:HOVER{
+	cursor: pointer;
+	box-shadow: 10px 10px 5px #888888;
+}
+#photo_one{
+	
+	position: relative;
+	left:13%;
+	top:57px;
+}
+#photo_two{
+	position: relative;
+	left:208px;
+	top:57px;
+}
+#photo_three{
+	position: relative;
+	left:230px;
+	top:57px;
+}
+.three_img{
+	position:relative;
+	width: 297px;
+	height: 192px;
+	margin: auto;
+	top:10px;
+	text-align:center;
+/* 	background-color: silver; */
+}
+.head_img{
+	position:relative;
+	width:40px;
+	height:40px;
+	left:12px;
+	top:20px;
+	background-color: silver;
+	border-radius:20px;
+}
+.photo_username{
+	position:relative;
+	left:55px;
+	bottom:8px;
+	width: 100px;
+	height: 17px;
+	color: rgba(41, 48, 64, 1);
+	font-size: 12px;
+	font-family: PingFangSC-Regular;
+}
+.photo_type{
+	position:relative;
+	float: right;
+	width: 100px;
+	height: 17px;
+	bottom:23px;
+	right:10px;
+	color: rgba(161, 166, 179, 1);
+	font-size: 12px;
+	text-align: center;
+	font-family: PingFangSC-Regular;
+	
 }

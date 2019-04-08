@@ -57,6 +57,7 @@ public class CanvasInfoController {
 		logger.info("totalCount{}",totalCount);
 		//2.计算总页数
 		int pageCount = totalCount%pageSize == 0 ? totalCount/pageSize:(totalCount/pageSize+1);
+		logger.info("pageCount{}",pageCount);
 		if(currentPage < 1){
 			currentPage = 1;
 		}else if(currentPage > pageCount){

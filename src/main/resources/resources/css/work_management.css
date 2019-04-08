@@ -4,6 +4,7 @@
 	margin: 0;
 	padding: 0;
 	width: 100%;
+	min-width:1440px;
 	height: 702px;
 	color: #A1A6B3;
 	background-color: black;
