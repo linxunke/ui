@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.constants.MaterialTypeConstants;
 import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.service.UploadMaterialsService;
+import com.ztzh.ui.vo.MaterialInfoIndexVo;
 import com.ztzh.ui.vo.ResponseVo;
 
 @RestController
@@ -64,16 +66,16 @@ public class ElasticSearchController {
 	}
 	
 	@RequestMapping(value="queryByParam", method = {RequestMethod.GET,
-			RequestMethod.POST}, produces = "application/json;charset=UTF-8")
-	public List<MaterialInfoIndex> queryByParam(@RequestBody MaterialESBo materialESBo) {
-		int page = 0;
-		int pageSize = 30;
-		//materialESBo.setMaterialName("lxk");
-		//materialESBo.setMaterialTypeCodeParent("01");
-		//materialESBo.setSort(MaterialTypeConstants.MATERIAL_TYPE_HOT_CODE);
-		materialESBo.setMaterialName("图标1");
+			RequestMethod.POST})
+	public String queryByParam(@RequestParam Long userId,
+			MaterialESBo materialESBo,@RequestParam int page, @RequestParam int pageSize) {
+		logger.info("查询条件{}",materialESBo);
 		Page<MaterialInfoIndex> items = elasticSearchService.findMaterialDocument(page, pageSize, materialESBo);
-		return items.getContent();
+		MaterialInfoIndexVo materialInfoIndexVo = new MaterialInfoIndexVo();
+		materialInfoIndexVo.setItems(items.getContent());
+		materialInfoIndexVo.setTotalPage(pageSize);
+		materialInfoIndexVo.setCurrentPage(page);
+		return JSONObject.toJSON(materialInfoIndexVo).toString();
 	}
 	
 
