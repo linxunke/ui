@@ -99,3 +99,19 @@ combo_box_first.addEventListener('click',function(){
 	console.log($(this).html());
 	$("#combo_box_head").html($(this).html());
 })
+
+/*function elasticSearch(){
+	var name = document.getElementById("searchBox_content").value;
+	var type = document.getElementById("combo_box_head").innerHTML;
+	console.log(name+"..."+type);
+	var MaterialESBo = new Object();
+	MaterialESBo.materialName = name;
+	materialName.materialType = type
+	$.ajax({
+		url:"/elasticsearch/queryByParam?userId="+userId,
+		data:{
+			materialName: name,
+			materialType: type
+		}
+	});
+}*/

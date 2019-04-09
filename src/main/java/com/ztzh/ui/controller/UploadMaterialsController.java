@@ -26,13 +26,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.ImageColorBo;
+import com.ztzh.ui.bo.MaterialInfoIndex;
+import com.ztzh.ui.bo.MaterialTypeInfoIndex;
 import com.ztzh.ui.bo.UploadMaterialsBo;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.po.MaterialTypeDomain;
 import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.po.UserInfoDomain;
+import com.ztzh.ui.service.ElasticSearchService;
+import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.service.UploadMaterialsService;
 import com.ztzh.ui.service.UserService;
 import com.ztzh.ui.utils.FTPUtil;
@@ -66,6 +71,13 @@ public class UploadMaterialsController {
 
 	@Value("${material.catch.thumbnail.url}")
 	private String catchThumbnailUrl;
+	
+	@Autowired
+	MaterialInfoService materialInfoService;
+	
+	@Autowired
+	ElasticSearchService elasticSearchService;
+	
 
 	/* 获取素材分类信息 */
 	@RequestMapping("/getMaterialTypes")
@@ -194,7 +206,7 @@ public class UploadMaterialsController {
 			try {
 				resourceIS.close();
 				//用resourceDir记录原文件的url(全路径)
-				resourceFileDir = resourceFileDir + "//" + resourceName
+				resourceFileDir = resourceFileDir + "//" + resourceName + "."
 						+ resourceFileType;
 			} catch (IOException e) {
 				logger.info("关闭源文件流失败");
@@ -338,6 +350,22 @@ public class UploadMaterialsController {
 		int addMaterialTypeInfoResult = uploadMaterialsService.addMaterialTypeInfo(materialTypeInfoList);
 		/*判断上传素材的最终结果*/
 		if(addMaterialInfoResult != 0 && addMaterialTypeInfoResult != 0 && uploadResult){
+			/*写入ElasticSearch*/
+			newMaterialInfoDomain.setId(currentMterialInfoId);
+			String materialJson = JSONObject.toJSONString(newMaterialInfoDomain);
+			List<MaterialTypeInfoIndex> materialTypeInfoIndexList = new ArrayList<MaterialTypeInfoIndex>();
+			MaterialInfoIndex materialInfoIndex = new MaterialInfoIndex();
+			materialInfoIndex = JSONObject.parseObject(materialJson,MaterialInfoIndex.class);
+			for(MaterialTypeInfoDomain materialTypeInfo:materialTypeInfoList) {
+				String materialTypeInfoJson = JSONObject.toJSONString(materialTypeInfo);
+				MaterialTypeInfoIndex materialTypeInfoIndex = JSONObject.parseObject(materialTypeInfoJson, MaterialTypeInfoIndex.class);
+				materialTypeInfoIndexList.add(materialTypeInfoIndex);
+			}
+			materialInfoIndex.setCountDownload(0);
+			materialInfoIndex.setMaterialTypeInfoIndex(materialTypeInfoIndexList);
+			List<MaterialInfoIndex> materialInfoIndexList = new ArrayList<MaterialInfoIndex>();
+			materialInfoIndexList.add(materialInfoIndex);
+			elasticSearchService.saveDocument(materialInfoIndexList);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("上传素材文件成功！");
 		}else{
@@ -355,6 +383,44 @@ public class UploadMaterialsController {
 		}
 		logger.info("currentFileType:" + fileType);
 		return fileType;
+	}
+	
+	@RequestMapping(value = "/updateMaterialInfos", method = {
+			RequestMethod.POST, RequestMethod.GET })
+	public String updateMaterialInfos(@RequestParam(value = "userId", required = true) Long userId,
+									  @RequestParam(value = "imageName", required = true) String imageName,
+								      @RequestParam(value = "materialInfoId", required = true) Long materialInfoId,  
+								      @RequestParam(value = "typeArray", required = true) String typeArray,
+								      @RequestParam(value = "imageLabel", required = true) String imageLabel,
+								      @RequestParam(value = "personalCanvasId", required = true) Long canvasId) {
+		/*
+		 * Long userId = 6L; String imageName = "风景"; Long materialInfoId = 25L; String
+		 * imageLabel = "修改"; Long canvasId = 44L; String typeArray =
+		 * "[['02','0003','0017'],['03','0006','0017'],['04','0012','0017']]";
+		 */
+		ResponseVo responseVo = new ResponseVo();
+		try {
+			responseVo = materialInfoService.updateMaterialsInfo(materialInfoId, imageLabel, canvasId, imageName, typeArray);
+			responseVo.setUserId(userId.toString());
+		} catch (Exception e) {
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("更新源文件信息失败");
+			responseVo.setUserId(userId.toString());
+			return responseVo.toString();
+		}
+		return responseVo.toString();
+	}
+	
+	@RequestMapping(value="deleteMaterialsByBatch" , method = {
+			RequestMethod.POST, RequestMethod.GET })
+	public String deleteMaterialsByBatch(@RequestParam(value = "userId", required = true) Long userId,
+			@RequestParam(value = "materialInfoIds", required = true) String materialInfoIds) {
+		/*
+		 * String materialInfoIds = "[{'id':'55'}]"; Long userId = 6L;
+		 */
+		ResponseVo responseVo = materialInfoService.deleteMaterialsById(materialInfoIds);
+		responseVo.setUserId(userId.toString());
+		return responseVo.toString();
 	}
 
 }

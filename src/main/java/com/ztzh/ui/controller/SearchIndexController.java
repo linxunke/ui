@@ -35,7 +35,7 @@ public class SearchIndexController {
 			responseVO.setMessage("成功");
 			responseVO.setObject(list);
 		}
-		logger.info("文件格式为：{}", responseVO);
+		logger.info("文件内容为：{}", responseVO);
 		return responseVO.toString();
 	}
 	@RequestMapping(value = "countNumber", method = { RequestMethod.GET,
@@ -61,6 +61,7 @@ public class SearchIndexController {
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object chooseSearchWord(){
 		List<String> list = materialInfoService.selectTypeNameForBox();
+		logger.info("type的信息为：{}", list);
 		ResponseVo responseVO = new ResponseVo();
 		if(list.size() == 0){
 			responseVO.setStatus(ResponseVo.STATUS_FAILED);

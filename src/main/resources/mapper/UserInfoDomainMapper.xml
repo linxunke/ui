@@ -162,4 +162,8 @@
    from user_info
    where user_account = #{account,jdbcType=VARCHAR}
   </select>
+  <select id="getUserInfoById" resultMap="BaseResultMap">
+  	select id,user_account,user_nickname,user_weixin,user_photo_url 
+  	 from user_info where id = #{userId} and is_valid = 1
+  </select>
 </mapper>

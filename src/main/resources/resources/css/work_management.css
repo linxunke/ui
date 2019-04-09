@@ -188,6 +188,9 @@
 	left: 20%;
 	
 }
+.every_board:HOVER {
+	box-shadow: 5px 5px 5px  #888888;
+}
 .every_board:HOVER .edit_button{
 	display: block;
 }

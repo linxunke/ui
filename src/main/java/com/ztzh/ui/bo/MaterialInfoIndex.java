@@ -1,6 +1,7 @@
 package com.ztzh.ui.bo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -35,6 +36,9 @@ public class MaterialInfoIndex {
     private Integer colorType;
 	@Field(type=FieldType.Float)
     private Float colorPercentage;
+	@Field(type=FieldType.Integer)
+	private Integer countDownload;
+	private List<MaterialTypeInfoIndex> materialTypeInfoIndex;
 	public Long getId() {
 		return id;
 	}
@@ -113,9 +117,22 @@ public class MaterialInfoIndex {
 	public void setColorPercentage(Float colorPercentage) {
 		this.colorPercentage = colorPercentage;
 	}
+	public Integer getCountDownload() {
+		return countDownload;
+	}
+	public void setCountDownload(Integer countDownload) {
+		this.countDownload = countDownload;
+	}
+	public List<MaterialTypeInfoIndex> getMaterialTypeInfoIndex() {
+		return materialTypeInfoIndex;
+	}
+	public void setMaterialTypeInfoIndex(List<MaterialTypeInfoIndex> materialTypeInfoIndex) {
+		this.materialTypeInfoIndex = materialTypeInfoIndex;
+	}
 	public MaterialInfoIndex(Long id, Long createUserId, Long canvasInfoIdPrivate, Long canvasInfoIdPublic,
 			String materialName, String materialDescription, String materialType, String materialUrl,
-			String thumbnailUrl, String pngUrl, Date uploadTime, Integer colorType, Float colorPercentage) {
+			String thumbnailUrl, String pngUrl, Date uploadTime, Integer colorType, Float colorPercentage,
+			Integer countDownload, List<MaterialTypeInfoIndex> materialTypeInfoIndex) {
 		super();
 		this.id = id;
 		this.createUserId = createUserId;
@@ -130,9 +147,12 @@ public class MaterialInfoIndex {
 		this.uploadTime = uploadTime;
 		this.colorType = colorType;
 		this.colorPercentage = colorPercentage;
+		this.countDownload = countDownload;
+		this.materialTypeInfoIndex = materialTypeInfoIndex;
 	}
 	public MaterialInfoIndex() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
@@ -140,6 +160,8 @@ public class MaterialInfoIndex {
 				+ canvasInfoIdPrivate + ", canvasInfoIdPublic=" + canvasInfoIdPublic + ", materialName=" + materialName
 				+ ", materialDescription=" + materialDescription + ", materialType=" + materialType + ", materialUrl="
 				+ materialUrl + ", thumbnailUrl=" + thumbnailUrl + ", pngUrl=" + pngUrl + ", uploadTime=" + uploadTime
-				+ ", colorType=" + colorType + ", colorPercentage=" + colorPercentage + "]";
+				+ ", colorType=" + colorType + ", colorPercentage=" + colorPercentage + ", countDownload="
+				+ countDownload + ", materialTypeInfoIndex=" + materialTypeInfoIndex + "]";
 	}
+	
 }

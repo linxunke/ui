@@ -3,12 +3,15 @@ package com.ztzh.ui.filter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class UiInterceptor implements HandlerInterceptor {
+	Logger logger = LoggerFactory.getLogger(UiInterceptor.class);
 
 	@Override
 	public void afterCompletion(HttpServletRequest arg0,
@@ -29,7 +32,7 @@ public class UiInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Object o) throws Exception {
 		String userId = httpServletRequest.getParameter("userId");
-		System.out.println("userId:" + userId);
+		logger.info(httpServletRequest.getRequestURL()+"?userId:" + userId);
 		if (userId != null) {
 			return true;
 		} else {

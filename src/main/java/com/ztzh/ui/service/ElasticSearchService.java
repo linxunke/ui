@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 
+import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
 
 public interface ElasticSearchService {
@@ -22,6 +23,8 @@ public interface ElasticSearchService {
 	 * @param size 每页大小
 	 * @return
 	 */
-	public Page<MaterialInfoIndex> findDocument(NativeSearchQueryBuilder queryBuilder, int page, int size);
+	public Page<MaterialInfoIndex> findMaterialDocument(int page, int size, MaterialESBo materialESBo);
+	
+	public void deleteDocById(List<MaterialInfoIndex> materialInfoIndexList);
 
 }

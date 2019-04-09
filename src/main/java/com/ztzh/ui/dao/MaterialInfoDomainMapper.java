@@ -41,8 +41,15 @@ public interface MaterialInfoDomainMapper {
     List<IconMaterialBo> getIconMaterialBoByThumbnailUrls(@Param("thumbnailUrls") List<String> thumbnailUrls);
 
 	List<String> getIconUrlsByCanvasId(@Param("canvasId") String canvasId);
-    
+	
+	List<MaterialInfoDomain> queryByIds(@Param("idList") List<Long> idList);
+	
+	int deleteByIds(@Param("idList") List<Long> idList);
+	
+	List<MaterialInfoIndex> getValidMaterialInfoForIndexByIds(@Param("materialInfoIds") List<Long> materialInfoIds);
 	int selectIconCount();
 	int selectDrawingCount();
 	List<String> selectTypeNameForBox();
+	int getMaterialNumOfCanvasByCanvasId(Long canvasId);
+	List<MaterialInfoDomain> selectMaterialInfoWithCanvasIdByPage(@Param("canvasId")Long canvasId, @Param("start")int start, @Param("end")int end);
 }

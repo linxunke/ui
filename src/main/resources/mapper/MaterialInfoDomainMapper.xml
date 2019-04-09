@@ -264,24 +264,51 @@
     where canvas_info_id_private = #{canvasId,jdbcType=BIGINT}
     and create_user_id = #{userId,jdbcType=BIGINT}
   </update>
-   <select id="getValidMaterialInfoForIndex" resultType="com.ztzh.ui.bo.MaterialInfoIndex">
-    select 
-     id AS id,
-     create_user_id AS createUserId,
-     canvas_info_id_private AS canvasInfoIdPrivate,
-     canvas_info_id_public AS canvasInfoIdPublic,
-     material_name AS materialName, 
-     material_description AS materialDescription,
-     material_type AS materialType,
-     material_url AS materialUrl,
-     thumbnail_url AS thumbNail,
-     png_url AS pngUrl,
-     upload_time AS uploadTime, 
-     color_type AS colorType,
-     color_percentage AS colorPercentage, 
-     is_valid AS isValid
-    from material_info
-    where is_valid = 1
+ <resultMap type="com.ztzh.ui.bo.MaterialInfoIndex" id="ResultIndexMap">  
+   <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="canvas_info_id_private" jdbcType="BIGINT" property="canvasInfoIdPrivate" />
+    <result column="canvas_info_id_public" jdbcType="BIGINT" property="canvasInfoIdPublic" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_description" jdbcType="VARCHAR" property="materialDescription" />
+    <result column="material_type" jdbcType="VARCHAR" property="materialType" />
+    <result column="material_url" jdbcType="VARCHAR" property="materialUrl" />
+    <result column="thumbnail_url" jdbcType="VARCHAR" property="thumbnailUrl" />
+    <result column="png_url" jdbcType="VARCHAR" property="pngUrl" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="color_type" jdbcType="INTEGER" property="colorType" />
+    <result column="color_percentage" jdbcType="REAL" property="colorPercentage" /> 
+    <result column="count_download" jdbcType="INTEGER" property="countDownload" />  
+<collection property="materialTypeInfoIndex" ofType="com.ztzh.ui.bo.MaterialTypeInfoIndex"  resultMap="ListResultMap" />  
+</resultMap>
+<resultMap id="ListResultMap" type="com.ztzh.ui.bo.MaterialTypeInfoIndex" >
+	<result column="material_type_code_parent" property="materialTypeCodeParent" jdbcType="VARCHAR" />
+	<result column="material_type_code_child" property="materialTypeCodeChild" jdbcType="VARCHAR" />
+	<result column="material_style_code" property="materialStyleCode" jdbcType="VARCHAR" />
+</resultMap>
+   <select id="getValidMaterialInfoForIndex" resultMap="ResultIndexMap">
+    	select 
+     a.id,
+     a.create_user_id,
+     a.canvas_info_id_private,
+     a.canvas_info_id_public,
+     a.material_name, 
+     a.material_description,
+     a.material_type,
+     a.material_url,
+     a.thumbnail_url,
+     a.png_url,
+     a.upload_time, 
+     a.color_type,
+     a.color_percentage, 
+     a.is_valid,
+     b.material_type_code_parent,
+     b.material_type_code_child,
+     b.material_style_code,
+	(case when c.count_download is null then 0 else c.count_download end) as count_download
+    from material_info as a left join material_type_info as b on a.id=b.materail_info_id
+		left join (	select c.material_info_id, count(c.id) as count_download from material_history_collection as c GROUP BY c.material_info_id) as c on a.id=c.material_info_id
+    where a.is_valid = 1
   </select>
   
   <insert id="addMaterialInfo" parameterType="com.ztzh.ui.po.MaterialInfoDomain">
@@ -304,10 +331,17 @@
 		     material_type_info as b
 		    where a.id = b.materail_info_id
 		    and b.material_type_code_parent = '01'
-			and a.thumbnail_url in
-		<foreach close=")" collection="thumbnailUrls" item="listItem" open="(" separator=",">
+		    <if test="thumbnailUrls.size()>0">
+		    and a.thumbnail_url in
+				<foreach close=")" collection="thumbnailUrls" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
+		    </if>
+		    <if test="thumbnailUrls.size()==0">
+		    and a.thumbnail_url in
+				<![CDATA[('')]]>
+		    </if>
+			
 	</select>
 		<select id="getIconUrlsByCanvasId" parameterType="java.lang.String" resultType="java.lang.String">
 		select png_url as pngUrl from material_info 
@@ -336,6 +370,83 @@
 	select count(id) from material_type_info where material_type_code_parent = 02;
 	</select>
 	<select id="selectTypeNameForBox" resultType="java.lang.String">
-	select type_name from material_type where parent_code is null and is_valid = 1;
+	select type_name,type_code from material_type where parent_code is null and is_valid = 1;
 	</select>
+	<select id="getMaterialNumOfCanvasByCanvasId" resultType="java.lang.Integer">
+		select count(id) from material_info where 
+			canvas_info_id_private = #{canvasId,jdbcType=BIGINT} and is_valid = 1
+	</select>
+	
+	<select id="selectMaterialInfoWithCanvasIdByPage" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />	
+    		from material_info	
+    		where canvas_info_id_private = #{canvasId,jdbcType=BIGINT} 
+    		and is_valid = 1
+    		LIMIT #{start},#{end}
+	</select>
+	<select id="queryByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+		 select 
+    	<include refid="Base_Column_List" />
+    	from material_info where
+    	<if test="idList.size()>0">
+		   id in
+				<foreach close=")" collection="idList" item="listItem" open="(" separator=",">
+                    #{listItem}
+                </foreach>
+		 </if>
+		 <if test="idList.size()==0">
+		    id in <![CDATA[('')]]>
+		 </if>
+	</select>
+	
+	<delete id="deleteByIds" parameterType="java.util.List">
+	delete from material_info
+	where
+	<if test="idList.size()>0">
+		id in
+		<foreach close=")" collection="idList" item="listItem"
+			open="(" separator=",">
+			#{listItem}
+		</foreach>
+	</if>
+	<if test="idList.size()==0">
+		id in <![CDATA[('')]]>
+	</if>
+  </delete>
+  
+   <select id="getValidMaterialInfoForIndexByIds" resultMap="ResultIndexMap">
+    select 
+     a.id,
+     a.create_user_id,
+     a.canvas_info_id_private,
+     a.canvas_info_id_public,
+     a.material_name, 
+     a.material_description,
+     a.material_type,
+     a.material_url,
+     a.thumbnail_url,
+     a.png_url,
+     a.upload_time, 
+     a.color_type,
+     a.color_percentage, 
+     a.is_valid,
+     b.material_type_code_parent,
+     b.material_type_code_child,
+     b.material_style_code,
+	(case when c.count_download is null then 0 else c.count_download end) as count_download
+    from material_info as a left join material_type_info as b on a.id=b.materail_info_id
+		left join (	select c.material_info_id, count(c.id) as count_download from material_history_collection as c GROUP BY c.material_info_id) as c on a.id=c.material_info_id
+    where a.is_valid = 1
+   <if test="materialInfoIds.size()>0">
+		and a.id in
+		<foreach close=")" collection="materialInfoIds" item="listItem"
+			open="(" separator=",">
+			#{listItem}
+		</foreach>
+	</if>
+	<if test="materialInfoIds.size()==0">
+		and a.id in <![CDATA[('')]]>
+	</if>
+  </select>
 </mapper>

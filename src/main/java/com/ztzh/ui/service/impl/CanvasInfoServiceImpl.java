@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.ManagementCanvasBo;
+import com.ztzh.ui.bo.MaterialInfoIndex;
+import com.ztzh.ui.bo.MaterialTypeInfoIndex;
 import com.ztzh.ui.constants.CanvasInfoConstants;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
@@ -17,9 +20,12 @@ import com.ztzh.ui.dao.MaterialInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
 import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
+import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
+import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.GetSYSTime;
+import com.ztzh.ui.utils.PageQueryUtil;
 
 @Service
 public class CanvasInfoServiceImpl implements CanvasInfoService{
@@ -40,6 +46,9 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	@Autowired
 	FTPUtil ftpUtil;
 	
+	@Autowired
+	ElasticSearchService elasticSearchService;
+	
 
 	
 	@SuppressWarnings("unused")
@@ -58,6 +67,9 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 			fileList.add(materialInfoDomain.getPngUrl());
 			materialIdList.add(materialInfoDomain.getId());
 		}
+		//删除elasticsearch中的相关数据
+		List<MaterialInfoIndex> materialInfoIndexList = materialInfoDomainMapper.getValidMaterialInfoForIndexByIds(materialIdList);
+		elasticSearchService.deleteDocById(materialInfoIndexList);
 		ftpUtil.deleteFtpFile(fileList);
 		logger.info("删除磁盘中的素材文件成功");
 		int countDeletedMaterials = materialInfoDomainMapper.deleteByCanvasId(canvasId, userId);
@@ -82,7 +94,24 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		materialInfoDomain.setCanvasInfoIdPrivate(canvasInfoDomain.getId());
 		materialInfoDomain.setCanvasInfoIdPublic(canvasInfoDomain.getId());
 		materialInfoDomain.setCreateUserId(userId);
-		materialInfoDomain.setUploadTime(GetSYSTime.systemTime());
+		List<MaterialInfoDomain> materialInfoDomainList = materialInfoDomainMapper.selectByCanvasId(canvasId);
+		logger.info("正在将数据更新入ElasticSearch");
+		List<MaterialInfoIndex> materialInfoIndexList = new ArrayList<MaterialInfoIndex>();
+		for(MaterialInfoDomain materialInfoDomainSelect:materialInfoDomainList) {
+			List<MaterialTypeInfoIndex> materialTypeInfoIndex = new ArrayList<MaterialTypeInfoIndex>();
+			MaterialInfoIndex materialInfoIndex = new MaterialInfoIndex();
+			materialInfoIndex = JSONObject.parseObject(JSONObject.toJSONString(materialInfoDomainSelect),MaterialInfoIndex.class);
+			List<MaterialTypeInfoDomain> materialTypeInfoDomainList = materialTypeInfoDomainMapper.selectMaterialTypeInfosByMaterialInfoId(materialInfoDomainSelect.getId());
+			for(MaterialTypeInfoDomain materialTypeInfoDomain:materialTypeInfoDomainList) {
+				materialTypeInfoIndex.add(JSONObject.parseObject(JSONObject.toJSONString(materialTypeInfoDomain),MaterialTypeInfoIndex.class));
+			}
+			materialInfoIndex.setMaterialTypeInfoIndex(materialTypeInfoIndex);
+			//查询收藏和下载总次数
+			materialInfoIndex.setCountDownload(materialHistoryCollectionDomainMapper.countByMaterialInfoId(materialInfoDomainSelect.getId()));
+			materialInfoIndexList.add(materialInfoIndex);
+		}
+		elasticSearchService.saveDocument(materialInfoIndexList);
+		logger.info("完成ElasticSearch数据输入");
 		int updateCount = materialInfoDomainMapper.updateByCanvasInfoIdPrivate(materialInfoDomain,canvasId,userId);
 		logger.info("总共将{}件素材转入未分类",updateCount);
 		return true;
@@ -119,5 +148,35 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 		canvasInfo.setDescribeInfo(canvasDesc);
 		canvasInfoDomainMapper.updateByPrimaryKey(canvasInfo);
 		return true;
+	}
+
+	@Override
+	public List<ManagementCanvasBo> selectAllCanvasByUserId(Long userId) {
+		return canvasInfoDomainMapper.selectAllCanvasInfoByUserId(userId);
+	}
+
+	@Override
+	public CanvasInfoDomain selectCanvasByCanvasId(Long canvasId) {
+		return canvasInfoDomainMapper.selectByPrimaryKey(canvasId);
+	}
+
+	/*查看指定canvasId的画板中是否存在图标,存在true,不存在false*/
+	@Override
+	public boolean existIconInCanvasByCanvasId(Long canvasId) {
+		Object object = canvasInfoDomainMapper.selectIconNumByCanvasId(canvasId);
+		return object != null ? true:false;
+	}
+
+	@Override
+	public PageQueryUtil getMaterialInfoWithCanvasIdByPage(int currentPage, int pageSize,
+			Long canvasId) {
+		int infoTotalNumber = materialInfoDomainMapper.getMaterialNumOfCanvasByCanvasId(canvasId); //总条数
+		int pageNumber = infoTotalNumber % pageSize == 0 ? (infoTotalNumber / pageSize) : (infoTotalNumber / pageSize)+1; //总页数
+		PageQueryUtil pageQueryUtil = new PageQueryUtil(pageSize, currentPage, infoTotalNumber);
+		int start = (currentPage - 1) * pageSize;
+		int end = (currentPage >= pageNumber) ? (infoTotalNumber-start) : pageSize;
+		List<MaterialInfoDomain> resultList = materialInfoDomainMapper.selectMaterialInfoWithCanvasIdByPage(canvasId, start, end);
+		pageQueryUtil.setObject(resultList);
+		return pageQueryUtil;
 	}
 }
