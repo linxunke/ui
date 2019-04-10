@@ -94,7 +94,12 @@
 .combo_box_child:HOVER{
 	cursor: pointer;
 }
-
+.hidedivForCode{
+	height:auto;
+	width: auto;
+	float: left;
+	display: none;
+}
 .search_camera{
 	width:72px;
 	height: 56px;

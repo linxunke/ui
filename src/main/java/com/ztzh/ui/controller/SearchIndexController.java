@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ztzh.ui.bo.MaterialTypeBo;
 import com.ztzh.ui.bo.ThreeRecentUrlResultBo;
+import com.ztzh.ui.dao.MaterialInfoDomainMapper;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.vo.ResponseVo;
 
@@ -21,6 +23,8 @@ public class SearchIndexController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	MaterialInfoService materialInfoService;
+	@Autowired
+	MaterialInfoDomainMapper materialInfoDomainMapper;
 	
 	@RequestMapping(value = "SearchThreePhoto", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
@@ -60,7 +64,8 @@ public class SearchIndexController {
 	@RequestMapping(value = "chooseSearchWord", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public Object chooseSearchWord(){
-		List<String> list = materialInfoService.selectTypeNameForBox();
+		List<MaterialTypeBo> list = materialInfoDomainMapper.selectTypeNameForBox();
+		
 		logger.info("type的信息为：{}", list);
 		ResponseVo responseVO = new ResponseVo();
 		if(list.size() == 0){

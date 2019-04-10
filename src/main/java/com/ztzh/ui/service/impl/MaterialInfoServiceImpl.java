@@ -86,9 +86,6 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		return materialInfoDomainMapper.selectDrawingCount();
 		
 	}
-	public List<String> selectTypeNameForBox(){
-		return  materialInfoDomainMapper.selectTypeNameForBox();
-	}
 
 	@Override
 	public List<MaterialInfoDomain> getMaterialListByCanvasId(Long canvasId) {

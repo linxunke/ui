@@ -24,6 +24,10 @@
   <result column="type_name" jdbcType="VARCHAR" property="materialType" />
   <result column="material_type_code_child" jdbcType="VARCHAR" property="childCode" />
   </resultMap>
+  <resultMap id="MaterialTypeResultMap" type="com.ztzh.ui.bo.MaterialTypeBo">
+  <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+  <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+  </resultMap>
   <sql id="Base_Column_List">
     id, create_user_id, canvas_info_id_private, canvas_info_id_public, material_name, 
     material_description, material_type, material_url, thumbnail_url, png_url, upload_time, 
@@ -369,7 +373,7 @@
 	<select id="selectDrawingCount" resultType="java.lang.Integer">
 	select count(id) from material_type_info where material_type_code_parent = 02;
 	</select>
-	<select id="selectTypeNameForBox" resultType="java.lang.String">
+	<select id="selectTypeNameForBox" resultMap="MaterialTypeResultMap">
 	select type_name,type_code from material_type where parent_code is null and is_valid = 1;
 	</select>
 	<select id="getMaterialNumOfCanvasByCanvasId" resultType="java.lang.Integer">

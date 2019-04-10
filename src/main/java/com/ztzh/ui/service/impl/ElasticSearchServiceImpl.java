@@ -96,7 +96,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         	boolQueryBuilder.must(QueryBuilders.matchQuery("materialName", materialESBo.getMaterialName()));
         }
         if(null!=materialESBo.getMaterialDescription()&&""!=materialESBo.getMaterialDescription()) {
-        	boolQueryBuilder.must(QueryBuilders.matchQuery("materialDescription", materialESBo.getMaterialDescription()));
+        	boolQueryBuilder.should(QueryBuilders.matchQuery("materialDescription", materialESBo.getMaterialDescription()));
         }
         if(null!=materialESBo.getSort()&&""!=materialESBo.getSort()) {
         	if(materialESBo.getSort().equals(MaterialTypeConstants.MATERIAL_TYPE_HOT_CODE)) {
