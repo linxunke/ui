@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ztzh.ui.bo.IconMaterialBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
+import com.ztzh.ui.bo.MaterialTypeBo;
+import com.ztzh.ui.bo.ThreeRecentUrlResultBo;
 import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 
@@ -33,6 +35,9 @@ public interface MaterialInfoDomainMapper {
     Long selectMaterialIdByMaterialUrl(String materialUrl);
 
     List<MaterialInfoIndex> getValidMaterialInfoForIndex();
+    //首页三张图
+    List<ThreeRecentUrlResultBo> getThreeRecentMaterial();
+    String selectTypeNameByChildCode (String childCode);
     
     List<IconMaterialBo> getIconMaterialBoByThumbnailUrls(@Param("thumbnailUrls") List<String> thumbnailUrls);
 
@@ -43,8 +48,9 @@ public interface MaterialInfoDomainMapper {
 	int deleteByIds(@Param("idList") List<Long> idList);
 	
 	List<MaterialInfoIndex> getValidMaterialInfoForIndexByIds(@Param("materialInfoIds") List<Long> materialInfoIds);
-    
+	int selectIconCount();
+	int selectDrawingCount();
+	List<MaterialTypeBo> selectTypeNameForBox();
 	int getMaterialNumOfCanvasByCanvasId(Long canvasId);
-	
 	List<MaterialInfoDomain> selectMaterialInfoWithCanvasIdByPage(@Param("canvasId")Long canvasId, @Param("start")int start, @Param("end")int end);
 }

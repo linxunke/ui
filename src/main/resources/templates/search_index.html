@@ -41,29 +41,55 @@
 		</div>
 		<div id="search_middle">
 			<div id="count_material">
-				<span id="count_icon" class="count_number">2465</span>个矢量图标
-				 <span id="count_inset" class="count_number">334</span>幅插画
+				<span id="count_icon" class="count_number">0</span>个矢量图标 <span
+					id="count_drawing" class="count_number">0</span>幅插画
 			</div>
 			<div id="description">
-			素材库有PNG、SVG、AI、PSD、SKETCH等格式提供免费图标、插画等设计素材
-			</div>
+				素材库有PNG、SVG、AI、PSD、SKETCH等格式提供免费图标、插画等设计素材</div>
 			<div id="searchBox">
-			<div id="selectBox" class="float_l">
-			<select>
-			<option>全部</option>
-			<option>1个</option>
-			<option>2个</option>
-			<option>3个</option>
-			</select>
+				<div id="selectBox" class="choose_box float_l">
+					<!-- onclick="chooseSearchWord()" -->
+					全部
+				</div>
+				<div class="search_camera float_l">
+					<img id="search_camera" src="../img/搜索图片.png" alt="">
+				</div>
+				<input type="text" value="春节" id="searchBox_content" class="searchBox_content" />
+				<div id="searchBox_button" onclick="elasticSearch()">
+					<img src="../img/首页搜索.png" alt="" class="searchBox_img">
+				</div>
 			</div>
-			<div class="search_camera float_l"><img src="../img/搜索图片.png" alt=""></div>
-			<input type="text" value="春节" class="searchBox_content" />
-			<div id="searchBox_button">
-			<img src="../img/首页搜索.png" alt="" class="searchBox_img">
-			</div>
+			<div id="combo_box">
+				<div id="combo_box_head" class="combo_box_head">全部</div>
+				<div id="combo_box_first" class="combo_box_child">全部</div>
 			</div>
 		</div>
-		<div id="search_show_three"></div>
+		<div id="search_show_three">
+			<div id="photo_one" class="photo">
+				<div id="photo_img1" class="three_img"></div>
+				<div id="photo_head1" class="head_img"></div>
+				<div id="photo_username1" class="photo_username"></div>
+				<div id="photo_type1" class="photo_type"></div>
+			</div>
+			<div id="photo_two" class="photo">
+				<div id="photo_img2" class="three_img"></div>
+				<div id="photo_head2" class="head_img"></div>
+				<div id="photo_username2" class="photo_username">一直是猪</div>
+				<div id="photo_type2" class="photo_type"></div>
+			</div>
+			<div id="photo_three" class="photo">
+				<div id="photo_img3" class="three_img"></div>
+				<div id="photo_head3" class="head_img"></div>
+				<div id="photo_username3" class="photo_username"></div>
+				<div id="photo_type3" class="photo_type"></div>
+			</div>
+		</div>
 	</div>
+	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
+	<script type="text/javascript" th:src="@{/js/search_index.js}"></script>
 </body>
 </html>

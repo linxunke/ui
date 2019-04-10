@@ -1,6 +1,7 @@
 var main_div =1;
 var userId = getParameter('userId'); 
 var Page;
+var currentPage;
 $(document).ready(function () {
 	
     var btn = document.getElementById('manage_add_btn');
@@ -19,7 +20,8 @@ $(document).ready(function () {
     
     //查看当前页面
     console.log("currentPage="+$.cookie("currentPage"));*/
-    var currentPage = document.getElementById('currentPageNumber').innerHTML;
+    currentPage = parseInt(document.getElementById('currentPageNumber').innerHTML);
+    console.log("currentPage111="+currentPage);
     getUserName(userId);
     
     $.ajax({
@@ -288,6 +290,7 @@ function nextPage(){
 	$(".every_board").remove();
 	if(currentPage<Page){
 		currentPage = parseInt(currentPage)+1;
+		console.log("currentPage222="+currentPage);
 	}else{
 		currentPage = parseInt(currentPage);
 	}
@@ -303,6 +306,7 @@ function finalPage(){
 }
 
 function sendAjax(currentPage){
+	console.log("currentPage1212="+currentPage);
 	$.ajax({
     	url:'/canvasInfo/getCanvasByUserId?userId='+userId,
     	data:{

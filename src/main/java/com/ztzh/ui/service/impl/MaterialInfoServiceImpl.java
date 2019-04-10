@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.IconMaterialBo;
 import com.ztzh.ui.bo.IconUrlBo;
 import com.ztzh.ui.bo.IconUrlResultBo;
+import com.ztzh.ui.bo.ThreeRecentUrlResultBo;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
 import com.ztzh.ui.dao.MaterialInfoDomainMapper;
@@ -64,6 +65,26 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	    	iconUrlResultBoList.add(iconUrlResultBo);
 	    }
 		return iconUrlResultBoList;
+	}
+	
+	public List<ThreeRecentUrlResultBo> getThreeRecentMaterial(){
+		String materialType;
+		String childType;
+		List<ThreeRecentUrlResultBo> list = materialInfoDomainMapper.getThreeRecentMaterial();
+		for(int i=0; i<3; i++){
+			childType = materialInfoDomainMapper.selectTypeNameByChildCode(list.get(i).getChildCode());
+			materialType= list.get(i).getMaterialType();
+			list.get(i).setMaterialType(materialType+"—"+childType);
+		}
+		return list;
+	}
+	public int selectIconCount(){
+		return materialInfoDomainMapper.selectIconCount();
+		
+	}
+	public int selectDrawingCount(){
+		return materialInfoDomainMapper.selectDrawingCount();
+		
 	}
 
 	@Override
@@ -154,8 +175,7 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		responseVo.setMessage("批量删除文件成功");
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 		return responseVo;
-	}
-	
+	}	
 	private void deleteMaterialsInFTP(List<String> materialUrlList, List<String> thumbnailUrlList, List<String> pngUrlList) {
 		//有可能删除失败，后面需要一张事务表管理未删除掉的ftp文件
 		ftpUtil.deleteFtpFile(materialUrlList);

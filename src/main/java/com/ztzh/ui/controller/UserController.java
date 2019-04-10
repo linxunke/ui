@@ -63,7 +63,7 @@ public class UserController {
 		String passwordMd5 = userService.encrypt(password);
 		user.setUserPassword(passwordMd5);
 		String imgType = file.substring(11, 14);
-		logger.info("文件格式为：{}", imgType);
+		logger.info("当前文件格式为：{}", imgType);
 		String base64 = null;
 		String fileName = null;
 		StringBuffer photoUrl = new StringBuffer(photoAddress);

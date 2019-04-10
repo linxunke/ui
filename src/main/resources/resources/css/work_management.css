@@ -4,6 +4,7 @@
 	margin: 0;
 	padding: 0;
 	width: 100%;
+	min-width:1440px;
 	height: 702px;
 	color: #A1A6B3;
 	background-color: black;
@@ -186,6 +187,9 @@
 	top: 18%;
 	left: 20%;
 	
+}
+.every_board:HOVER {
+	box-shadow: 5px 5px 5px  #888888;
 }
 .every_board:HOVER .edit_button{
 	display: block;
