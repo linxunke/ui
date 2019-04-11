@@ -91,7 +91,7 @@ $(document).ready(function() {
 				data:{
 					userId:userId,
 					materialId:currentMaterialId,
-					imageType:'ai',
+					imageType:'original',
 					isIcon:isIcon
 				},
 				success:function(data){
@@ -190,6 +190,7 @@ function downloadStaticFile(imageUrl,imageName) {
         console.log(imageUrl);
         console.log(imageName);
         $("#downloadImg").attr("href",window.location.protocol + "//" + window.location.host + imageUrl);
+        $("#downloadImg").attr("download",imageName);
         document.getElementById("downloadImg").click(); 
 }
 /*点击详情页的删除按钮*/
@@ -491,6 +492,7 @@ function showMaterialDetailsInModal(data) {
 		$("#material_png_size_select").css("display","none");
 		$("#isIconInput").val(false);
 	}
+	$("#download_material_ai").html(data.object.materialType);
 	$("#material_img_preview").prop("src",materialPngSrc);
 	$("#material_content_name").val(data.object.materialName);
 	$("#material_content_label").val(data.object.materialDescription);

@@ -493,6 +493,7 @@
      background-color: #F5F5F5;
  }
  .download_btn{
+ 	min-width:80px;
 	height: 40px;
 	border-radius: 3px;
 	margin-right:30px;
