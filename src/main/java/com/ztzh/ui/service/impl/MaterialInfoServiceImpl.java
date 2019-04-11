@@ -1,14 +1,23 @@
 package com.ztzh.ui.service.impl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.im4java.core.IM4JavaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.IconMaterialBo;
 import com.ztzh.ui.bo.IconUrlBo;
 import com.ztzh.ui.bo.IconUrlResultBo;
+import com.ztzh.ui.bo.MaterialAndTypeInfoBo;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
 import com.ztzh.ui.dao.MaterialInfoDomainMapper;
@@ -26,6 +36,7 @@ import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.GetSYSTime;
+import com.ztzh.ui.utils.ImageMagickUtil;
 import com.ztzh.ui.vo.ResponseVo;
 
 @Service
@@ -45,6 +56,18 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	
 	@Autowired
 	MaterialHistoryCollectionDomainMapper materialHistoryCollectionDomainMapper;
+	
+	@Autowired
+	ImageMagickUtil imageMagickUtil;
+	
+	@Value("${material.catch.png.url}")
+	private String catchPngUrl;
+	
+	@Value("${web.upload-path}")
+	private String resourceFTPUrl;
+	
+	@Value("{material.catch.resource.url}")
+	private String catchResourceUrl;
 	
 	@Override
 	public List<IconUrlResultBo> getDisplayUrlByThumbnailUrl(List<String> thumbnailUrls) {
@@ -163,4 +186,131 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		ftpUtil.deleteFtpFile(pngUrlList);
 	}
 
+	@Override
+	public MaterialAndTypeInfoBo getMaterialDetailInfoById(Long materialId) {
+		MaterialAndTypeInfoBo materialAndTypeInfoBo = materialInfoDomainMapper.selectMaterialDetailsInfo(materialId);
+		logger.info(materialAndTypeInfoBo.toString());
+		return materialAndTypeInfoBo;
+	}
+
+	@Override
+	public MaterialInfoDomain getMaterialInfoById(Long materialId) {
+		return materialInfoDomainMapper.selectByPrimaryKey(materialId);
+	}
+
+	@Override
+	public Map<String, String> getImageUrlAndName(MaterialInfoDomain materialInfoDomain,
+			String imageType, boolean isIcon, Integer iconSize) {
+		Map<String,String> imageMap = new HashMap<String, String>();
+		if("ai".equalsIgnoreCase(imageType)){
+			String oldPath = resourceFTPUrl + materialInfoDomain.getMaterialUrl();
+			oldPath = oldPath.replaceAll("//", "/");
+			String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
+			String imageName = imgTempName + "." + materialInfoDomain.getMaterialType();
+			String newPath = catchPngUrl + imageName;
+			newPath = newPath.replaceAll("\\\\", "/");
+			boolean copyResult = copy(oldPath, newPath);
+			if(copyResult){
+				imageMap.put("imageUrl", "/images/"+imageName);
+				imageMap.put("imageName", imageName);
+			}
+			return imageMap;
+		}
+		if ("png".equalsIgnoreCase(imageType)) {
+			if(isIcon){
+			/*将png图片缓存至缓存文件夹，并转换大小，将转换好的图片路径发给前端*/
+				String oldImgPath = resourceFTPUrl + materialInfoDomain.getPngUrl();
+				oldImgPath = oldImgPath.replaceAll("//", "/");
+				String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
+				String imageName = imgTempName + "." + "png";
+				String newPath = catchPngUrl + imageName;
+				newPath = newPath.replaceAll("\\\\", "/");
+				boolean zoomResult = imageMagickUtil.zoomImage(oldImgPath, newPath, iconSize, iconSize);
+				if(zoomResult){
+					imageMap.put("imageUrl", "/images/"+imageName);
+					imageMap.put("imageName", imageName);
+				}
+				
+				return imageMap;
+			}else {
+				String oldPath = resourceFTPUrl + materialInfoDomain.getMaterialUrl();
+				oldPath = oldPath.replaceAll("//", "/");
+				String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
+				String imageName = imgTempName + ".png";
+				String newPath = catchPngUrl + imageName;
+				newPath = newPath.replaceAll("\\\\", "/");
+				boolean copyResult = copy(oldPath, newPath);
+				if(copyResult){
+					imageMap.put("imageUrl", "/images/"+imageName);
+					imageMap.put("imageName", imageName);
+				}
+				return imageMap;
+			}
+		}
+		if("svg".equalsIgnoreCase(imageType)){
+			/*下载svg图片*/
+			String oldImgPath = resourceFTPUrl + materialInfoDomain.getPngUrl();
+			oldImgPath = oldImgPath.replaceAll("//", "/");
+			String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
+			String imageName = imgTempName + "." + "svg";
+			String newPath = catchPngUrl + imageName;
+			newPath = newPath.replaceAll("\\\\", "/");
+			String[] imgPaths = {oldImgPath};
+			try {
+				boolean convertResult = imageMagickUtil.convertType(imgPaths, newPath);
+				if(convertResult){
+					imageMap.put("imageUrl", "/images/"+imageName);
+					imageMap.put("imageName", imageName);
+					return imageMap;
+				}
+			} catch (IOException | InterruptedException | IM4JavaException e) {
+				logger.info("转换svg文件失败");
+				e.printStackTrace();
+			}
+		}
+		return imageMap;
+	}
+	
+	
+	public static boolean copy(String src, String dst) {
+		boolean result = true;
+		// 提供需要读入和写入的文件
+		File fileIN = new File(src);
+		File fileOUT = new File(dst);
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		try {
+			// 创建相应的节点流，将文件对象作为形参传递给节点流的构造器
+			FileInputStream fis = new FileInputStream(fileIN);
+			FileOutputStream fos = new FileOutputStream(fileOUT);
+			// 创建相应的缓冲流，将节点流对象作为形参传递给缓冲流的构造器
+			bis = new BufferedInputStream(fis);
+			bos = new BufferedOutputStream(fos);
+
+			// 具体的文件复制操作
+			byte[] b = new byte[65536]; // 把从输入文件读取到的数据存入该数组
+			int len; // 记录每次读取数据并存入数组中后的返回值，代表读取到的字节数，最大值为b.length；当输入文件被读取完后返回-1
+			while ((len = bis.read(b)) != -1) {
+				bos.write(b, 0, len);
+				bos.flush();
+			}
+			return result;
+		} catch (IOException e) {
+			e.printStackTrace();
+			result = false;
+			return result;
+		} finally {
+			// 关闭流，遵循先开后关原则(这里只需要关闭缓冲流即可)
+			try {
+				bos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				bis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

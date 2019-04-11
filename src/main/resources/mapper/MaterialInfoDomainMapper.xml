@@ -299,7 +299,8 @@
      b.material_type_code_child,
      b.material_style_code,
 	(case when c.count_download is null then 0 else c.count_download end) as count_download
-    from material_info as a left join material_type_info as b on a.id=b.materail_info_id
+    from material_info as a 
+        left join material_type_info as b on a.id=b.materail_info_id
 		left join (	select c.material_info_id, count(c.id) as count_download from material_history_collection as c GROUP BY c.material_info_id) as c on a.id=c.material_info_id
     where a.is_valid = 1
   </select>
@@ -384,4 +385,65 @@
 		id in <![CDATA[('')]]>
 	</if>
   </delete>
+  
+  
+  <resultMap type="com.ztzh.ui.bo.MaterialAndTypeInfoBo" id="ResultMaterialDetailMap">
+  	<id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="canvas_info_id_private" jdbcType="BIGINT" property="canvasInfoIdPrivate" />
+    <result column="canvas_info_id_public" jdbcType="BIGINT" property="canvasInfoIdPublic" />
+    <result column="canvas_name" jdbcType="VARCHAR" property="canvasName" />
+    <result column="describe_info" jdbcType="VARCHAR" property="canvasDescribeInfo" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_description" jdbcType="VARCHAR" property="materialDescription" />
+    <result column="material_type" jdbcType="VARCHAR" property="materialType" />
+    <result column="material_url" jdbcType="VARCHAR" property="materialUrl" />
+    <result column="thumbnail_url" jdbcType="VARCHAR" property="thumbnailUrl" />
+    <result column="png_url" jdbcType="VARCHAR" property="pngUrl" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="color_type" jdbcType="INTEGER" property="colorType" />
+    <result column="color_percentage" jdbcType="REAL" property="colorPercentage" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+    <collection property="materialTypeInfoList" ofType="com.ztzh.ui.po.MaterialTypeInfoDomain" resultMap="resultMaterialTypeMap" />
+  </resultMap>
+  <resultMap type="com.ztzh.ui.po.MaterialTypeInfoDomain" id="resultMaterialTypeMap">
+  	<result column="id" jdbcType="BIGINT" property="id" />
+    <result column="materail_info_id" jdbcType="BIGINT" property="materailInfoId" />
+    <result column="material_type_code_parent" jdbcType="VARCHAR" property="materialTypeCodeParent" />
+    <result column="material_type_code_child" jdbcType="VARCHAR" property="materialTypeCodeChild" />
+    <result column="material_style_code" jdbcType="VARCHAR" property="materialStyleCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <select id="selectMaterialDetailsInfo" resultMap="ResultMaterialDetailMap">
+  	select 
+  	a.id,
+     a.create_user_id,
+     a.canvas_info_id_private,
+     a.canvas_info_id_public,
+     a.material_name, 
+     a.material_description,
+     a.material_type,
+     a.material_url,
+     a.thumbnail_url,
+     a.png_url,
+     a.upload_time, 
+     a.color_type,
+     a.color_percentage, 
+     a.is_valid,
+     b.canvas_name,
+     b.describe_info,
+     c.id,
+     c.materail_info_id,
+     c.material_type_code_parent,
+     c.material_type_code_child,
+     c.material_style_code,
+     c.create_time
+	from material_info as a 
+	LEFT JOIN canvas_info as b on a.canvas_info_id_private = b.id 
+	LEFT JOIN (select c.id,c.materail_info_id,c.material_type_code_parent,
+     c.material_type_code_child,c.material_style_code,c.create_time from material_type_info as c)
+      as c on c.materail_info_id = a.id 
+	where a.id = #{materialId} AND a.is_valid = 1
+  </select>
 </mapper>
