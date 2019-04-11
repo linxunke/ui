@@ -63,4 +63,9 @@ public class UserPageController {
 		return "materialManage";
 
 	}
+	
+	@RequestMapping(value="toMateiralLibrary")
+	public String toMaterialLibrary(){
+		return "materialLibrary";
+	}
 }

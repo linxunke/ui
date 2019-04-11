@@ -222,32 +222,33 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	public Map<String, String> getImageUrlAndName(MaterialInfoDomain materialInfoDomain,
 			String imageType, boolean isIcon, Integer iconSize) {
 		Map<String,String> imageMap = new HashMap<String, String>();
-		if("ai".equalsIgnoreCase(imageType)){
+		if("original".equalsIgnoreCase(imageType)){
+			/*下载原文件(ai、psd)，将缓存文件路径返回*/
 			String oldPath = resourceFTPUrl + materialInfoDomain.getMaterialUrl();
 			oldPath = oldPath.replaceAll("//", "/");
-			String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
-			String imageName = imgTempName + "." + materialInfoDomain.getMaterialType();
-			String newPath = catchPngUrl + imageName;
+			String imageTempName = UUID.randomUUID().toString().replaceAll("-", "") + "." + materialInfoDomain.getMaterialType();
+			String newPath = catchPngUrl + imageTempName;
 			newPath = newPath.replaceAll("\\\\", "/");
+			String imageName = materialInfoDomain.getMaterialName() + "." + materialInfoDomain.getMaterialType();
 			boolean copyResult = copy(oldPath, newPath);
 			if(copyResult){
-				imageMap.put("imageUrl", "/images/"+imageName);
+				imageMap.put("imageUrl", "/images/"+imageTempName);
 				imageMap.put("imageName", imageName);
 			}
 			return imageMap;
 		}
 		if ("png".equalsIgnoreCase(imageType)) {
 			if(isIcon){
-			/*将png图片缓存至缓存文件夹，并转换大小，将转换好的图片路径发给前端*/
+			    /*将png图片缓存至缓存文件夹，并转换大小，返回缓存的图片路径*/
 				String oldImgPath = resourceFTPUrl + materialInfoDomain.getPngUrl();
 				oldImgPath = oldImgPath.replaceAll("//", "/");
-				String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
-				String imageName = imgTempName + "." + "png";
-				String newPath = catchPngUrl + imageName;
+				String imageTempName = UUID.randomUUID().toString().replaceAll("-", "") + ".png";
+				String newPath = catchPngUrl + imageTempName;
 				newPath = newPath.replaceAll("\\\\", "/");
+				String imageName = materialInfoDomain.getMaterialName() + ".png";
 				boolean zoomResult = imageMagickUtil.zoomImage(oldImgPath, newPath, iconSize, iconSize);
 				if(zoomResult){
-					imageMap.put("imageUrl", "/images/"+imageName);
+					imageMap.put("imageUrl", "/images/"+imageTempName);
 					imageMap.put("imageName", imageName);
 				}
 				
@@ -255,31 +256,31 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 			}else {
 				String oldPath = resourceFTPUrl + materialInfoDomain.getMaterialUrl();
 				oldPath = oldPath.replaceAll("//", "/");
-				String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
-				String imageName = imgTempName + ".png";
-				String newPath = catchPngUrl + imageName;
+				String imageTempName = UUID.randomUUID().toString().replaceAll("-", "")+ ".png";
+				String newPath = catchPngUrl + imageTempName;
 				newPath = newPath.replaceAll("\\\\", "/");
+				String imageName = materialInfoDomain.getMaterialName()+".png";
 				boolean copyResult = copy(oldPath, newPath);
 				if(copyResult){
-					imageMap.put("imageUrl", "/images/"+imageName);
+					imageMap.put("imageUrl", "/images/"+imageTempName);
 					imageMap.put("imageName", imageName);
 				}
 				return imageMap;
 			}
 		}
 		if("svg".equalsIgnoreCase(imageType)){
-			/*下载svg图片*/
+			/*下载svg图片，返回缓存文件的路径*/
 			String oldImgPath = resourceFTPUrl + materialInfoDomain.getPngUrl();
 			oldImgPath = oldImgPath.replaceAll("//", "/");
-			String imgTempName = UUID.randomUUID().toString().replaceAll("-", "");
-			String imageName = imgTempName + "." + "svg";
-			String newPath = catchPngUrl + imageName;
+			String imageTempName = UUID.randomUUID().toString().replaceAll("-", "") + ".svg";
+			String newPath = catchPngUrl + imageTempName;
 			newPath = newPath.replaceAll("\\\\", "/");
+			String imageName = materialInfoDomain.getMaterialName() + ".svg";
 			String[] imgPaths = {oldImgPath};
 			try {
 				boolean convertResult = imageMagickUtil.convertType(imgPaths, newPath);
 				if(convertResult){
-					imageMap.put("imageUrl", "/images/"+imageName);
+					imageMap.put("imageUrl", "/images/"+imageTempName);
 					imageMap.put("imageName", imageName);
 					return imageMap;
 				}
