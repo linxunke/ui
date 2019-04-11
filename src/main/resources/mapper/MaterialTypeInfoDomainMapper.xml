@@ -134,5 +134,12 @@
             #{item.createTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
+  
+  <select id="selectMaterialTypeInfosByMaterialInfoId" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from material_type_info
+    where materail_info_id = #{materialInfoId,jdbcType=BIGINT}
+  </select>
  
 </mapper>

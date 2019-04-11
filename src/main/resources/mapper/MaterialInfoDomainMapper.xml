@@ -17,6 +17,17 @@
     <result column="color_percentage" jdbcType="REAL" property="colorPercentage" />
     <result column="is_valid" jdbcType="INTEGER" property="isValid" />
   </resultMap>
+  <resultMap id="PhotoResultMap" type="com.ztzh.ui.bo.ThreeRecentUrlResultBo">
+  <result column="user_nickname" jdbcType="VARCHAR" property="userName" />
+  <result column="user_photo_url" jdbcType="VARCHAR" property="userPhotoUrl" />
+  <result column="thumbnail_url" jdbcType="VARCHAR" property="thumbnailUrl" />
+  <result column="type_name" jdbcType="VARCHAR" property="materialType" />
+  <result column="material_type_code_child" jdbcType="VARCHAR" property="childCode" />
+  </resultMap>
+  <resultMap id="MaterialTypeResultMap" type="com.ztzh.ui.bo.MaterialTypeBo">
+  <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+  <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+  </resultMap>
   <sql id="Base_Column_List">
     id, create_user_id, canvas_info_id_private, canvas_info_id_public, material_name, 
     material_description, material_type, material_url, thumbnail_url, png_url, upload_time, 
@@ -343,6 +354,29 @@
 		and canvas_info_id_public = #{canvasId}
 		limit 20 
 	</select>
+	<select id="getThreeRecentMaterial" resultMap="PhotoResultMap" >
+	select e.user_nickname, e.user_photo_url, e.thumbnail_url, f.type_name, 
+	e.material_type_code_child from 
+	(select user_nickname, user_photo_url, c.thumbnail_url as thumbnail_url, 
+	c.material_type_code_parent as material_type_code_parent, 
+	c.material_type_code_child as material_type_code_child from 
+	(select thumbnail_url, create_user_id, material_type_code_parent, material_type_code_child
+	from material_info as a , material_type_info as b where a.id=b.materail_info_id and is_valid=1
+	order by a.upload_time desc limit 0,3 ) as c , user_info as d where c.create_user_id=d.id) as e , 
+	material_type as f where e.material_type_code_parent = f.type_code
+	</select>
+	<select id="selectTypeNameByChildCode" parameterType="String" resultType="String">
+	select type_name from material_type where type_code = #{childCode}
+	</select>
+	<select id="selectIconCount" resultType="java.lang.Integer">
+	select count(id) from material_type_info where material_type_code_parent = 01;
+	</select>
+	<select id="selectDrawingCount" resultType="java.lang.Integer">
+	select count(id) from material_type_info where material_type_code_parent = 02;
+	</select>
+	<select id="selectTypeNameForBox" resultMap="MaterialTypeResultMap">
+	select type_name,type_code from material_type where parent_code is null and is_valid = 1;
+	</select>
 	<select id="getMaterialNumOfCanvasByCanvasId" resultType="java.lang.Integer">
 		select count(id) from material_info where 
 			canvas_info_id_private = #{canvasId,jdbcType=BIGINT} and is_valid = 1
@@ -418,6 +452,36 @@
   <select id="selectMaterialDetailsInfo" resultMap="ResultMaterialDetailMap">
   	select 
   	a.id,
+  	a.create_user_id,
+     a.canvas_info_id_private,
+     a.canvas_info_id_public,
+     a.material_name, 
+     a.material_description,
+     a.material_type,
+     a.material_url,
+     a.thumbnail_url,
+     a.png_url,
+     a.upload_time, 
+     a.color_type,
+     a.color_percentage, 
+     a.is_valid,
+  	c.id,
+     c.materail_info_id,
+     c.material_type_code_parent,
+     c.material_type_code_child,
+     c.material_style_code,
+     c.create_time
+	from material_info as a 
+	LEFT JOIN canvas_info as b on a.canvas_info_id_private = b.id 
+	LEFT JOIN (select c.id,c.materail_info_id,c.material_type_code_parent,
+     c.material_type_code_child,c.material_style_code,c.create_time from material_type_info as c)
+      as c on c.materail_info_id = a.id 
+	where a.id = #{materialId} AND a.is_valid = 1
+	</select>
+  	
+   <select id="getValidMaterialInfoForIndexByIds" resultMap="ResultIndexMap">
+    select 
+     a.id,
      a.create_user_id,
      a.canvas_info_id_private,
      a.canvas_info_id_public,
@@ -433,17 +497,22 @@
      a.is_valid,
      b.canvas_name,
      b.describe_info,
-     c.id,
-     c.materail_info_id,
-     c.material_type_code_parent,
-     c.material_type_code_child,
-     c.material_style_code,
-     c.create_time
-	from material_info as a 
-	LEFT JOIN canvas_info as b on a.canvas_info_id_private = b.id 
-	LEFT JOIN (select c.id,c.materail_info_id,c.material_type_code_parent,
-     c.material_type_code_child,c.material_style_code,c.create_time from material_type_info as c)
-      as c on c.materail_info_id = a.id 
-	where a.id = #{materialId} AND a.is_valid = 1
+     b.material_type_code_parent,
+     b.material_type_code_child,
+     b.material_style_code,
+	(case when c.count_download is null then 0 else c.count_download end) as count_download
+    from material_info as a left join material_type_info as b on a.id=b.materail_info_id
+		left join (	select c.material_info_id, count(c.id) as count_download from material_history_collection as c GROUP BY c.material_info_id) as c on a.id=c.material_info_id
+    where a.is_valid = 1
+   <if test="materialInfoIds.size()>0">
+		and a.id in
+		<foreach close=")" collection="materialInfoIds" item="listItem"
+			open="(" separator=",">
+			#{listItem}
+		</foreach>
+	</if>
+	<if test="materialInfoIds.size()==0">
+		and a.id in <![CDATA[('')]]>
+	</if>
   </select>
 </mapper>

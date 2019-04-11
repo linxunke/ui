@@ -26,4 +26,6 @@ public interface MaterialTypeInfoDomainMapper {
     int deleteByMaterialInfoId(Long materialInfoId);
     
     int insertBybatch(@Param("materialTypeInfoDomains") List<MaterialTypeInfoDomain> list);
+    
+    List<MaterialTypeInfoDomain> selectMaterialTypeInfosByMaterialInfoId(@Param("materialInfoId")Long materialInfoId);
 }

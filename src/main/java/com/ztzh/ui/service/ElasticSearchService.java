@@ -24,5 +24,7 @@ public interface ElasticSearchService {
 	 * @return
 	 */
 	public Page<MaterialInfoIndex> findMaterialDocument(int page, int size, MaterialESBo materialESBo);
+	
+	public void deleteDocById(List<MaterialInfoIndex> materialInfoIndexList);
 
 }

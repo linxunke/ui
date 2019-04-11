@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -95,7 +96,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         	boolQueryBuilder.must(QueryBuilders.matchQuery("materialName", materialESBo.getMaterialName()));
         }
         if(null!=materialESBo.getMaterialDescription()&&""!=materialESBo.getMaterialDescription()) {
-        	boolQueryBuilder.must(QueryBuilders.matchQuery("materialDescription", materialESBo.getMaterialDescription()));
+        	boolQueryBuilder.should(QueryBuilders.matchQuery("materialDescription", materialESBo.getMaterialDescription()));
         }
         if(null!=materialESBo.getSort()&&""!=materialESBo.getSort()) {
         	if(materialESBo.getSort().equals(MaterialTypeConstants.MATERIAL_TYPE_HOT_CODE)) {
@@ -123,5 +124,14 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         return searchBuilder.withPageable(pageable)
                 .withQuery(boolQueryBuilder).build();
     }
+
+
+	@Override
+	public void deleteDocById(List<MaterialInfoIndex> materialInfoIndexList) {
+		logger.info("开始根据条件删除Elasticsearch中的数据, materialInfoIndexList:{}",materialInfoIndexList);
+		materialInfoIndexRepository.delete(materialInfoIndexList);
+		logger.info("删除Elaticsearch数据成功");
+		
+	}
 
 }

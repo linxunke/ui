@@ -26,13 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.ImageColorBo;
+import com.ztzh.ui.bo.MaterialInfoIndex;
+import com.ztzh.ui.bo.MaterialTypeInfoIndex;
 import com.ztzh.ui.bo.UploadMaterialsBo;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.po.MaterialTypeDomain;
 import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.po.UserInfoDomain;
+import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.service.UploadMaterialsService;
 import com.ztzh.ui.service.UserService;
@@ -70,6 +74,9 @@ public class UploadMaterialsController {
 	
 	@Autowired
 	MaterialInfoService materialInfoService;
+	
+	@Autowired
+	ElasticSearchService elasticSearchService;
 	
 
 	/* 获取素材分类信息 */
@@ -343,6 +350,22 @@ public class UploadMaterialsController {
 		int addMaterialTypeInfoResult = uploadMaterialsService.addMaterialTypeInfo(materialTypeInfoList);
 		/*判断上传素材的最终结果*/
 		if(addMaterialInfoResult != 0 && addMaterialTypeInfoResult != 0 && uploadResult){
+			/*写入ElasticSearch*/
+			newMaterialInfoDomain.setId(currentMterialInfoId);
+			String materialJson = JSONObject.toJSONString(newMaterialInfoDomain);
+			List<MaterialTypeInfoIndex> materialTypeInfoIndexList = new ArrayList<MaterialTypeInfoIndex>();
+			MaterialInfoIndex materialInfoIndex = new MaterialInfoIndex();
+			materialInfoIndex = JSONObject.parseObject(materialJson,MaterialInfoIndex.class);
+			for(MaterialTypeInfoDomain materialTypeInfo:materialTypeInfoList) {
+				String materialTypeInfoJson = JSONObject.toJSONString(materialTypeInfo);
+				MaterialTypeInfoIndex materialTypeInfoIndex = JSONObject.parseObject(materialTypeInfoJson, MaterialTypeInfoIndex.class);
+				materialTypeInfoIndexList.add(materialTypeInfoIndex);
+			}
+			materialInfoIndex.setCountDownload(0);
+			materialInfoIndex.setMaterialTypeInfoIndex(materialTypeInfoIndexList);
+			List<MaterialInfoIndex> materialInfoIndexList = new ArrayList<MaterialInfoIndex>();
+			materialInfoIndexList.add(materialInfoIndex);
+			elasticSearchService.saveDocument(materialInfoIndexList);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("上传素材文件成功！");
 		}else{
