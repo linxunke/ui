@@ -224,7 +224,7 @@ public class ImageMagickUtil {
 				op.resize(width, height);
 			}
 			op.addImage(newPath);
-			ConvertCmd convert = new ConvertCmd(true);
+			ConvertCmd convert = new ConvertCmd();
 			convert.setSearchPath(imageMagickPath);
 			convert.run(op);
 			flag = true;
@@ -264,7 +264,7 @@ public class ImageMagickUtil {
 			op.addImage(imagePath);
 			op.rotate(degree);
 			op.addImage(newPath);
-			ConvertCmd cmd = new ConvertCmd(true);
+			ConvertCmd cmd = new ConvertCmd();
 			cmd.run(op);
 			flag = true;
 		} catch (Exception e) {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ztzh.ui.bo.IconMaterialBo;
+import com.ztzh.ui.bo.MaterialAndTypeInfoBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.bo.MaterialTypeBo;
 import com.ztzh.ui.bo.ThreeRecentUrlResultBo;
@@ -53,4 +54,6 @@ public interface MaterialInfoDomainMapper {
 	List<MaterialTypeBo> selectTypeNameForBox();
 	int getMaterialNumOfCanvasByCanvasId(Long canvasId);
 	List<MaterialInfoDomain> selectMaterialInfoWithCanvasIdByPage(@Param("canvasId")Long canvasId, @Param("start")int start, @Param("end")int end);
+	
+	MaterialAndTypeInfoBo selectMaterialDetailsInfo(Long materialId);
 }
