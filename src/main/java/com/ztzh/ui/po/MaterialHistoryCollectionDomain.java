@@ -6,6 +6,10 @@ import java.util.Date;
 public class MaterialHistoryCollectionDomain implements Serializable{
 
 	private static final long serialVersionUID = -3043407906353628506L;
+	
+	public static Integer OPERATION_TYPE_HISTORY = 1;
+	
+	public static Integer OPERATION_TYPE_COLLETION = 2;
 
 	private Long id;
 

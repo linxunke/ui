@@ -1,5 +1,12 @@
 package com.ztzh.ui.controller;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,6 +17,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -106,6 +114,86 @@ public class TestController {
 		 * false, "/12345678902/"+UserConstants.FTP_PNG_DIRECTORY);
 		 */
 	        return "";
+	}
+	
+	@RequestMapping(value="similar")
+	public String similar(@RequestParam(value="filePath") String filePath) throws IOException {
+		File inputFile = new File(filePath);
+		BufferedImage sourceImage = ImageIO.read(inputFile);
+		
+		int width = 8;
+		int height =8;
+		int type = sourceImage.getType();
+		BufferedImage thumbImage = null;
+		double sx = (double) width / sourceImage.getWidth();
+		double sy = (double) height / sourceImage.getHeight();
+		if(sx>sy) {
+			sx=sy;
+			width = (int)(sx*sourceImage.getWidth());
+		}else {
+			sy=sx;
+			height = (int)(sy*sourceImage.getHeight());
+		}
+		if(type==BufferedImage.TYPE_CUSTOM) {
+			ColorModel cm = sourceImage.getColorModel();
+			WritableRaster raster = cm.createCompatibleWritableRaster(width, height);
+			boolean alphaPremultipiled = cm.isAlphaPremultiplied();
+			thumbImage = new BufferedImage(cm, raster, alphaPremultipiled, null);
+		}else {
+			thumbImage = new BufferedImage(width, height, type);
+		}
+		Graphics2D g = thumbImage.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g.drawRenderedImage(sourceImage, AffineTransform.getScaleInstance(sx, sy));
+		g.dispose();
+		int[] pixels = new int[width*height];
+		for(int i=0;i<width;i++) {
+			for(int j=0;j<height;j++) {
+				logger.info("{}",thumbImage.getRGB(i, j));
+				pixels[i*height+j] = rgbToGray(thumbImage.getRGB(i, j));
+			}
+		}
+		int avgPixel = 0;
+		int m = 0;
+		for(int i=0;i<pixels.length;i++) {
+			m+=pixels[i];
+		}
+		m = m/pixels.length;
+		avgPixel = m;
+		int[] comps = new int[width*height];
+		for(int i=0;i<comps.length;i++) {
+			if(pixels[i]>=avgPixel) {
+				comps[i] = 1;
+			}else {
+				comps[i] = 0;
+			}
+		}
+		StringBuffer hashCode = new StringBuffer();
+		for(int i=0;i<comps.length;i+=4) {
+			int result = comps[i] * (int) Math.pow(2, 3) + comps[i + 1] * (int) Math.pow(2, 2)+ comps[i + 2] * (int) Math.pow(2, 1) + comps[i + 2];
+			hashCode.append(Integer.toHexString(result&0xff));
+		}
+		String sourceHashCode = hashCode.toString();
+		
+		return sourceHashCode;
+	}
+	
+	private static int rgbToGray(int pixels) {
+		int _red = _red = (pixels >> 16)&0xFF;
+		int _green = (pixels >> 8)&0xFF;
+		int _blue = (pixels)&0xFF;
+		return (int)(0.3*_red+0.59*_green+0.11*_blue);
+	}
+	
+	private static int difference(String sourceHashCode, String targetHashCode) {
+		int difference = 0;
+		int len = sourceHashCode.length();
+		for(int i=0;i<len;i++) {
+			if(sourceHashCode.charAt(i) != targetHashCode.charAt(i)) {
+				difference++;
+			}
+		}
+		return difference;
 	}
 
 }

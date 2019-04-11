@@ -71,10 +71,15 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		String materialType;
 		String childType;
 		List<ThreeRecentUrlResultBo> list = materialInfoDomainMapper.getThreeRecentMaterial();
-		for(int i=0; i<3; i++){
+		int count = 0;
+		for(int i=0; i<list.size(); i++){
 			childType = materialInfoDomainMapper.selectTypeNameByChildCode(list.get(i).getChildCode());
 			materialType= list.get(i).getMaterialType();
 			list.get(i).setMaterialType(materialType+"—"+childType);
+			count++;
+			if(count==3) {
+				return list;
+			}
 		}
 		return list;
 	}

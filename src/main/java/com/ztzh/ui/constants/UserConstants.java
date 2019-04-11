@@ -30,4 +30,12 @@ public class UserConstants {
 	 * FTP photo路径
 	 */
 	public static String FTP_PHOTO_DIRECTORY = "/photo";
+	/**
+	 * 选中
+	 */
+	public static String OPERATION_CODE_CHOOSED = "1";
+	/**
+	 * 取消
+	 */
+	public static String OPERATION_CODE_CANCEL = "0";
 }

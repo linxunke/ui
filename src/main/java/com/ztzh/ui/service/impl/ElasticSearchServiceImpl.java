@@ -8,6 +8,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
 import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.index.search.MatchQuery;
@@ -119,10 +120,16 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
         	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
         }
+        RangeQueryBuilder rangeQueryBuider = QueryBuilders.rangeQuery("colorPercentage");
+        if(null!=materialESBo.getColorPercentage()) {
+        	rangeQueryBuider = rangeQueryBuider.gte(materialESBo.getColorPercentage()*0.97).lte(materialESBo.getColorPercentage()*1.03);
+        }
         // 设置分页
         Pageable pageable = new PageRequest(pageNumber, pageSize);
+        logger.info(searchBuilder.withPageable(pageable)
+                .withQuery(boolQueryBuilder).withFilter(rangeQueryBuider).build().toString());
         return searchBuilder.withPageable(pageable)
-                .withQuery(boolQueryBuilder).build();
+                .withQuery(boolQueryBuilder).withFilter(rangeQueryBuider).build();
     }
 
 
