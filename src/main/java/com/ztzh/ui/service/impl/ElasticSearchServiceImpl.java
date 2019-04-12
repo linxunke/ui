@@ -2,17 +2,18 @@ package com.ztzh.ui.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.util.Map;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
-import org.elasticsearch.index.search.MatchQuery;
-import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
+import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -22,13 +23,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.DeleteQuery;
+import org.springframework.data.elasticsearch.core.ResultsExtractor;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSONObject;
+import com.ztzh.ui.bo.MaterialCountByParentType;
 import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.constants.MaterialTypeConstants;
@@ -83,6 +83,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	@Override
 	public Page<MaterialInfoIndex> findMaterialDocument(int page, int size, MaterialESBo materialESBo) {
 		SearchQuery searchQuery = getEntitySearchQuery(page,size,materialESBo);
+		logger.info("{}",searchQuery.getQuery());
 		Page<MaterialInfoIndex> items = materialInfoIndexRepository.search(searchQuery);
 		return items;
 	}
@@ -139,6 +140,49 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		materialInfoIndexRepository.delete(materialInfoIndexList);
 		logger.info("删除Elaticsearch数据成功");
 		
+	}
+
+
+	@Override
+	public List<MaterialCountByParentType> countMaterialByType(MaterialESBo materialESBo) {
+		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+		NativeSearchQueryBuilder nativeSearchQuerybuilder = new NativeSearchQueryBuilder();
+		RangeQueryBuilder rangeQueryBuider = QueryBuilders.rangeQuery("colorPercentage");
+        if(null!=materialESBo.getColorPercentage()) {
+        	rangeQueryBuider = rangeQueryBuider.gte(materialESBo.getColorPercentage()*0.97).lte(materialESBo.getColorPercentage()*1.03);
+        	boolQueryBuilder.filter(rangeQueryBuider);
+        }
+		if(null!=materialESBo.getMaterialTypeCodeParent()) {
+			boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialESBo.getMaterialTypeCodeParent()));
+		}
+		if(null!=materialESBo.getMaterialTypeCodeChild()) {
+			boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeChild", materialESBo.getMaterialTypeCodeChild()));
+		}
+		nativeSearchQuerybuilder.withQuery(boolQueryBuilder);
+		nativeSearchQuerybuilder.withSearchType(SearchType.QUERY_THEN_FETCH);
+		nativeSearchQuerybuilder.withIndices("materialinfo").withTypes("docs");
+		TermsBuilder termsAggregation = AggregationBuilders.terms("countMaterialByTypes").field("materialTypeInfoIndex.materialTypeCodeParent");
+		nativeSearchQuerybuilder.addAggregation(termsAggregation);
+		NativeSearchQuery nativeSearchQuery = nativeSearchQuerybuilder.build();
+		logger.info("{}",nativeSearchQuery.getQuery());
+		Aggregations aggregations = elasticsearchTemplate.query(nativeSearchQuery, new ResultsExtractor<Aggregations>() {
+			@Override
+			public Aggregations extract(SearchResponse response) {
+				return response.getAggregations();
+			}
+		});
+		Map<String, Aggregation> aggregationMap = aggregations.asMap();
+		StringTerms stringTerms = (StringTerms) aggregationMap.get("countMaterialByTypes");
+    	//获得所有的桶
+    	List<Bucket> buckets = stringTerms.getBuckets();
+    	List<MaterialCountByParentType> materialCountByParentTypeList = new ArrayList<MaterialCountByParentType>();
+    	for(Bucket bucket:buckets){	
+    		MaterialCountByParentType materialCountByParentType = new MaterialCountByParentType();
+    		materialCountByParentType.setMaterialTypeCodeParent(bucket.getKeyAsString());
+    		materialCountByParentType.setMaterialCount(bucket.getDocCount());
+    		materialCountByParentTypeList.add(materialCountByParentType);
+    	}	
+    	return materialCountByParentTypeList;
 	}
 
 }
