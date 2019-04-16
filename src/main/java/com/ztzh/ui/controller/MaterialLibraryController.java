@@ -29,76 +29,81 @@ import com.ztzh.ui.vo.ResponseVo;
 @RequestMapping("/materialLibrary")
 public class MaterialLibraryController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
-	
+
 	@Autowired
 	MaterialLibraryService materialLibraryService;
-	
+
 	@Autowired
 	MaterialInfoService materialInfoService;
-	
+
 	@Autowired
 	CanvasInfoDomainMapper canvasInfoDomainMapper;
-	
+
 	@Autowired
 	MaterialTypeInfoDomainMapper materialTypeInfoDomainMapper;
-	
+
 	@Autowired
 	MaterialTypeDomainMapper materialTypeDomainMapper;
-	
-	@RequestMapping(value = "/getAllMaterialParentTypeInfo", method = { RequestMethod.POST,
-			RequestMethod.GET })
+
+	@RequestMapping(value = "/getAllMaterialParentTypeInfo", method = {
+			RequestMethod.POST, RequestMethod.GET })
 	public String getAllMaterialParentTypeInfo(
-			@RequestParam(value = "userId", required = true) String userId){
+			@RequestParam(value = "userId", required = true) String userId) {
 		ResponseVo responseVo = new ResponseVo();
-		List<MaterialTypeDomain> parentTypeList = materialLibraryService.getAllMaterialParentType();
+		List<MaterialTypeDomain> parentTypeList = materialLibraryService
+				.getAllMaterialParentType();
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 		responseVo.setUserId(userId);
-		if(parentTypeList.size() != 0){
+		if (parentTypeList.size() != 0) {
 			responseVo.setMessage("成功获取一级分类信息");
 			responseVo.setObject(parentTypeList);
-		}else {
+		} else {
 			responseVo.setMessage("获取一级分类信息失败，分类列表为空");
 		}
 		return responseVo.toString();
 	}
-	
-	@RequestMapping(value = "/getChildTypesByParentTypeCode", method = { RequestMethod.POST,
-			RequestMethod.GET })
+
+	@RequestMapping(value = "/getChildTypesByParentTypeCode", method = {
+			RequestMethod.POST, RequestMethod.GET })
 	public String getChildTypesByParentTypeCode(
 			@RequestParam(value = "userId", required = true) String userId,
 			@RequestParam(value = "parentTypeCode", required = true) String parentTypeCode,
-			@RequestParam(value = "isIcon", required = true) boolean isIcon){
+			@RequestParam(value = "isIcon", required = true) boolean isIcon) {
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setUserId(userId);
-		List<MaterialChildTypeCoverInfosBo> resultList = materialLibraryService.getChildTypeInfoByParentCode(parentTypeCode, isIcon);
+		List<MaterialChildTypeCoverInfosBo> resultList = materialLibraryService
+				.getChildTypeInfoByParentCode(parentTypeCode, isIcon);
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 		responseVo.setMessage("根据分类获取细分类别的素材信息成功");
 		responseVo.setObject(resultList);
-		/*执行service层的方法*/
+		/* 执行service层的方法 */
 		return responseVo.toString();
 	}
-	
-	@RequestMapping(value = "/getMaterialsByChildTypeCode", method = { RequestMethod.POST,
-			RequestMethod.GET })
+
+	@RequestMapping(value = "/getMaterialsByChildTypeCode", method = {
+			RequestMethod.POST, RequestMethod.GET })
 	public String getMaterialsByChildTypeCode(
 			@RequestParam(value = "userId", required = true) String userId,
 			@RequestParam(value = "childTypeCode", required = true) String childTypeCode,
-			@RequestParam(value = "currentPage", required = true) int currentPage){
+			@RequestParam(value = "currentPage", required = true) int currentPage) {
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setUserId(userId);
 		PageQueryUtil pageQueryUtil;
-		Map<String,Object> resultMap = new HashMap<String, Object>();
-		if("01".equalsIgnoreCase(materialTypeDomainMapper.selectParentTypeCodeByChildTypeCode(childTypeCode))){
-			pageQueryUtil = materialLibraryService.getMaterialsByChildTypeCode(childTypeCode, currentPage, PageQueryUtil.PAGE_SIZE_IS_40);
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		if ("01".equalsIgnoreCase(materialTypeDomainMapper
+				.selectParentTypeCodeByChildTypeCode(childTypeCode))) {
+			pageQueryUtil = materialLibraryService.getMaterialsByChildTypeCode(
+					childTypeCode, currentPage, PageQueryUtil.PAGE_SIZE_IS_40);
 			resultMap.put("isIcon", true);
-		}else {
-			pageQueryUtil = materialLibraryService.getMaterialsByChildTypeCode(childTypeCode, currentPage, PageQueryUtil.PAGE_SIZE_IS_6);
+		} else {
+			pageQueryUtil = materialLibraryService.getMaterialsByChildTypeCode(
+					childTypeCode, currentPage, PageQueryUtil.PAGE_SIZE_IS_6);
 			resultMap.put("isIcon", false);
 		}
-		if(pageQueryUtil.getInfoTotalNumber() != 0){
+		if (pageQueryUtil.getInfoTotalNumber() != 0) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("根据细分类型获取素材信息成功");
-		}else {
+		} else {
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
 			responseVo.setMessage("根据细分类型获取到的素材列表为空");
 		}
@@ -106,24 +111,24 @@ public class MaterialLibraryController {
 		responseVo.setObject(resultMap);
 		return responseVo.toString();
 	}
-	
-	@RequestMapping(value = "/getMaterialInfoInLibrary", method = { RequestMethod.POST,
-			RequestMethod.GET })
+
+	@RequestMapping(value = "/getMaterialInfoInLibrary", method = {
+			RequestMethod.POST, RequestMethod.GET })
 	public String getMaterialInfoInLibrary(
 			@RequestParam(value = "userId", required = true) String userId,
-			@RequestParam(value = "materialId", required = true) String materialId
-			){
+			@RequestParam(value = "materialId", required = true) String materialId) {
 		ResponseVo responseVo = new ResponseVo();
-		MaterialAndTypeInfoBo materialBo = materialInfoService.getMaterialDetailInfoById(new Long(materialId));
-		CanvasInfoDomain canvasInfo = 
-				canvasInfoDomainMapper.selectByPrimaryKey(materialBo.getCanvasInfoIdPrivate());
+		MaterialAndTypeInfoBo materialBo = materialInfoService
+				.getMaterialDetailInfoById(new Long(materialId));
+		CanvasInfoDomain canvasInfo = canvasInfoDomainMapper
+				.selectByPrimaryKey(materialBo.getCanvasInfoIdPrivate());
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		if(materialBo != null && canvasInfo != null){
+		if (materialBo != null && canvasInfo != null) {
 			resultMap.put("materialInfo", materialBo);
 			resultMap.put("canvasInfo", canvasInfo);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取素材库中素材的详细信息成功");
-		}else {
+		} else {
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
 			responseVo.setMessage("获取素材库中素材的详细信息为空");
 		}
@@ -131,20 +136,20 @@ public class MaterialLibraryController {
 		responseVo.setObject(resultMap);
 		return responseVo.toString();
 	}
-	
-	@RequestMapping(value = "/getCurrentTypeInfos", method = { RequestMethod.POST,
-			RequestMethod.GET })
+
+	@RequestMapping(value = "/getCurrentTypeInfos", method = {
+			RequestMethod.POST, RequestMethod.GET })
 	public String getTypeNameInfos(
 			@RequestParam(value = "userId", required = true) String userId,
-			@RequestParam(value = "childTypeCode", required = true) String childTypeCode){
+			@RequestParam(value = "childTypeCode", required = true) String childTypeCode) {
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setUserId(userId);
-		List<MaterialTypeDomain> resultList = materialLibraryService.
-				getMaterialTypeInfoByChildTypeCode(childTypeCode);
-		if(resultList.size() != 0){
+		List<MaterialTypeDomain> resultList = materialLibraryService
+				.getMaterialTypeInfoByChildTypeCode(childTypeCode);
+		if (resultList.size() != 0) {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取当前分类的类别和细分信息成功");
-		}else {
+		} else {
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
 			responseVo.setMessage("获取当前分类的类别和细分信息列表为空");
 		}

@@ -81,26 +81,33 @@ public class MaterialLibraryServiceImpl implements MaterialLibraryService {
 			}
 			try {
 				String iconCoverUrl = ImageMagickUtil.iconDisplay(urlList);
-				coverImgUrl = "/images/" + iconCoverUrl.replace(catchPngUrl.replaceAll("//", "/"), "");
+				coverImgUrl = "/images/"
+						+ iconCoverUrl.replace(
+								catchPngUrl.replaceAll("//", "/"), "");
 			} catch (IOException | InterruptedException | IM4JavaException e) {
 				logger.info("封面图拼接失败");
 				e.printStackTrace();
 			}
 		} else {
-			String orignalUrl = resourceFTPUrl + materialTypeInfoDomainMapper.selectMaterialThumbnailUrlByImgChildCode(childTypeCode);
+			String orignalUrl = resourceFTPUrl
+					+ materialTypeInfoDomainMapper
+							.selectMaterialThumbnailUrlByImgChildCode(childTypeCode);
 			orignalUrl = orignalUrl.replaceAll("//", "/");
-			String newImgUrl = catchPngUrl + UUID.randomUUID().toString().replaceAll("-", "") + ".png";
-			try{
-				boolean copyResult = MaterialInfoServiceImpl.copy(orignalUrl, newImgUrl);
-				if(copyResult){
-				String imgCoverUrl = newImgUrl;
-				coverImgUrl = "/images/" + imgCoverUrl.replace(catchPngUrl.replaceAll("//", "/"), "");
+			String newImgUrl = catchPngUrl
+					+ UUID.randomUUID().toString().replaceAll("-", "") + ".png";
+			try {
+				boolean copyResult = MaterialInfoServiceImpl.copy(orignalUrl,
+						newImgUrl);
+				if (copyResult) {
+					String imgCoverUrl = newImgUrl;
+					coverImgUrl = "/images/"
+							+ imgCoverUrl.replace(
+									catchPngUrl.replaceAll("//", "/"), "");
 				}
-			}catch(Exception exception){
+			} catch (Exception exception) {
 				logger.warn("有素材类别中没有素材存在！");
 			}
-			
-			
+
 		}
 		return coverImgUrl;
 	}
@@ -108,12 +115,18 @@ public class MaterialLibraryServiceImpl implements MaterialLibraryService {
 	@Override
 	public PageQueryUtil getMaterialsByChildTypeCode(String childTypeCode,
 			int currentPage, int pageSize) {
-		int infoTotalNumber = materialTypeInfoDomainMapper.selectMaterialNumberByChildTypeCode(childTypeCode); //总条数
-		int pageNumber = infoTotalNumber % pageSize == 0 ? (infoTotalNumber / pageSize) : (infoTotalNumber / pageSize)+1; //总页数
-		PageQueryUtil pageQueryUtil = new PageQueryUtil(pageSize, currentPage, infoTotalNumber);
+		int infoTotalNumber = materialTypeInfoDomainMapper
+				.selectMaterialNumberByChildTypeCode(childTypeCode); // 总条数
+		int pageNumber = infoTotalNumber % pageSize == 0 ? (infoTotalNumber / pageSize)
+				: (infoTotalNumber / pageSize) + 1; // 总页数
+		PageQueryUtil pageQueryUtil = new PageQueryUtil(pageSize, currentPage,
+				infoTotalNumber);
 		int start = (currentPage - 1) * pageSize;
-		int end = (currentPage >= pageNumber) ? (infoTotalNumber-start) : pageSize;
-		List<MaterialInfoDomain> resultList = materialInfoDomainMapper.selectMaterialInfoWithchildTypeCodeByPage(childTypeCode,start,end);
+		int end = (currentPage >= pageNumber) ? (infoTotalNumber - start)
+				: pageSize;
+		List<MaterialInfoDomain> resultList = materialInfoDomainMapper
+				.selectMaterialInfoWithchildTypeCodeByPage(childTypeCode,
+						start, end);
 		pageQueryUtil.setObject(resultList);
 		return pageQueryUtil;
 	}
@@ -121,6 +134,7 @@ public class MaterialLibraryServiceImpl implements MaterialLibraryService {
 	@Override
 	public List<MaterialTypeDomain> getMaterialTypeInfoByChildTypeCode(
 			String childTypeCode) {
-		return materialTypeDomainMapper.selectTypeInfosByChildTypeCode(childTypeCode);
+		return materialTypeDomainMapper
+				.selectTypeInfosByChildTypeCode(childTypeCode);
 	}
 }
