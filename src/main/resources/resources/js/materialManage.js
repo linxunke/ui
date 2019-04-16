@@ -2,6 +2,7 @@ currentPage=1;
 pageNumber=0;
 userId = getParameter('userId');
 canvasId = getParameter('canvasId');
+var typeCatchDate;
 $(document).ready(function() {
 	
 	init(userId, canvasId,1);
@@ -28,6 +29,10 @@ $(document).ready(function() {
 	/*点击+按钮，添加分类模块*/
 	$("#add_material_type_div").click(function () {
 		addMaterialTypeblocks(userId);
+	});
+	/*细分下拉框的值会随分类下拉框值的改变而改变*/
+	$(".material_parent_type_select").change(function() {
+		changeChildTypeValue(this);
 	});
 	
 	/*点击删除按钮*/
@@ -73,6 +78,7 @@ $(document).ready(function() {
 				var resultData = JSON.parse(data);
 				console.log(resultData);
 				alert(resultData.message);
+				window.location.reload();
 			},
 			error:function () {
 				alert("更新失败，请重试！");
@@ -148,6 +154,7 @@ $(document).ready(function() {
 			});
 		}
 	});
+	/*下载格式为svg的图片*/
 	$("#download_material_svg").click(function() {
 		var currentMaterialId = $("#currentMaterialId").val();
 		var isIcon = $("#isIconInput").val();
@@ -227,15 +234,15 @@ function addMaterialTypeblocks(userId) {
 		url:'/uploadMaterial/getMaterialTypes?userId='+userId,
 		type:'get',
 		success:function(data){
-			var typeData = JSON.parse(data);
-			var parentType = typeData.object.materialTypes;
-			var childType = typeData.object.materialSegmentations;
-			var styleType = typeData.object.materialStyles;
+			typeCatchDate = JSON.parse(data);
+			var parentType = typeCatchDate.object.materialTypes;
+			var childType = typeCatchDate.object.materialSegmentations;
+			var styleType = typeCatchDate.object.materialStyles;
 			var newTypeModual = "";
 			/*类型模块拼接*/
 			newTypeModual += '<div class="material_info_div"><div class="float_l material_type_div_each">'+
 				'<span class="material_type_name">类型</span><div class="material_type_content float_l">'+
-				'<select class="material_parent_type_select">';
+				'<select class="material_parent_type_select" onchange="changeChildTypeValue(this)">';
 			for(var i = 0; i < parentType.length; i++){
 				newTypeModual += '<option value="'+parentType[i].typeCode+'">'+parentType[i].typeName+'</option>';
 			}
@@ -244,7 +251,9 @@ function addMaterialTypeblocks(userId) {
 			'<span class="material_type_name">细分</span><div class="material_type_content float_l">'+
 			'<select class="material_child_type_select">';
 			for(var i = 0; i < childType.length; i++){
-				newTypeModual += '<option value="'+childType[i].typeCode+'">'+childType[i].typeName+'</option>';
+				if(childType[i].parentCode == '01'){
+					newTypeModual += '<option value="'+childType[i].typeCode+'">'+childType[i].typeName+'</option>';
+				}
 			}
 			/*风格模块拼接*/
 			newTypeModual += '</select></div></div><div class="float_l material_type_div_each" style="margin-right: 0">'+
@@ -474,11 +483,13 @@ function refreshPageModual(currentPage,pageNumber) {
 }
 function materialIsAIcon(materialTypeInfoList) {
 	for(var i =0; i < materialTypeInfoList.length; i++){
-		if(materialTypeInfoList[i].materialTypeCodeParent == '01'){
-			return true;
+		if(materialTypeInfoList[i].materialTypeCodeParent != '01'){
+			console.log("false");
+			return false;
 		}
 	}
-	return false;
+	console.log("true");
+	return true;
 }
 /*展示详情页的信息*/
 function showMaterialDetailsInModal(data) {
@@ -498,85 +509,53 @@ function showMaterialDetailsInModal(data) {
 	$("#material_content_label").val(data.object.materialDescription);
 	var checkedOptionVal = data.object.canvasInfoIdPrivate;
 	getUserCanvas(data.userId,checkedOptionVal);
+	getMaterialTypesInfo(); //获取素材分类信息并初始化全局变量
 	$("#material_type_info_div").empty();
-	addMaterialTypeBlockByNum(data.userId,data.object.materialTypeInfoList.length);
-	var materialTypeInfos = data.object.materialTypeInfoList;
+	addMaterialTypeBlocks(data.object.materialTypeInfoList.length);
+	var materialTypeInfos = data.object.materialTypeInfoList; //获取素材的分类信息
+	/*用查询到的素材的分类信息初始化类别模块的下拉框值*/
 	var materialTypes = $("#material_type_info_div").find(".material_info_div");
 	var len = materialTypes.length;
 	for(var i = 0; i < len; i++){
 		var parentTypeOptions = $(materialTypes[i]).find(".material_parent_type_select").find("option");
-		var childTypeOptions = $(materialTypes[i]).find(".material_child_type_select").find("option");
-		var styleTypeOptions = $(materialTypes[i]).find(".material_style_type_select").find("option");
 		/*设置类型下拉框的值*/
 		for(var j = 0; j < parentTypeOptions.length; j++){
 			if($(parentTypeOptions[j]).val() == materialTypeInfos[i].materialTypeCodeParent){
 				$(parentTypeOptions[j]).attr("selected", "selected");
-				break;
+				changeChildTypeValue($(parentTypeOptions[i]).parent());
 			}
 		}
+		changeChildTypeValue($(parentTypeOptions[i]).parent());
 		/*设置细分下拉框的值*/
+		var childTypeOptions = $(materialTypes[i]).find(".material_child_type_select").find("option");
 		for(var j = 0; j < childTypeOptions.length; j++){
 			if($(childTypeOptions[j]).val() == materialTypeInfos[i].materialTypeCodeChild){
 				$(childTypeOptions[j]).attr("selected", "selected");
-				break;
 			}
 		}
 		/*设置风格下拉框的值*/
+		var styleTypeOptions = $(materialTypes[i]).find(".material_style_type_select").find("option");
 		for(var j = 0; j < styleTypeOptions.length; j++){
 			if($(styleTypeOptions[j]).val() == materialTypeInfos[i].materialStyleCode){
 				$(styleTypeOptions[j]).attr("selected", "selected");
-				break;
+				console.log("i:"+i);
 			}
 		}
 	}
 	
 }
-
-/*添加num个素材分类模块*/
-function addMaterialTypeBlockByNum(userId,num) {
-	$.ajax({
-		url:'/uploadMaterial/getMaterialTypes?userId='+userId,
-		type:'get',
-		async: false,
-		success:function(data){
-			var typeData = JSON.parse(data);
-			var parentType = typeData.object.materialTypes;
-			var childType = typeData.object.materialSegmentations;
-			var styleType = typeData.object.materialStyles;
-			var newTypeModual = "";
-			/*类型模块拼接*/
-			newTypeModual += '<div class="material_info_div"><div class="float_l material_type_div_each">'+
-				'<span class="material_type_name">类型</span><div class="material_type_content float_l">'+
-				'<select class="material_parent_type_select">';
-			for(var i = 0; i < parentType.length; i++){
-				newTypeModual += '<option value="'+parentType[i].typeCode+'">'+parentType[i].typeName+'</option>';
-			}
-			/*细分模块拼接*/
-			newTypeModual += '</select></div></div><div class="float_l material_type_div_each">'+
-			'<span class="material_type_name">细分</span><div class="material_type_content float_l">'+
-			'<select class="material_child_type_select">';
-			for(var i = 0; i < childType.length; i++){
-				newTypeModual += '<option value="'+childType[i].typeCode+'">'+childType[i].typeName+'</option>';
-			}
-			/*风格模块拼接*/
-			newTypeModual += '</select></div></div><div class="float_l material_type_div_each" style="margin-right: 0">'+
-			'<span class="material_type_name">风格</span><div class="material_type_content float_l">'+
-			'<select class="material_style_type_select">';
-			for(var i = 0; i < styleType.length; i++){
-				newTypeModual += '<option value="'+styleType[i].typeCode+'">'+styleType[i].typeName+'</option>';
-			}
-			newTypeModual += '</select></div></div><div class="float_l">'+
-			'<input type="button" onclick="removeTypeBlock(this)" class="remove_parent_type_div" value="-"/></div></div>';
-			for (var i = 0; i < num; i++) {
-				$("#material_type_info_div").append(newTypeModual);
-			}
-		},
-		error:function(){
-			console.log('error happened----');
+function changeChildTypeValue(obj) {
+	var childType = typeCatchDate.object.materialSegmentations;
+	var parentTypeCode = $(obj).val();
+	var childTypeSelect = $(obj).parent().parent().parent().find(".material_child_type_select");
+	$(childTypeSelect).empty();
+	for(var i = 0; i < childType.length; i++){
+		if(childType[i].parentCode == parentTypeCode){
+			$(childTypeSelect).append('<option value="'+childType[i].typeCode+'">'+childType[i].typeName+'</option>');
 		}
-	});
-	
+	}
 }
+
 /*获取用户的画板信息*/
 function getUserCanvas(userId,checkedOptionVal) {
 	$.ajax({
@@ -640,4 +619,48 @@ function delete_in_batch() {
 			alert("删除失败，请重试！");
 		}
 	});
+}
+
+function getMaterialTypesInfo() {
+	$.ajax({
+		url:'/uploadMaterial/getMaterialTypes?userId='+userId,
+		type:'get',
+		async: false,
+		success:function(data){
+			typeCatchDate = JSON.parse(data);
+		}
+	});
+}
+
+function addMaterialTypeBlocks(num) {
+	var parentType = typeCatchDate.object.materialTypes;
+	var childType = typeCatchDate.object.materialSegmentations;
+	var styleType = typeCatchDate.object.materialStyles;
+	var newTypeModual = "";
+	/*类型模块拼接*/
+	newTypeModual += '<div class="material_info_div"><div class="float_l material_type_div_each">'+
+		'<span class="material_type_name">类型</span><div class="material_type_content float_l">'+
+		'<select class="material_parent_type_select" onchange="changeChildTypeValue(this)">';
+	for(var i = 0; i < parentType.length; i++){
+		newTypeModual += '<option value="'+parentType[i].typeCode+'">'+parentType[i].typeName+'</option>';
+	}
+	/*细分模块拼接*/
+	newTypeModual += '</select></div></div><div class="float_l material_type_div_each">'+
+	'<span class="material_type_name">细分</span><div class="material_type_content float_l">'+
+	'<select class="material_child_type_select">';
+	for(var i = 0; i < childType.length; i++){
+		newTypeModual += '<option value="'+childType[i].typeCode+'">'+childType[i].typeName+'</option>';
+	}
+	/*风格模块拼接*/
+	newTypeModual += '</select></div></div><div class="float_l material_type_div_each" style="margin-right: 0">'+
+	'<span class="material_type_name">风格</span><div class="material_type_content float_l">'+
+	'<select class="material_style_type_select">';
+	for(var i = 0; i < styleType.length; i++){
+		newTypeModual += '<option value="'+styleType[i].typeCode+'">'+styleType[i].typeName+'</option>';
+	}
+	newTypeModual += '</select></div></div><div class="float_l">'+
+	'<input type="button" onclick="removeTypeBlock(this)" class="remove_parent_type_div" value="-"/></div></div>';
+	for (var i = 0; i < num; i++) {
+		$("#material_type_info_div").append(newTypeModual);
+	}
 }

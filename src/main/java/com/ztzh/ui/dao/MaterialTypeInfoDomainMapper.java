@@ -3,7 +3,6 @@ package com.ztzh.ui.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-
 import com.ztzh.ui.po.MaterialTypeInfoDomain;
 
 public interface MaterialTypeInfoDomainMapper {
@@ -28,4 +27,12 @@ public interface MaterialTypeInfoDomainMapper {
     int insertBybatch(@Param("materialTypeInfoDomains") List<MaterialTypeInfoDomain> list);
     
     List<MaterialTypeInfoDomain> selectMaterialTypeInfosByMaterialInfoId(@Param("materialInfoId")Long materialInfoId);
+    
+    int selectMaterialNumberByChildTypeCode(String childCode);
+    
+    List<String> selectMaterialPngUrlListByIconChildCode(String childTypeCode);
+    
+    String selectMaterialThumbnailUrlByImgChildCode(String childTypeCode);
+    
+    int selectMaterialNumByChildTypeCode(String childTypeCode);
 }

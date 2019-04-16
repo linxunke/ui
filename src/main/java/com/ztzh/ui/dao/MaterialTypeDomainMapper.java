@@ -2,6 +2,7 @@ package com.ztzh.ui.dao;
 
 import java.util.List;
 
+import com.ztzh.ui.bo.MaterialChildTypeCoverInfosBo;
 import com.ztzh.ui.po.MaterialTypeDomain;
 
 public interface MaterialTypeDomainMapper {
@@ -22,4 +23,10 @@ public interface MaterialTypeDomainMapper {
     List<MaterialTypeDomain> selectSegmentation();
     
     List<MaterialTypeDomain> selectStyle();
+    
+    List<MaterialTypeDomain> selectChildTypeByParentCode(String parentCode);
+    
+    String selectParentTypeCodeByChildTypeCode(String childTypeCode);
+    
+    List<MaterialTypeDomain> selectTypeInfosByChildTypeCode(String childTypeCode);
 }

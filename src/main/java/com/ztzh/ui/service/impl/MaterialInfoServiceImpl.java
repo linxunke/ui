@@ -317,7 +317,6 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 			}
 			return result;
 		} catch (IOException e) {
-			e.printStackTrace();
 			result = false;
 			return result;
 		} finally {

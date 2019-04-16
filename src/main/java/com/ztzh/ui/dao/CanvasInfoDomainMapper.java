@@ -38,5 +38,5 @@ public interface CanvasInfoDomainMapper {
 
 	List<ManagementCanvasBo> selectAllCanvasInfoByUserId(@Param("userId") Long userId);
 	
-	Object selectIconNumByCanvasId(Long canvasId);
+	Object selectNotIconNumByCanvasId(Long canvasId);
 }

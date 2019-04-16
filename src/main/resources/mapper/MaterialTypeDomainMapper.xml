@@ -137,4 +137,26 @@
   	from material_type
   	where grade=2 and is_valid=1 and parent_code ="05"
   </select>
+  
+  <!-- 根据分类查询细分类型 -->
+  <select id="selectChildTypeByParentCode" resultMap="BaseResultMap">
+  	select	
+  	<include refid="Base_Column_List"/>
+  	from material_type	
+  	where parent_code = #{parentCode} and is_valid = 1
+  </select>
+  
+  <select id="selectParentTypeCodeByChildTypeCode" resultType="java.lang.String">
+  	select parent_code from material_type 
+  	where  type_code = #{childTypeCode} and is_valid = 1;
+  </select>
+  
+  <select id="selectTypeInfosByChildTypeCode" resultMap="BaseResultMap">
+  	select	
+  	<include refid="Base_Column_List"/> 
+  	from material_type as a
+  	where a.type_code = #{childTypeCode}	
+  	or a.type_code = (select b.parent_code from material_type as b where b.type_code = #{childTypeCode})
+  	and a.is_valid = 1
+  </select>
 </mapper>

@@ -187,9 +187,9 @@
   		from canvas_info where is_valid = 1 
   		 and user_id = #{userId,jdbcType=BIGINT}
   </select>
-  <select id="selectIconNumByCanvasId" resultType="java.lang.Object">
+  <select id="selectNotIconNumByCanvasId" resultType="java.lang.Object">
   	SELECT count(c.id) from material_type_info as c,(
 		SELECT b.id as id,a.id as canvas_id from canvas_info as a, material_info as b where a.id= b.canvas_info_id_private) as d
-		where c.materail_info_id = d.id and c.material_type_code_parent='01' and d.canvas_id = #{canvasId} GROUP BY d.canvas_id
+		where c.materail_info_id = d.id and c.material_type_code_parent != '01' and d.canvas_id = #{canvasId} GROUP BY d.canvas_id
   </select>
 </mapper>

@@ -141,5 +141,31 @@
     from material_type_info
     where materail_info_id = #{materialInfoId,jdbcType=BIGINT}
   </select>
- 
+  
+  <select id="selectMaterialNumberByChildTypeCode" resultType="java.lang.Integer">
+  	select count(DISTINCT materail_info_id) 
+  	from material_type_info where material_type_code_child = #{childCode}
+  </select>
+  
+  <select id="selectMaterialPngUrlListByIconChildCode" resultType="java.lang.String">
+	  select a.png_url from material_info as a where id in
+		(select DISTINCT b.materail_info_id from material_type_info as b where 
+			material_type_code_child = #{childTypeCode})
+			 and is_valid = 1 limit 20
+  </select>
+  
+  <select id="selectMaterialThumbnailUrlByImgChildCode" resultType="java.lang.String">
+  	select a.thumbnail_url from material_info as a where id in
+		(select DISTINCT b.materail_info_id from material_type_info as b where 
+			material_type_code_child = #{childTypeCode}) 
+			and is_valid=1 ORDER BY a.upload_time DESC
+			LIMIT 1
+  </select>
+  
+  <select id="selectMaterialNumByChildTypeCode" resultType="java.lang.Integer">
+  	select count(distinct materail_info_id) 
+  	from material_type_info 
+  	where material_type_code_child = #{childTypeCode}
+  	 and is_valid = 1
+  </select>
 </mapper>

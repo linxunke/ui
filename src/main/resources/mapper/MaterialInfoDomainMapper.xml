@@ -515,4 +515,13 @@
 		and a.id in <![CDATA[('')]]>
 	</if>
   </select>
+  <select id="selectMaterialInfoWithchildTypeCodeByPage" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	 from material_info as a 
+  	where a.id in
+	(select distinct b.materail_info_id from material_type_info as b 
+	where b.material_type_code_child = #{childTypeCode}) and is_valid = 1
+	limit #{start} , #{end}
+  </select>
 </mapper>

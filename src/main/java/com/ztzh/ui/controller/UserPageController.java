@@ -64,8 +64,12 @@ public class UserPageController {
 
 	}
 	
-	@RequestMapping(value="toMateiralLibrary")
+	@RequestMapping(value="toMaterialLibrary")
 	public String toMaterialLibrary(){
 		return "materialLibrary";
+	}
+	@RequestMapping(value="toChildMateiralLibrary")
+	public String toChildMateiralLibrary(){
+		return "childMaterialLibrary";
 	}
 }
