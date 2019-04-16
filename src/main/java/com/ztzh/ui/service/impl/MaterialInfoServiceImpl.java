@@ -27,6 +27,7 @@ import com.ztzh.ui.bo.IconMaterialBo;
 import com.ztzh.ui.bo.IconUrlBo;
 import com.ztzh.ui.bo.IconUrlResultBo;
 import com.ztzh.ui.bo.MaterialAndTypeInfoBo;
+import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.bo.ThreeRecentUrlResultBo;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
@@ -34,6 +35,7 @@ import com.ztzh.ui.dao.MaterialInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.po.MaterialTypeInfoDomain;
+import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.GetSYSTime;
@@ -60,6 +62,9 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	
 	@Autowired
 	ImageMagickUtil imageMagickUtil;
+	
+	@Autowired
+	ElasticSearchService elasticSearchService;
 	
 	@Value("${material.catch.png.url}")
 	private String catchPngUrl;
@@ -94,10 +99,15 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		String materialType;
 		String childType;
 		List<ThreeRecentUrlResultBo> list = materialInfoDomainMapper.getThreeRecentMaterial();
-		for(int i=0; i<3; i++){
+		int count = 0;
+		for(int i=0; i<list.size(); i++){
 			childType = materialInfoDomainMapper.selectTypeNameByChildCode(list.get(i).getChildCode());
 			materialType= list.get(i).getMaterialType();
 			list.get(i).setMaterialType(materialType+"—"+childType);
+			count++;
+			if(count==3) {
+				return list;
+			}
 		}
 		return list;
 	}
@@ -124,6 +134,12 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	public ResponseVo updateMaterialsInfo(Long materialInfoId, String imageLabel, Long canvasId, String imageName, String typeArray) throws Exception {
 		logger.info("获取源文件基本信息");
 		MaterialInfoDomain materialInfo = materialInfoDomainMapper.selectByPrimaryKey(materialInfoId);
+		//删除elasticsearch中的相关数据
+		logger.info("开始删除搜索引擎数据");
+		List<Long> materialIds = new ArrayList<Long>();
+		materialIds.add(materialInfoId);
+		List<MaterialInfoIndex> materialInfoIndexList = materialInfoDomainMapper.getValidMaterialInfoForIndexByIds(materialIds);
+		elasticSearchService.deleteDocById(materialInfoIndexList);
 		logger.info("删除源文件信息");
 		int count = materialInfoDomainMapper.deleteByPrimaryKey(materialInfoId);
 		if(count>1) {
@@ -160,6 +176,9 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 		}
 				
 		logger.info("成功插入{}条源文件类型信息",materialTypeCount);
+		logger.info("将更新数据写入搜索引擎");
+		List<MaterialInfoIndex> newMaterialInfoIndexList = materialInfoDomainMapper.getValidMaterialInfoForIndexByIds(materialIds);
+		elasticSearchService.saveDocument(newMaterialInfoIndexList);
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 		responseVo.setMessage("更新文件信息成功");
@@ -178,6 +197,10 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 			MaterialTypeInfoDomain materialTypeInfoDomain = JSONObject.parseObject(typeJson, MaterialTypeInfoDomain.class);
 			materialIds.add(materialTypeInfoDomain.getId());
 		}
+		//删除elasticsearch中的相关数据
+		logger.info("开始删除搜索引擎数据");
+		List<MaterialInfoIndex> materialInfoIndexList = materialInfoDomainMapper.getValidMaterialInfoForIndexByIds(materialIds);
+		elasticSearchService.deleteDocById(materialInfoIndexList);
 		logger.info("删除有关该文件所有磁盘中的文件");
 		logger.info("获取所有磁盘地址");
 		List<MaterialInfoDomain> materialInfoDomainList = materialInfoDomainMapper.queryByIds(materialIds);

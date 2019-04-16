@@ -13,6 +13,7 @@ public class ManagementCanvasBo {
 	public Date lastMaterialUploadTime;	
 	public String lastMaterialUrl;
 	public String lastMaterialUploadTimeFormate;
+	public int collectionCount;
 
 	public String getLastMaterialUploadTimeFormate() {
 		if(this.lastMaterialUploadTime!=null) {
@@ -71,13 +72,19 @@ public class ManagementCanvasBo {
 		this.lastMaterialUrl = lastMaterialUrl;
 	}
 
+	public int getCollectionCount() {
+		return collectionCount;
+	}
+	public void setCollectionCount(int collectionCount) {
+		this.collectionCount = collectionCount;
+	}
 	@Override
 	public String toString() {
-		return "ManagementCanvasBo [canvasId=" + canvasId + ", canvasName="
-				+ canvasName + ", canvasDesc=" + canvasDesc
-				+ ", materialCount=" + materialCount
-				+ ", lastMaterialUploadTime=" + lastMaterialUploadTime
-				+ ", lastMaterialUrl=" + lastMaterialUrl + "]";
+		return "ManagementCanvasBo [canvasId=" + canvasId + ", canvasName=" + canvasName + ", canvasDesc=" + canvasDesc
+				+ ", materialCount=" + materialCount + ", lastMaterialUploadTime=" + lastMaterialUploadTime
+				+ ", lastMaterialUrl=" + lastMaterialUrl + ", lastMaterialUploadTimeFormate="
+				+ lastMaterialUploadTimeFormate + ", collectionCount=" + collectionCount + "]";
 	}
+
 
 }

@@ -330,7 +330,7 @@
 	</select>
 	
 	<select id="getIconMaterialBoByThumbnailUrls" resultType="com.ztzh.ui.bo.IconMaterialBo">
-		select a.id as materialInfoId, 
+	select a.id as materialInfoId, 
 		       a.thumbnail_url as thumbnailUrl
 		from material_info as a,
 		     material_type_info as b
@@ -346,7 +346,23 @@
 		    and a.thumbnail_url in
 				<![CDATA[('')]]>
 		    </if>
-			
+		    and a.id not in (
+		select a.id as materialInfoId
+		from material_info as a,
+		     material_type_info as b
+		    where a.id = b.materail_info_id
+		    and b.material_type_code_parent != '01'
+		    <if test="thumbnailUrls.size()>0">
+		    and a.thumbnail_url in
+				<foreach close=")" collection="thumbnailUrls" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+		    </if>
+		    <if test="thumbnailUrls.size()==0">
+		    and a.thumbnail_url in
+				<![CDATA[('')]]>
+		    </if>
+			)
 	</select>
 		<select id="getIconUrlsByCanvasId" parameterType="java.lang.String" resultType="java.lang.String">
 		select png_url as pngUrl from material_info 
@@ -465,6 +481,8 @@
      a.color_type,
      a.color_percentage, 
      a.is_valid,
+     b.canvas_name,
+     b.describe_info,
   	c.id,
      c.materail_info_id,
      c.material_type_code_parent,
@@ -495,8 +513,6 @@
      a.color_type,
      a.color_percentage, 
      a.is_valid,
-     b.canvas_name,
-     b.describe_info,
      b.material_type_code_parent,
      b.material_type_code_child,
      b.material_style_code,

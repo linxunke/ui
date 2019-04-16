@@ -22,4 +22,6 @@ public interface MaterialHistoryCollectionDomainMapper {
     int deleteByMaterialInfoIds(@Param("materialInfoIds")List<Long> materialInfoIds);
     
     int countByMaterialInfoId(Long materialInfoId);
+    
+    int cancelCollection(@Param("materialInfoId") Long materialInfoId,@Param("userInfoId") Long userInfoId);
 }

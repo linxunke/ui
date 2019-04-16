@@ -109,4 +109,11 @@
   	material_history_collection
   	where material_info_id = #{materialInfoId,jdbcType=BIGINT}
   </select>
+  
+   <delete id="cancelCollection">
+    delete from material_history_collection
+    where material_info_id = #{materialInfoId,jdbcType=BIGINT}
+    and user_info_id = #{userInfoId,jdbcType=BIGINT}
+    and type = 2
+  </delete>
 </mapper>

@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ztzh.ui.bo.MaterialAndTypeInfoBo;
+import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
+import com.ztzh.ui.po.MaterialHistoryCollectionDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.vo.ResponseVo;
@@ -32,6 +35,9 @@ public class MaterialInfoController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	MaterialInfoService materialInfoService;
+	
+	@Autowired
+	MaterialHistoryCollectionDomainMapper materialHistoryCollectionDomainMapper;
 	
 	@RequestMapping(value = "/getMaterialDetailInfo", method = { RequestMethod.POST,
 			RequestMethod.GET })
@@ -64,6 +70,13 @@ public class MaterialInfoController {
 		responseVo.setUserId(userId);
 		MaterialInfoDomain materialInfoDomain = materialInfoService.getMaterialInfoById(new Long(materialId));
 		if(materialInfoDomain != null){
+			logger.info("下载记录");
+			MaterialHistoryCollectionDomain materialHistoryCollectionDomain = new MaterialHistoryCollectionDomain();
+			materialHistoryCollectionDomain.setMaterialInfoId(Long.parseLong(materialId));
+			materialHistoryCollectionDomain.setOperateTime(new Date());
+			materialHistoryCollectionDomain.setType(MaterialHistoryCollectionDomain.OPERATION_TYPE_HISTORY);
+			materialHistoryCollectionDomain.setUserInfoId(Long.parseLong(userId));
+			materialHistoryCollectionDomainMapper.insert(materialHistoryCollectionDomain);
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取文件的路径成功");
 			Map<String,String> imageMap  = materialInfoService.getImageUrlAndName(materialInfoDomain, imageType, isIcon, iconSize);
