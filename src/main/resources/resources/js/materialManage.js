@@ -44,6 +44,11 @@ $(document).ready(function() {
 		}
 	});
 	
+	/*点击上传跳转到上传作品页面*/
+	$(".upload_btn_div").click(function() {
+		window.open("/userpage/toMaterialUpload?userId="+userId);
+	});
+	
 	/*更新图片信息*/
 	$("#updateMaterial").click(function(){
 		var imageName = $("#material_content_name").val();

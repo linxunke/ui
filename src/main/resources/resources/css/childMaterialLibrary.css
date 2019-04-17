@@ -37,8 +37,10 @@
 	height: auto;
 }
 .material_show_body{
-	width: 90%;
+	padding-left:120px;
+	max-width: 90%;
 	height:auto;
+	min-height:600px;
 	margin-left: 67px;
 	margin-top: 20px;
 }
@@ -71,7 +73,7 @@
 }
 .each_material_img_div{
 	float:left;
-	margin:25px 15px 25px 40px;
+	margin:25px 40px 25px 40px;
 	width: 240px;
 	height: 210px;
 	background-color: white;

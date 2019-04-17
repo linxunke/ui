@@ -3,7 +3,9 @@ var userId = getParameter('userId');
 var Page;
 var currentPage;
 $(document).ready(function () {
-	
+	$("#manage_upload").click(function() {
+		window.open("/userpage/toMaterialUpload?userId="+userId);
+	});
     var btn = document.getElementById('manage_add_btn');
     var cover = document.getElementById('cover_layer');
     var close = document.getElementById('close');

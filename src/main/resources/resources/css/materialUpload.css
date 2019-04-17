@@ -220,6 +220,7 @@ body{
 }
 #downloadModels:hover{
 	color: orange;
+	cursor: pointer;
 }
 .foot_list{
 	float:left;

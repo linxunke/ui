@@ -12,12 +12,11 @@ $(document).ready(function() {
 	});
 	/*点击跳转上一页*/
 	$("#lastPage").click(function() {
-		getMaterialsInCurrentCanvas(userId,canvasId,currentPage<=1?1:currentPage-1);
+		getMaterialListInLibrary(userId,childTypeCode,currentPage<=1?1:currentPage-1);
 	});
 	/*点击跳转下一页*/
 	$("#nextPage").click(function() {
-		console.log(pageNumber);
-		getMaterialsInCurrentCanvas(userId,canvasId,currentPage>=pageNumber?pageNumber:(currentPage+1));
+		getMaterialListInLibrary(userId,childTypeCode,(currentPage>=pageNumber?pageNumber:(currentPage+1)));
 	});
 	/*点击根据页数搜索*/
 	$("#search_by_page").click(function() {
@@ -25,7 +24,7 @@ $(document).ready(function() {
 		if(theCurrentPage<1 || theCurrentPage > pageNum){
 			alert("要查找的页数不正确,请重新输入！");
 		}else {
-			getMaterialsInCurrentCanvas(userId,canvasId,theCurrentPage);
+			getMaterialListInLibrary(userId,childTypeCode,theCurrentPage);
 		}
 		
 	});
