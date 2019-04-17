@@ -20,10 +20,13 @@ body{
     float: left;
 }
 .nav_list a{
-	color: rgba(223, 225, 230, 1);
     border: 0px;
     text-decoration: none;
     list-style: none;
+	color: #C4C4C4;
+	font-size: 14px;
+	text-align: left;
+	font-family: PingFangSC-Regular;
 }
 .logo{
     float: left;
@@ -39,7 +42,6 @@ body{
     top: 19px;
     width: 28px;
     height: 20px;
-    color: rgba(223, 225, 230, 1);
     font-size: 14px;
     text-align: left;
     font-family: PingFangSC-Semibold;
@@ -50,8 +52,6 @@ body{
     top: 19px;
     width: 42px;
     height: 20px;
-    opacity: 0.6;
-    color: rgba(255, 255, 255, 1);
     font-size: 14px;
     text-align: left;
     font-family: PingFangSC-Regular;
@@ -62,8 +62,6 @@ body{
     top: 19px;
     width: 56px;
     height: 20px;
-    opacity: 0.6;
-    color: rgba(255, 255, 255, 1);
     font-size: 14px;
     text-align: left;
     font-family: PingFangSC-Regular;
@@ -138,6 +136,11 @@ body{
 .need_sign_in:hover{
     cursor: pointer;
 }
+.need_sign_in img{
+	max-height: 100%;
+	max-width: 100%;
+	border-radius:24px;
+}
 .float_l{
 	float: left;
 }
@@ -145,5 +148,5 @@ body{
 	clear: both;
 }
 .nav_active{
-	color: 
+	color: #F7F7F7!important;
 }

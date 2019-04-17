@@ -122,11 +122,9 @@ public class MaterialLibraryServiceImpl implements MaterialLibraryService {
 		PageQueryUtil pageQueryUtil = new PageQueryUtil(pageSize, currentPage,
 				infoTotalNumber);
 		int start = (currentPage - 1) * pageSize;
-		int end = (currentPage >= pageNumber) ? (infoTotalNumber - start)
-				: pageSize;
+		int end = (currentPage >= pageNumber) ? (infoTotalNumber - start) : pageSize;
 		List<MaterialInfoDomain> resultList = materialInfoDomainMapper
-				.selectMaterialInfoWithchildTypeCodeByPage(childTypeCode,
-						start, end);
+				.selectMaterialInfoWithchildTypeCodeByPage(childTypeCode,start, end);
 		pageQueryUtil.setObject(resultList);
 		return pageQueryUtil;
 	}

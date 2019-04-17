@@ -13,6 +13,7 @@ $(document).ready(function(){
 		generateChildTypeGroups(parentTypeCode);
 	});
 });
+/*点击细分封面进入细分素材列表的页面*/
 function enterChildTypeLibrary(obj) {
 	var childTypeCode = $(obj).find(".group_child_typeCode").html();
 	window.location.href="/userpage/toChildMateiralLibrary?userId="+userId+"&childTypeCode="+childTypeCode;
@@ -22,6 +23,7 @@ function init() {
 	var parentTypeCode = $(".nav_head_content").find(".active").find(".typeCode").html();
 	generateChildTypeGroups(parentTypeCode);
 }
+/*生成导航栏*/
 function generateNavHead() {
 	$.ajax({
 		url:'/materialLibrary/getAllMaterialParentTypeInfo?userId='+userId,
@@ -53,8 +55,8 @@ function generateNavHead() {
 		}
 	});
 }
+/*执行请求对应parentTypeCode的细分素材信息*/
 function generateChildTypeGroups(parentTypeCode) {
-	/*执行请求对应parentTypeCode的细分素材信息*/
 	var isIcon = (parentTypeCode == '01') ? true : false;
 	$.ajax({
 		url:'/materialLibrary/getChildTypesByParentTypeCode?userId='+userId,
@@ -75,6 +77,12 @@ function generateChildTypeGroups(parentTypeCode) {
 				'</div><div class="group_name">'+resultData.object[i].childTypeDomain.typeName+
 				'</div><div class="group_material_num">'+resultData.object[i].materialOfChildTypeNum+'</div></div></div>';
 				$(".material_library_container").append(appendStr);
+			}
+			for(var i = 0; i < resultData.object.length; i++){
+				var coverImgNodes = $(".img_cover");
+				if(resultData.object[i].coverImgUrl.trim() == "" || resultData.object[i].coverImgUrl == null){
+					$(coverImgNodes[i]).css("display","none");
+				}
 			}
 		},
 		error:function(){

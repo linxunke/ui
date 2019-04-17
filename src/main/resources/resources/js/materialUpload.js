@@ -130,6 +130,7 @@ $(document).ready(function(){
 			}
 		});
 	});
+	/*下载ai文件模板*/
 	$("#downloadModels").click(function(){
 		var $eleForm = $("<form method='get'></form>");
         $eleForm.attr("action",window.location.protocol + "//" + window.location.host + "/downloadFiles/model.ai");
