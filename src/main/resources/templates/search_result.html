@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/nav.css}" type="text/css" />
+<link rel="stylesheet" th:href="@{/css/search_result.css}"
+	type="text/css" />
+</head>
+<body>
+	<div id="div-all">
+		<div id="div-head">
+			<div class="nav">
+				<div class="nav_list logo">
+					<img src="../img/logo.png">
+				</div>
+				<div class="nav_list home">
+					<a href="#">首页</a>
+				</div>
+				<div class="nav_list material_library">
+					<a href="#">素材库</a>
+				</div>
+				<div class="nav_list work_management">
+					<a href="#">作品管理</a>
+				</div>
+				<div class="nav_list search_box">
+					<img src="../img/搜图.png" class="search_map" alt=""> <input
+						type="text" value="春节" class="search_content" /> <img
+						src="../img/搜索.png" alt="" class="search_btn">
+				</div>
+				<div class="nav_list update">
+					<img src="../img/上传.png">
+				</div>
+				<div class="nav_list message">
+					<img src="../img/消息.png">
+				</div>
+				<div class="nav_list need_sign_in">
+					<img src="../img/未登录.png">
+				</div>
+			</div>
+		</div>
+		<div id="div-filtration">
+			<div id="rs" class="float_l">结果</div>
+			<!-- <div id="typename_0" class="float_l typename">
+				<div><div>1113&nbsp</div><div id="typename_1_1" onclick="show_child1()">图标&nbsp<img src="../img/分类_箭头.png"></div></div>
+				<div id="type_child1" class="type_child">
+				<div class="type_child_name type_child_1">全部图标</div>
+				<div class="type_child_name type_child_1">单色</div>
+				<div class="type_child_name type_child_1">彩色</div>
+			</div> -->
+			
+			<!-- <div id="type_color" class="float_l type_color"  onclick="show_child_color()">
+				<div id="color_word">颜色&nbsp</div><div id="typename_color_1" id="color_pane"></div>
+			</div> -->
+			
+		</div>
+		<div id="div-filtration-result">
+			
+			<div id="type_child_color" class="type_child_color">
+			
+			</div>
+			<div id="result_list">
+				<div id="result_list_body">
+					<div class="result_photo"></div>
+					<div class="result_photo"></div>
+					<div class="result_photo"></div>
+					<div class="result_photo"></div>
+					<div class="result_photo"></div>
+					<div class="result_photo"></div>
+				</div>
+				<div id="result_list_foot">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
+	<script type="text/javascript" th:src="@{/js/search_result.js}"></script>
+</body>
+</html>

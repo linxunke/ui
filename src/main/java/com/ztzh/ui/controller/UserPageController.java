@@ -61,6 +61,10 @@ public class UserPageController {
 	@RequestMapping(value="toMaterialManage")
 	public String toMaterialManage(){
 		return "materialManage";
-
+	}
+	
+	@RequestMapping(value="toSearchResult")
+	public String toSearchResult(){
+		return "/search_result";
 	}
 }

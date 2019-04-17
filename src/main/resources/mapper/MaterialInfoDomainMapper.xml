@@ -376,6 +376,13 @@
 	<select id="selectTypeNameForBox" resultMap="MaterialTypeResultMap">
 	select type_name,type_code from material_type where parent_code is null and is_valid = 1;
 	</select>
+	<select id="selectTypeName" resultMap="MaterialTypeResultMap">
+	select type_name,type_code from material_type where parent_code is null and is_valid = 1;
+	</select>
+	<!-- 下面需要更改 -->
+	<select id="selectChildTypeName" resultMap="MaterialTypeResultMap">
+	select type_name,type_code from material_type where parent_code is null and is_valid = 1;
+	</select>
 	<select id="getMaterialNumOfCanvasByCanvasId" resultType="java.lang.Integer">
 		select count(id) from material_info where 
 			canvas_info_id_private = #{canvasId,jdbcType=BIGINT} and is_valid = 1

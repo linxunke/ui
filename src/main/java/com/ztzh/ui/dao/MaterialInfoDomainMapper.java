@@ -51,6 +51,7 @@ public interface MaterialInfoDomainMapper {
 	int selectIconCount();
 	int selectDrawingCount();
 	List<MaterialTypeBo> selectTypeNameForBox();
+	
 	int getMaterialNumOfCanvasByCanvasId(Long canvasId);
 	List<MaterialInfoDomain> selectMaterialInfoWithCanvasIdByPage(@Param("canvasId")Long canvasId, @Param("start")int start, @Param("end")int end);
 }
