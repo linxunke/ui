@@ -139,12 +139,9 @@
 	height: 25px;
 	border-radius: 25px;
 }
-
-.nav_active{
+.head_active{
 	color: orange!important;
-	border-bottom: 1px solid orange!important;
 }
-
 /* 以上是作品管理页面的head样式 */
 .body{
 	width:100%;

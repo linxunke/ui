@@ -39,13 +39,15 @@
 	position: absolute;
 	margin: 26px 1053px 42px 299px;
 }
-
+.head_active{
+	color: orange!important;
+}
 #manage_userwork1 {
 	width: 120px;
 	height: 28px;
 	position: absolute;
 	margin: 67px 1040px 9px 300px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
@@ -56,7 +58,7 @@
 	height: 28px;
 	position: absolute;
 	margin: 67px 920px 9px 420px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
@@ -67,7 +69,7 @@
 	height: 28px;
 	position: absolute;
 	margin: 67px 830px 9px 510px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
@@ -78,7 +80,7 @@
 	height: 28px;
 	position: absolute;
 	margin: 67px 740px 9px 600px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
