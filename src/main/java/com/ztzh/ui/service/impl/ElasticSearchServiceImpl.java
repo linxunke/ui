@@ -1,6 +1,7 @@
 package com.ztzh.ui.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.elasticsearch.action.search.SearchResponse;
@@ -116,7 +117,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialESBo.getMaterialTypeCodeParent()));
         }
         if(null!=materialESBo.getMaterialTypeCodeChild()&&""!=materialESBo.getMaterialTypeCodeChild()) {
-        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeChild", materialESBo.getMaterialTypeCodeChild()));
+        	String materialTypeCodeChilds = materialESBo.getMaterialTypeCodeChild();
+        	List<String> materialTypeCodeChildList = Arrays.asList(materialTypeCodeChilds.split(","));
+        	for(String materialTypeCodeChild:materialTypeCodeChildList) {
+        		boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeChild", materialTypeCodeChild));
+        	}
         }
         if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
         	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
@@ -155,9 +160,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		if(null!=materialESBo.getMaterialTypeCodeParent()) {
 			boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialESBo.getMaterialTypeCodeParent()));
 		}
-		if(null!=materialESBo.getMaterialTypeCodeChild()) {
-			boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeChild", materialESBo.getMaterialTypeCodeChild()));
-		}
+		if(null!=materialESBo.getMaterialTypeCodeChild()&&""!=materialESBo.getMaterialTypeCodeChild()) {
+	        String materialTypeCodeChilds = materialESBo.getMaterialTypeCodeChild();
+	        List<String> materialTypeCodeChildList = Arrays.asList(materialTypeCodeChilds.split(","));
+	        for(String materialTypeCodeChild:materialTypeCodeChildList) {
+	        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeChild", materialTypeCodeChild));
+	        }
+	    }
 		nativeSearchQuerybuilder.withQuery(boolQueryBuilder);
 		nativeSearchQuerybuilder.withSearchType(SearchType.QUERY_THEN_FETCH);
 		nativeSearchQuerybuilder.withIndices("materialinfo").withTypes("docs");
