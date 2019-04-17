@@ -163,8 +163,8 @@ public class CanvasInfoServiceImpl implements CanvasInfoService{
 	/*查看指定canvasId的画板中是否存在图标,存在true,不存在false*/
 	@Override
 	public boolean existIconInCanvasByCanvasId(Long canvasId) {
-		Object object = canvasInfoDomainMapper.selectIconNumByCanvasId(canvasId);
-		return object != null ? true:false;
+		Object object = canvasInfoDomainMapper.selectNotIconNumByCanvasId(canvasId);
+		return object == null ? true:false;
 	}
 
 	@Override

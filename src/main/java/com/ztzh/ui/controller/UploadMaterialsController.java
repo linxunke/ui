@@ -416,7 +416,7 @@ public class UploadMaterialsController {
 	public String deleteMaterialsByBatch(@RequestParam(value = "userId", required = true) Long userId,
 			@RequestParam(value = "materialInfoIds", required = true) String materialInfoIds) {
 		/*
-		 * String materialInfoIds = "[{'id':'55'}]"; Long userId = 6L;
+		 * String materialInfoIds = '"[{'id':'55'}]"; Long userId = 6L;
 		 */
 		ResponseVo responseVo = materialInfoService.deleteMaterialsById(materialInfoIds);
 		responseVo.setUserId(userId.toString());

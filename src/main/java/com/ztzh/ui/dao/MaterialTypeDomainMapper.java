@@ -1,8 +1,6 @@
 package com.ztzh.ui.dao;
 
 import java.util.List;
-
-import com.ztzh.ui.bo.MaterialTypeBo;
 import com.ztzh.ui.po.MaterialTypeDomain;
 
 public interface MaterialTypeDomainMapper {
@@ -27,4 +25,10 @@ public interface MaterialTypeDomainMapper {
   	List<MaterialTypeDomain> selectTypeNameParent();
   	//这里是查询child的集合
   	List<MaterialTypeDomain> selectTypeNameChild();
+    
+    List<MaterialTypeDomain> selectChildTypeByParentCode(String parentCode);
+    
+    String selectParentTypeCodeByChildTypeCode(String childTypeCode);
+    
+    List<MaterialTypeDomain> selectTypeInfosByChildTypeCode(String childTypeCode);
 }

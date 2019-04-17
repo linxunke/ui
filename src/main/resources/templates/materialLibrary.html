@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>素材库</title>
+<link rel="stylesheet" th:href="@{/css/nav.css}" type="text/css" />
+<link rel="stylesheet" th:href="@{/css/materialLibrary.css}"
+	type="text/css" />
+</head>
+<body>
+	<div class="nav">
+		<div class="nav_list logo">
+			<img src="../img/logo.png">
+		</div>
+		<div class="nav_list home">
+			<a href="#">首页</a>
+		</div>
+		<div class="nav_list material_library">
+			<a href="#">素材库</a>
+		</div>
+		<div class="nav_list work_management">
+			<a href="#">作品管理</a>
+		</div>
+		<div class="nav_list search_box">
+			<img src="../img/搜图.png" class="search_map" alt=""> <input
+				type="text" value="春节" class="search_content" /> <img
+				src="../img/搜索.png" alt="" class="search_btn">
+		</div>
+		<div class="nav_list update">
+			<img src="../img/上传.png">
+		</div>
+		<div class="nav_list message">
+			<img src="../img/消息.png">
+		</div>
+		<div class="nav_list need_sign_in">
+			<img src="../img/未登录.png">
+		</div>
+	</div>
+	<div class="nav_head">
+		<div class="nav_head_content"></div>
+	</div>
+	<div class="material_library_container">
+		<!-- <div class="child_type_material_group">
+			<div class="img_cover_container">
+				<img class="img_cover" alt="img_cover" src="">
+			</div>
+			<div class="group_info_container">
+				<div class="group_child_id"></div>
+				<div class="group_name">单色</div>
+				<div class="group_material_num">234</div>
+			</div>
+		</div> -->
+	</div>
+	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/materialLibrary.js}"></script>
+</body>
+</html>

@@ -142,9 +142,9 @@
   where a.is_valid=1 and user_id =#{userId,jdbcType=BIGINT} ) as c 
   left join material_info d on c.upload_time = d.upload_time <!-- limit 0,2 -->
 </select>
-  <select id="selectByUserId" resultMap="CanvasResultMap" > <!-- parameterType="java.lang.Long" -->
+  <select id="selectByUserId" resultMap="CanvasResultMap" >
   select c.id as id, c.canvas_name as canvas_name,c.describe_info as describe_info, c.upload_time as upload_time, 
-  d.thumbnail_url,c.number 
+  d.thumbnail_url,c.number,f.collectionNumber as collectionCount
   from (select a.id as id, a.canvas_name as canvas_name,a.describe_info as describe_info,b.upload_time as upload_time, 
   b.number as number 
   from canvas_info as a 
@@ -153,6 +153,10 @@
   from material_info where create_user_id= #{userId,jdbcType=BIGINT} 
   GROUP BY canvas_info_id_private) as b on a.id=b.canvas_info_id_private 
   where a.is_valid=1 and user_id =#{userId,jdbcType=BIGINT} ) as c 
+  left join (select COUNT(material_history_collection.id) as collectionNumber,material_info.canvas_info_id_private 
+  from material_info, material_history_collection  
+  where material_info.id=material_history_collection.material_info_id and material_history_collection.type=1 and material_info.create_user_id= #{userId,jdbcType=BIGINT} 
+  GROUP BY material_info.canvas_info_id_private) as f on c.id=f.canvas_info_id_private
   left join material_info d on c.upload_time = d.upload_time limit #{firstCanvas},#{pageSize}
   </select>
   
@@ -187,9 +191,9 @@
   		from canvas_info where is_valid = 1 
   		 and user_id = #{userId,jdbcType=BIGINT}
   </select>
-  <select id="selectIconNumByCanvasId" resultType="java.lang.Object">
+  <select id="selectNotIconNumByCanvasId" resultType="java.lang.Object">
   	SELECT count(c.id) from material_type_info as c,(
 		SELECT b.id as id,a.id as canvas_id from canvas_info as a, material_info as b where a.id= b.canvas_info_id_private) as d
-		where c.materail_info_id = d.id and c.material_type_code_parent='01' and d.canvas_id = #{canvasId} GROUP BY d.canvas_id
+		where c.materail_info_id = d.id and c.material_type_code_parent != '01' and d.canvas_id = #{canvasId} GROUP BY d.canvas_id
   </select>
 </mapper>

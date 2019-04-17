@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 
+import com.ztzh.ui.bo.MaterialCountByParentType;
 import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
 
@@ -26,5 +27,13 @@ public interface ElasticSearchService {
 	public Page<MaterialInfoIndex> findMaterialDocument(int page, int size, MaterialESBo materialESBo);
 	
 	public void deleteDocById(List<MaterialInfoIndex> materialInfoIndexList);
+	
+	/**
+	 * 分类统计源文件数量
+	 * @param materialESBo
+	 */
+	public List<MaterialCountByParentType> countMaterialByType(MaterialESBo materialESBo);
+	
+
 
 }

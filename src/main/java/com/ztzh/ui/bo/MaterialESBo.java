@@ -35,13 +35,7 @@ public class MaterialESBo {
 	
 	private String sort;
 
-	public String getSort() {
-		return sort;
-	}
-
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
+	private Float colorPercentage;
 
 	public Long getCreateUserId() {
 		return createUserId;
@@ -163,10 +157,26 @@ public class MaterialESBo {
 		this.countDownload = countDownload;
 	}
 
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public Float getColorPercentage() {
+		return colorPercentage;
+	}
+
+	public void setColorPercentage(Float colorPercentage) {
+		this.colorPercentage = colorPercentage;
+	}
+
 	public MaterialESBo(Long createUserId, Long canvasInfoIdPrivate, Long canvasInfoIdPublic, String materialName,
 			String materialDescription, String materialType, String materialUrl, String thumbnailUrl, String pngUrl,
 			Date uploadTime, Integer colorType, String materialTypeCodeParent, String materialTypeCodeChild,
-			String materialStyleCode, Integer countDownload, String sort) {
+			String materialStyleCode, Integer countDownload, String sort, Float colorPercentage) {
 		super();
 		this.createUserId = createUserId;
 		this.canvasInfoIdPrivate = canvasInfoIdPrivate;
@@ -184,11 +194,11 @@ public class MaterialESBo {
 		this.materialStyleCode = materialStyleCode;
 		this.countDownload = countDownload;
 		this.sort = sort;
+		this.colorPercentage = colorPercentage;
 	}
 
 	public MaterialESBo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -199,8 +209,9 @@ public class MaterialESBo {
 				+ materialUrl + ", thumbnailUrl=" + thumbnailUrl + ", pngUrl=" + pngUrl + ", uploadTime=" + uploadTime
 				+ ", colorType=" + colorType + ", materialTypeCodeParent=" + materialTypeCodeParent
 				+ ", materialTypeCodeChild=" + materialTypeCodeChild + ", materialStyleCode=" + materialStyleCode
-				+ ", countDownload=" + countDownload + ", sort=" + sort + "]";
+				+ ", countDownload=" + countDownload + ", sort=" + sort + ", colorPercentage=" + colorPercentage + "]";
 	}
+	
 
 	
 	

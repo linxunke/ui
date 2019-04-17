@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ztzh.ui.bo.MaterialCountByParentType;
 import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.constants.MaterialTypeConstants;
@@ -76,6 +77,19 @@ public class ElasticSearchController {
 		materialInfoIndexVo.setTotalPage(pageSize);
 		materialInfoIndexVo.setCurrentPage(page);
 		return JSONObject.toJSON(materialInfoIndexVo).toString();
+	}
+	
+	@RequestMapping(value="countMaterialByType", method = {RequestMethod.GET,
+			RequestMethod.POST})
+	public String countMaterialByType(@RequestParam Long userId,
+			MaterialESBo materialESBo) {
+		logger.info("查询条件{}",materialESBo);
+		List<MaterialCountByParentType> materialCountByParentTypeList = elasticSearchService.countMaterialByType(materialESBo);
+		ResponseVo responseVo = new ResponseVo();
+		responseVo.setMessage("查询成功");
+		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+		responseVo.setObject(materialCountByParentTypeList);
+		return responseVo.toString();
 	}
 	
 

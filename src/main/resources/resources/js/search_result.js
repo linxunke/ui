@@ -24,16 +24,28 @@ $(document).ready(function() {
      		   div.id = "typename_" + i;
      		   document.getElementById("div-filtration").appendChild(div);
      		   //下面需要后台传过来的信息innerHTML
-     		   $("#"+div.id).html('<div><div>'+1113+'&nbsp</div><div id="typename_1_'+i+'" onclick="show_child'+(i+1)+'()">'+data.object[i].typeName+'&nbsp<img src="../img/分类_箭头.png"></div></div>');
+     		   $("#"+div.id).html('<div><div id='+data.object[i].typeCode+'>'+0+'&nbsp</div><div id="typename_1_'+i+'" onclick="show_child'+(i+1)+'()">'+data.object[i].typeName+'&emsp;<img src="../img/分类_箭头.png"></div></div>');
+     		   //
+     		   var div3 = document.createElement('div');
+     		   div3.className = "type_child_name type_child_"+i;
+    		   div3.id = "child_"+i+i+i;
+    		   div3.style = "width: 99px;height: 36px;text-align: center;line-height: 36px;" +
+		  		"font-size: 14px;font-family: PingFangSC-Regular;z-index: 9;" +
+		  		"border-radius: 4px;" +
+		  		"border: 1px solid rgba(223, 225, 230, 1);" ;
+    		   div3.onclick = changeHead;
+    		   document.getElementById("typename_" + i).appendChild(div3);
+    		   $("#"+div3.id).html(data.object[i].typeName);
+    		   
      		   for(var j = 0;j <= data.object[i].childTypeName.length-1; j++){
      			   var div2 = document.createElement('div');
          		   div2.className = "type_child_name type_child_"+i;
-         		  div2.id = "child_"+i+j;
-         		  div2.style = "width: 99px;height: 36px;text-align: center;line-height: 36px;" +
+         		   div2.id = "child_"+i+j;
+         		   div2.style = "width: 99px;height: 36px;text-align: center;line-height: 36px;" +
          		  		"font-size: 14px;font-family: PingFangSC-Regular;z-index: 9;" +
          		  		"border-radius: 4px;" +
          		  		"border: 1px solid rgba(223, 225, 230, 1);" ;
-         		 div2.onclick = changeHead;
+         		   div2.onclick = changeHead;
          		   document.getElementById("typename_" + i).appendChild(div2);
          		   $("#"+div2.id).html(data.object[i].childTypeName[j]);
      		   }
@@ -48,7 +60,55 @@ $(document).ready(function() {
     	   console.log("error happened ---------");
        }
 	});
+	typeCount();
+	getPhotoUrl();
 });
+function typeCount(){
+	$.ajax({
+		url:'/elasticsearch/countMaterialByType?userId='+userId,
+    	data:"",
+        type:'post',
+       success:function (data) {
+    	   var result = JSON.parse(data);
+    	   console.log(result);
+    	   console.log("typeCount====="+result.object);
+    	   for(var i = 0; i<= result.object.length-1; i++){
+    		   $("#"+result.object[i].materialTypeCodeParent).html(result.object[i].materialCount+"&nbsp");
+    	   }
+       },
+       error:function () {
+    	   console.log("error happened ---------");
+       }
+	});
+}
+function getPhotoUrl(){
+	$.ajax({
+		url:"/elasticsearch/queryByParam?userId="+userId,
+		data:{
+			materialName: materialName,
+			materialDescription: materialName,
+			materialTypeCodeParent: materialTypeCodeParent,
+			page: 0,
+			pageSize: 15
+		},
+		type:'post',
+	       success:function (data) {
+	    	   var result = JSON.parse(data);;
+	    	   console.log(result);
+	    	   for(var i = 0; i<=result.items.length-1; i++){
+	    		   var div = document.createElement('div');
+	    		   div.className = "result_photo";
+	     		   div.id = "typename_" + i;
+	     		   document.getElementById("div-filtration").appendChild(div);
+	     		   //下面需要后台传过来的信息innerHTML
+	    	   }
+	       },
+	       error:function(){
+	    	   console.log('error happened----');
+	       }
+			
+	});
+}
 function show_child1() {
 	$(".type_child_0").slideToggle();
 }
