@@ -80,14 +80,17 @@ function chooseSearchWord(){
 		
 	});
 }
-$("#combo_box_head").mouseenter(function(event){	
+/*$("#combo_box_head").mouseenter(function(event){	
 	$(".combo_box_child").slideDown();
 })
 
 $("#combo_box").mouseleave(function(event){
 	$(".combo_box_child").slideUp();
 
-})
+})*/
+$("#combo_box").click(function() {
+	$(".combo_box_child").slideToggle("fast");
+});
 
 function changeChooseWord(){
 	var a = $(this).children("span").text();

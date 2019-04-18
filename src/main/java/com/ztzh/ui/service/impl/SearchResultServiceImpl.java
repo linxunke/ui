@@ -28,10 +28,13 @@ public class SearchResultServiceImpl implements SearchResultService{
 		List<MaterialTypeBo> list4 = new ArrayList<MaterialTypeBo>();
 		for(int i = 0 ;i <= list1.size()-1;i++){
 			MaterialTypeBo materialTypeBo = new MaterialTypeBo();
-			List<String> list3 = new ArrayList<String>();
+			List<MaterialTypeDomain> list3 = new ArrayList<MaterialTypeDomain>();
 			for(int j = 0; j<= list2.size()-1;j++){
+				MaterialTypeDomain childInfo = new MaterialTypeDomain();
 				if(list2.get(j).getParentCode().equals(list1.get(i).getTypeCode()) ){
-					list3.add(list2.get(j).getTypeName());
+					childInfo.setTypeCode(list2.get(j).getTypeCode());
+					childInfo.setTypeName(list2.get(j).getTypeName());
+					list3.add(childInfo);
 				}
 			}
 			materialTypeBo.setTypeName(list1.get(i).getTypeName());
@@ -42,7 +45,7 @@ public class SearchResultServiceImpl implements SearchResultService{
 		logger.info("list4所有type的集合:{}",list4);
 		return list4;
 	}
-	//以下未完成
+	
 	@Override
 	public List<MaterialTypeDomain> selectChildTypeName() {
 		List<MaterialTypeDomain> list = materialTypeDomainMapper.selectTypeNameChild();
