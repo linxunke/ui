@@ -82,7 +82,7 @@ function chooseSearchWord(){
 }
 
 $("#combo_box").click(function() {
-	$(".combo_box_child").slideToggle('fast');
+	$(".combo_box_child").slideToggle("fast");
 });
 
 function changeChooseWord(){
@@ -101,16 +101,19 @@ combo_box_first.addEventListener('click',function(){
 })
 
 function elasticSearch(){
-	var materialName = document.getElementById("searchBox_content").value;;
+	var materialName = document.getElementById("searchBox_content").value;
 	var typeName = $("#combo_box_head").children("span").text();
-	var typeCodeParent = $("#combo_box_head").children("div").html();
+	var materialTypeCodeParent = $("#combo_box_head").children("div").html();
 	console.log(materialName+"..."+typeName+"..."+typeCodeParent);
+	window.location.herf = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
+	"&materialDescription="+materialName+"&materialTypeCodeParent="+materialTypeCodeParent+
+	"&page="+page+"&pageSize="+pageSize;
 	$.ajax({
 		url:"/elasticsearch/queryByParam?userId="+userId,
 		data:{
 			materialName: materialName,
 			materialDescription: materialName,
-			materialTypeCodeParent: typeCodeParent,
+			materialTypeCodeParent: materialTypeCodeParent,
 			page: 0,
 			pageSize: 15
 		},

@@ -137,7 +137,17 @@
   	from material_type
   	where grade=2 and is_valid=1 and parent_code ="05"
   </select>
-  
+
+  <select id="selectTypeNameChild" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from material_type where grade = 2 and is_valid = 1;
+  </select>
+  <select id="selectTypeNameParent" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from material_type where grade = 1 and is_valid = 1;
+  </select>
   <!-- 根据分类查询细分类型 -->
   <select id="selectChildTypeByParentCode" resultMap="BaseResultMap">
   	select	

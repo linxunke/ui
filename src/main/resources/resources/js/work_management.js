@@ -22,7 +22,7 @@ $(document).ready(function () {
     
     //查看当前页面
     console.log("currentPage="+$.cookie("currentPage"));*/
-    currentPage = parseInt(document.getElementById('currentPageNumber').innerHTML);
+    currentPage = parseInt($("#currentPage").val());
     console.log("currentPage111="+currentPage);
     getUserName(userId);
     
@@ -269,26 +269,20 @@ function getUserName(userId){
     	}
     });
 }
-function homePage(){
-	$(".every_board").remove();
-	currentPage = 1;
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
-	sendAjax(currentPage);
-    
-}
 function lastPage(){
-	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+	var currentPage = $("#currentPage").val();
 	$(".every_board").remove();
 	if(currentPage>1){
 		currentPage = parseInt(currentPage)-1;
 	}else{
 		currentPage = parseInt(currentPage);
 	}
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	/*currentPage = currentPage>1?parseInt(currentPage)-1 : parseInt(currentPage);*/
+	$("#currentPage").val(currentPage);
 	sendAjax(currentPage);
 }
 function nextPage(){
-	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+	var currentPage = $("#currentPage").val();
 	$(".every_board").remove();
 	if(currentPage<Page){
 		currentPage = parseInt(currentPage)+1;
@@ -296,17 +290,21 @@ function nextPage(){
 	}else{
 		currentPage = parseInt(currentPage);
 	}
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
-	sendAjax(currentPage);   
+	$("#currentPage").val(currentPage);
+	sendAjax(currentPage);
 }
-function finalPage(){
-	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+$("#search_by_page").click(function(event){
+	var currentPage = $("#currentPage").val();
 	$(".every_board").remove();
-	currentPage = Page;
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
-	sendAjax(currentPage);   
-}
-
+	if(currentPage > Page){
+		currentPage = Page;
+	}
+	else if(currentPage < 1){
+		currentPage = 1;
+	}
+	$("#currentPage").val(currentPage);
+	sendAjax(currentPage);
+});
 function sendAjax(currentPage){
 	console.log("currentPage1212="+currentPage);
 	$.ajax({

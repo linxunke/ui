@@ -61,7 +61,8 @@ public class CanvasInfoController {
 		int totalCount = canvasInfoService.canvasCount(Long.parseLong(userId));
 		logger.info("totalCount{}", totalCount);
 		// 2.计算总页数
-		int pageSize = 9;
+		int pageSize = 7;
+		
 		int pageCount = totalCount % pageSize == 0 ? totalCount / pageSize
 				: (totalCount / pageSize + 1);
 		if (currentPage < 1) {
