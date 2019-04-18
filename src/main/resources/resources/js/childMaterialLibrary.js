@@ -21,7 +21,7 @@ $(document).ready(function() {
 	/*点击根据页数搜索*/
 	$("#search_by_page").click(function() {
 		var theCurrentPage = $("#currentPage").val();
-		if(theCurrentPage<1 || theCurrentPage > pageNum){
+		if(theCurrentPage<1 || theCurrentPage > pageNumber){
 			alert("要查找的页数不正确,请重新输入！");
 		}else {
 			getMaterialListInLibrary(userId,childTypeCode,theCurrentPage);

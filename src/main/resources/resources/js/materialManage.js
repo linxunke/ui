@@ -13,13 +13,14 @@ $(document).ready(function() {
 	});
 	/*点击跳转下一页*/
 	$("#nextPage").click(function() {
-		console.log(pageNumber);
 		getMaterialsInCurrentCanvas(userId,canvasId,currentPage>=pageNumber?pageNumber:(currentPage+1));
 	});
 	/*点击根据页数搜索*/
 	$("#search_by_page").click(function() {
 		var theCurrentPage = $("#currentPage").val();
-		if(theCurrentPage<1 || theCurrentPage > pageNum){
+		console.log("theCurrentPage:"+theCurrentPage);
+		console.log("pageNumber:"+pageNumber);
+		if(theCurrentPage<1 || theCurrentPage > pageNumber){
 			alert("要查找的页数不正确,请重新输入！");
 		}else {
 			getMaterialsInCurrentCanvas(userId,canvasId,theCurrentPage);
