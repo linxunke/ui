@@ -19,7 +19,6 @@ import com.ztzh.ui.dao.MaterialTypeDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
 import com.ztzh.ui.po.CanvasInfoDomain;
 import com.ztzh.ui.po.MaterialTypeDomain;
-import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.service.MaterialLibraryService;
 import com.ztzh.ui.utils.PageQueryUtil;
@@ -134,6 +133,26 @@ public class MaterialLibraryController {
 		}
 		responseVo.setUserId(userId);
 		responseVo.setObject(resultMap);
+		return responseVo.toString();
+	}
+
+	@RequestMapping(value = "/getMaterialInfoInLibraryById", method = {
+			RequestMethod.POST, RequestMethod.GET })
+	public String getMaterialInfoInLibraryById(
+			@RequestParam(value = "userId", required = true) String userId,
+			@RequestParam(value = "materialId", required = true) String materialId) {
+		ResponseVo responseVo = new ResponseVo();
+		Map<String, Object> resultMap = materialLibraryService
+				.getMaterialAndUserInfoById(new Long(materialId));
+		if (resultMap != null) {
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setMessage("根据Id获取素材、用户、统计信息成功!");
+		} else {
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("根据Id获取素材、用户、统计信息失败!");
+		}
+		responseVo.setObject(resultMap);
+		responseVo.setUserId(userId);
 		return responseVo.toString();
 	}
 
