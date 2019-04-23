@@ -196,8 +196,6 @@ function getMaterialListInLibrary(userId,childTypeCode,currentPage) {
 				}else {
 					showMaterialAsImg(resultData);
 				}
-			}else {
-				alert(resultData.message);
 			}
 		},
 		error:function(){
@@ -265,8 +263,6 @@ function getMaterialInfoDetailsByMaterialId(materialId) {
 			console.log(materialData);
 			if(materialData.status == '200'){
 				reloadMaterialInfoInModal(materialData.object);
-			}else {
-				alert(materialData.message);
 			}
 		},
 		error:function(){
@@ -307,7 +303,6 @@ function getSimilarMaterial(color_percentage) {
 			userId:userId
 		},
 		success:function(data){
-			//var resultData = JSON.parse(data);
 			var similarMaterialList = JSON.parse(data);
 			console.log(similarMaterialList);
 			showSimilarMaterialImg(similarMaterialList);

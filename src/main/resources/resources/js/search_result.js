@@ -306,8 +306,6 @@ function getPhotoUrl(){
 	       success:function (data) {
 	    	   $(".result_photo").remove();
 	    	   var result = JSON.parse(data);
-	    	   console.log("============================");
-	    	   console.log(result.items[1].isCollection);
 	    	   typeCount();
 	    	   for(var i = 0; i<=result.items.length-1; i++){
 	    		   var div = document.createElement('div');

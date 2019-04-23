@@ -2,9 +2,9 @@ currentPage=1;
 pageNumber=0;
 userId = getParameter('userId');
 parentTypeCode = getParameter('parentTypeCode');
-showWay = "";  //block or list
-start = 0;
-materialListLoadFinish = false;
+showWay = "";  //'block' or 'list'  当前素材的展示形式，缩略图或者列表形式
+start = 0;  //懒加载时，查询的素材起始位置
+materialListLoadFinish = false;  //素材列表的懒加载是否已经完成
 $(document).ready(function(){
 	init();
 	$(".parent_type_nav").click(function(){
@@ -18,7 +18,6 @@ $(document).ready(function(){
 		}else if("list" == showWay){
 			$(".child_Type_list").empty();
 			$(".material_list").empty();
-			$(".material_info_list").css("display","none");
 			generateChildTypeMaterialList(parentTypeCode);
 			generateMaterialList();
 		}
@@ -29,21 +28,28 @@ $(document).ready(function(){
 		var parentTypeCode = $(".nav_head_content").find(".active").find(".typeCode").html();
 		if(listButtonValue.trim() == "true"){
 			showWay = "block";
+			/*设置缩略图显示/列表显示的按钮样式*/
 			$("#show_as_list_button").val("false");
 			$(".list_button_block_show").css("display","none");
 			$(".list_button_list_show").css("display","block");
+			/*--------------------*/
+			/*以缩略图形式显示*/
 			$(".material_library_container").css("display","block");
+			/*以列表形式显示*/
 			$(".material_library_list_container").css("display","none");
 			generateChildTypeGroups(parentTypeCode);
 		}else {
 			showWay = "list";
+			/*设置缩略图显示/列表显示的按钮样式*/
 			$("#show_as_list_button").val("true");
 			$(".list_button_block_show").css("display","block");
 			$(".list_button_list_show").css("display","none");
+			/*--------------------*/
+			/*以缩略图形式显示*/
 			$(".material_library_container").css("display","none");
+			/*以列表形式显示*/
 			$(".material_library_list_container").css("display","block");
 			generateChildTypeMaterialList(parentTypeCode);
-			generateMaterialList();
 		}
 	});
 });
@@ -90,7 +96,7 @@ function generateNavHead() {
 		}
 	});
 }
-/*执行请求对应parentTypeCode的细分素材信息*/
+/*执行请求获取对应parentTypeCode的细分素材信息*/
 function generateChildTypeGroups(parentTypeCode) {
 	var isIcon = (parentTypeCode == '01') ? true : false;
 	$.ajax({
@@ -140,6 +146,7 @@ function generateChildTypeMaterialList(parentTypeCode) {
 			var resultData = JSON.parse(data);
 			console.log(resultData);
 			generateChildTypeList(resultData.object);
+			generateMaterialList();
 		},
 		error:function(){
 			console.log("error happened .....");
@@ -149,30 +156,26 @@ function generateChildTypeMaterialList(parentTypeCode) {
 /*以列表形式生成细分（childType）类别模块*/
 function generateChildTypeList(childTypeInfoList) {
 	$(".child_Type_list").empty();
-	if(childTypeInfoList.length == 0){
-		materialListLoadFinish = true;
-		console.log("素材列表加载完毕");
-	}else{
-		for(var i = 0; i < childTypeInfoList.length; i++){
-			var appendStr = '';
-			appendStr += '<div class="each_child_type_li"><div class="child_type_li_img float_l">'+
-				'<img src="../img/文件夹.png" /></div><div class="child_type_name_div float_l">'+
-				'<div class="child_type_name_content">' + childTypeInfoList[i].childTypeDomain.typeName +
-				'</div><div class="chilt_type_id_content" style="display: none">' + 
-				childTypeInfoList[i].childTypeDomain.typeCode + '</div></div><div class="child_type_material_number float_l">'+
-				childTypeInfoList[i].materialOfChildTypeNum + '</div></div>';
-			$(".child_Type_list").append(appendStr);
-		}
-		var childTypeLists = $(".each_child_type_li");
-		$(childTypeLists[0]).addClass("list_li_active");
+	for (var i = 0; i < childTypeInfoList.length; i++) {
+		var appendStr = '';
+		appendStr += '<div class="each_child_type_li"><div class="child_type_li_img float_l">'
+				+ '<img src="../img/文件夹.png" /></div><div class="child_type_name_div float_l">'
+				+ '<div class="child_type_name_content">'
+				+ childTypeInfoList[i].childTypeDomain.typeName
+				+ '</div><div class="chilt_type_id_content" style="display: none">'
+				+ childTypeInfoList[i].childTypeDomain.typeCode
+				+ '</div></div><div class="child_type_material_number float_l">'
+				+ childTypeInfoList[i].materialOfChildTypeNum + '</div></div>';
+		$(".child_Type_list").append(appendStr);
 	}
+	var childTypeLists = $(".each_child_type_li");
+	$(childTypeLists[0]).addClass("list_li_active");
 	
 }
 /*生成素材列表*/
 function generateMaterialList() {
 	var childTypeCode = $(".child_Type_list").find(".list_li_active").find(".chilt_type_id_content").html();
 	start = $(".each_material_li").length;
-	console.log("childTypeCode:"+childTypeCode);
 	$.ajax({
 		url:'/materialLibrary/getMaterialsByChildTypeCodeAndNumber?userId='+userId,
 		type:'get',
@@ -185,11 +188,7 @@ function generateMaterialList() {
 		success:function(data){
 			var resultData = JSON.parse(data);
 			console.log(resultData);
-			if(resultData.status == '200'){
-				generateMaterialListGroups(resultData.object);
-			}else {
-				alert(resultData.message);
-			}
+			generateMaterialListGroups(resultData.object);
 		},
 		error:function(){
 			console.log("error happened .....")
@@ -197,7 +196,9 @@ function generateMaterialList() {
 	});
 }
 function generateMaterialListGroups(materialList){
-	if(materialList.length != 0){
+	if(materialList.length == 0 || materialList == null){
+		materialListLoadFinish = true;
+	} else{
 		for(var i = 0; i < materialList.length; i++){
 			var appendStr = '';
 			appendStr += '<div class="each_material_li"><div class="material_li_thumbnail float_l">'+
@@ -212,37 +213,42 @@ function generateMaterialListGroups(materialList){
 		}
 		var materialListBlocks = $(".each_material_li");
 		$(materialListBlocks[0]).addClass("list_li_active");
-		generateMaterialDetailInfoModal();
 	}
+	generateMaterialDetailInfoModal();
 }
 function generateMaterialDetailInfoModal() {
 	$(".material_info_list").css("display","block");
 	var materialId = $(".material_list").find(".list_li_active").find(".material_li_id").html();
-	/*发送ajax请求，根据materialId查到素材的详细信息并显示*/
-	console.log("materialId:"+materialId);
-	$.ajax({
-		url:'/materialLibrary/getMaterialInfoInLibraryById',
-		type:'get',
-		async:false,
-		data:{
-			userId:userId,
-			materialId:materialId
-		},
-		success:function(data){
-			var materialData = JSON.parse(data);
-			console.log(materialData);
-			if(materialData.status == '200'){
-				reloadMaterialDetails(materialData.object);
-			}else {
-				alert(materialData.message);
+	if(materialId == "" || materialId == null){
+		$(".material_info_list").css("display","none");
+		return false;
+	}else{
+		$(".material_info_list").css("display","block");
+		$.ajax({
+			url:'/materialLibrary/getMaterialInfoInLibraryById',
+			type:'get',
+			async:false,
+			data:{
+				userId:userId,
+				materialId:materialId
+			},
+			success:function(data){
+				var materialData = JSON.parse(data);
+				console.log(materialData);
+				if(materialData.status == '200'){
+					reloadMaterialDetails(materialData.object);
+				}
+			},
+			error:function(){
+				console.log("error happened .....");
 			}
-		},
-		error:function(){
-			console.log("error happened .....");
-		}
-	});
+		});
+	}
 }
 function reloadMaterialDetails(materialInfos) {
+	if(materialInfos == null){
+		return false;
+	}
 	$("#material_img_preview").attr("src",window.location.protocol + "//" + window.location.host + materialInfos.MaterialDetailsInfoBo.pngUrl);
 	$(".material_name_content").html(materialInfos.MaterialDetailsInfoBo.materialName);
 	$(".author_head_img").attr("src",window.location.protocol + "//" + window.location.host + materialInfos.MaterialDetailsInfoBo.createUserHeadImgUrl);
@@ -275,7 +281,6 @@ function getSimilarMaterial(color_percentage) {
 			userId:userId
 		},
 		success:function(data){
-			//var resultData = JSON.parse(data);
 			var similarMaterialList = JSON.parse(data);
 			console.log(similarMaterialList);
 			showSimilarMaterialImg(similarMaterialList);
@@ -295,15 +300,15 @@ function showSimilarMaterialImg(similarMaterialList) {
 }
 $("#childTypeList").on('click','.each_child_type_li',function(){
 	materialListLoadFinish = false;
-	$(".material_info_list").css("display","none");
+	start = 0;
 	var childTypeList = $(".each_child_type_li");
 	for(var i = 0; i < childTypeList.length; i++){
 		$(childTypeList[i]).removeClass("list_li_active");
 	}
 	$(this).addClass("list_li_active");
-	start = 0;
 	$(".material_list").empty();
 	generateMaterialList();
+	/*generateMaterialDetailInfoModal();*/
 })
 $("#materialList").on('click',".each_material_li",function(){
 	var materialList = $(".each_material_li");
@@ -432,4 +437,3 @@ $('.material_list').on('mousewheel',function(event, delta){
     }
     return false;
 })
-$("")
