@@ -31,6 +31,7 @@ public class HistoryAndCollectionController {
 			@RequestParam(value="operationCode") String operationCode,
 			@RequestParam(value="type") Integer type
 			) {
+		logger.info("收藏操作条件是：{}", userId+"+"+materialInfoId+"+"+operationCode+"+"+type);
 		MaterialHistoryCollectionDomain materialHistoryCollectionDomain = new MaterialHistoryCollectionDomain();
 		materialHistoryCollectionDomain.setMaterialInfoId(materialInfoId);
 		materialHistoryCollectionDomain.setOperateTime(new Date());

@@ -32,7 +32,7 @@ public class UiInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse, Object o) throws Exception {
 		String userId = httpServletRequest.getParameter("userId");
-		logger.info(httpServletRequest.getRequestURL()+"?userId:" + userId);
+		logger.info("l浏览器地址是="+httpServletRequest.getRequestURL()+"?userId:" + userId);
 		if (userId != null) {
 			return true;
 		} else {

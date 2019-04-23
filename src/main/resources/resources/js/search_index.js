@@ -1,4 +1,6 @@
 var userId = getParameter('userId'); 
+var page = 0;
+var pageSize = 15;
 $(document).ready(function () {
 	$.ajax({
 		url:'/SearchIndex/SearchThreePhoto?userId='+userId,
@@ -104,7 +106,7 @@ function elasticSearch(){
 	var materialName = document.getElementById("searchBox_content").value;
 	var typeName = $("#combo_box_head").children("span").text();
 	var materialTypeCodeParent = $("#combo_box_head").children("div").html();
-	console.log(materialName+"..."+typeName+"..."+typeCodeParent);
+	console.log(materialName+"..."+typeName+"..."+materialTypeCodeParent);
 	window.location.herf = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
 	"&materialDescription="+materialName+"&materialTypeCodeParent="+materialTypeCodeParent+
 	"&page="+page+"&pageSize="+pageSize;

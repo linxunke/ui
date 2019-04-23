@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,8 +15,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.MaterialCountByParentType;
 import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
-import com.ztzh.ui.constants.MaterialTypeConstants;
 import com.ztzh.ui.service.ElasticSearchService;
+import com.ztzh.ui.service.MaterialHistoryCollectionService;
 import com.ztzh.ui.service.UploadMaterialsService;
 import com.ztzh.ui.vo.MaterialInfoIndexVo;
 import com.ztzh.ui.vo.ResponseVo;
@@ -33,6 +31,9 @@ public class ElasticSearchController {
 	
 	@Autowired
 	UploadMaterialsService uploadMaterialsService;
+	
+	@Autowired
+	MaterialHistoryCollectionService materialHistoryCollectionService;
 	
 	@RequestMapping(value = "/createMaterialInfoIndex", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
@@ -92,5 +93,29 @@ public class ElasticSearchController {
 		return responseVo.toString();
 	}
 	
-
+	@RequestMapping(value="queryByParamIsCollection", method = {RequestMethod.GET,
+			RequestMethod.POST})
+	public String queryByParamIsCollection(@RequestParam Long userId,
+			MaterialESBo materialESBo,@RequestParam int page, @RequestParam int pageSize) {
+		logger.info("查询条件{}",materialESBo);
+		List<Long> list = materialHistoryCollectionService.SelectByUserInfoId(userId);
+		Page<MaterialInfoIndex> items = elasticSearchService.findMaterialDocument(page, pageSize, materialESBo);
+		MaterialInfoIndexVo materialInfoIndexVo = new MaterialInfoIndexVo();
+		for(int i = 0; i <= list.size()-1; i++){
+			for(int j = 0; j<= items.getContent().size()-1; j++){
+				if(list.get(i) == items.getContent().get(j).getId()){
+					items.getContent().get(j).setIsCollection(1);
+				}else{
+					if(items.getContent().get(j).getIsCollection() != 1){
+						items.getContent().get(j).setIsCollection(0);
+					}
+				}
+			}
+		}
+		logger.info("收藏结果{}",items.getContent());
+		materialInfoIndexVo.setItems(items.getContent());
+		materialInfoIndexVo.setTotalPage(pageSize);
+		materialInfoIndexVo.setCurrentPage(page);
+		return JSONObject.toJSON(materialInfoIndexVo).toString();
+	}
 }

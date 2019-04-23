@@ -38,6 +38,7 @@ public class MaterialInfoIndex {
     private Float colorPercentage;
 	@Field(type=FieldType.Integer)
 	private Integer countDownload;
+	private int isCollection;
 	private List<MaterialTypeInfoIndex> materialTypeInfoIndex;
 	public Long getId() {
 		return id;
@@ -123,16 +124,26 @@ public class MaterialInfoIndex {
 	public void setCountDownload(Integer countDownload) {
 		this.countDownload = countDownload;
 	}
+	public Integer getIsCollection() {
+		return isCollection;
+	}
+	public void setIsCollection(Integer isCollection) {
+		this.isCollection = isCollection;
+	}
 	public List<MaterialTypeInfoIndex> getMaterialTypeInfoIndex() {
 		return materialTypeInfoIndex;
 	}
-	public void setMaterialTypeInfoIndex(List<MaterialTypeInfoIndex> materialTypeInfoIndex) {
+	public void setMaterialTypeInfoIndex(
+			List<MaterialTypeInfoIndex> materialTypeInfoIndex) {
 		this.materialTypeInfoIndex = materialTypeInfoIndex;
 	}
-	public MaterialInfoIndex(Long id, Long createUserId, Long canvasInfoIdPrivate, Long canvasInfoIdPublic,
-			String materialName, String materialDescription, String materialType, String materialUrl,
-			String thumbnailUrl, String pngUrl, Date uploadTime, Integer colorType, Float colorPercentage,
-			Integer countDownload, List<MaterialTypeInfoIndex> materialTypeInfoIndex) {
+	public MaterialInfoIndex(Long id, Long createUserId,
+			Long canvasInfoIdPrivate, Long canvasInfoIdPublic,
+			String materialName, String materialDescription,
+			String materialType, String materialUrl, String thumbnailUrl,
+			String pngUrl, Date uploadTime, Integer colorType,
+			Float colorPercentage, Integer countDownload, Integer isCollection,
+			List<MaterialTypeInfoIndex> materialTypeInfoIndex) {
 		super();
 		this.id = id;
 		this.createUserId = createUserId;
@@ -148,6 +159,7 @@ public class MaterialInfoIndex {
 		this.colorType = colorType;
 		this.colorPercentage = colorPercentage;
 		this.countDownload = countDownload;
+		this.isCollection = isCollection;
 		this.materialTypeInfoIndex = materialTypeInfoIndex;
 	}
 	public MaterialInfoIndex() {
@@ -156,12 +168,19 @@ public class MaterialInfoIndex {
 	}
 	@Override
 	public String toString() {
-		return "MaterialInfoIndex [id=" + id + ", createUserId=" + createUserId + ", canvasInfoIdPrivate="
-				+ canvasInfoIdPrivate + ", canvasInfoIdPublic=" + canvasInfoIdPublic + ", materialName=" + materialName
-				+ ", materialDescription=" + materialDescription + ", materialType=" + materialType + ", materialUrl="
-				+ materialUrl + ", thumbnailUrl=" + thumbnailUrl + ", pngUrl=" + pngUrl + ", uploadTime=" + uploadTime
-				+ ", colorType=" + colorType + ", colorPercentage=" + colorPercentage + ", countDownload="
-				+ countDownload + ", materialTypeInfoIndex=" + materialTypeInfoIndex + "]";
+		return "MaterialInfoIndex [id=" + id + ", createUserId=" + createUserId
+				+ ", canvasInfoIdPrivate=" + canvasInfoIdPrivate
+				+ ", canvasInfoIdPublic=" + canvasInfoIdPublic
+				+ ", materialName=" + materialName + ", materialDescription="
+				+ materialDescription + ", materialType=" + materialType
+				+ ", materialUrl=" + materialUrl + ", thumbnailUrl="
+				+ thumbnailUrl + ", pngUrl=" + pngUrl + ", uploadTime="
+				+ uploadTime + ", colorType=" + colorType
+				+ ", colorPercentage=" + colorPercentage + ", countDownload="
+				+ countDownload + ", isCollection=" + isCollection
+				+ ", materialTypeInfoIndex=" + materialTypeInfoIndex + "]";
 	}
+	
+	
 	
 }
