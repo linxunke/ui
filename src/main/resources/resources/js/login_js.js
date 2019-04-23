@@ -40,8 +40,11 @@ $(document).ready(function () {
               dataType:'text',
               type:'post',
               success:function (data) {
+            	  console.log(data);
+            	 window.location.herf="/userpage/work_management?userId="+data.userId;
               },
               error:function () {
+            	  console.log("error happen -------------");
               }
           });
       }

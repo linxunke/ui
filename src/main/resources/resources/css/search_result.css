@@ -1,4 +1,7 @@
 @CHARSET "UTF-8";
+.float_r{
+	float: right;
+}
 #div-all{
 	width: 100%;
 	min-width:1440px;
@@ -195,7 +198,11 @@
 	height: 914px;
 	margin-left: 13.9%;
 	margin-top: 6px;
-	background-color: rgba(245,245,249,1);
+	background-color: rgba(245,245,249,1) ;
+}
+#result_list_body{
+	width: 1040px;
+	height: 740px;
 }
 .result_photo{
 	position: relative;
@@ -247,7 +254,46 @@
 .download:HOVER {
 	cursor:pointer;
 }
+#result_list_foot{
+	width: 1040px;
+	height: 174px;
 
+}
+.page_modual{
+	width:400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.page_modual_each{
+	margin-left: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 14px;
+	color: rgba(113, 119, 135, 1);
+	font-family: PingFangSC-Regular;
+}
+
+.page_modual_each a:HOVER {
+	cursor: pointer;
+	color: orange;
+}
+#currentPage{
+	width: 40px;
+	height: 20px;
+	border-radius:3px;
+}
+#search_by_page{
+	width: 50px;
+	height: 25px;
+	border-radius:8px;
+	border: 1px solid grey;
+	background-color: white;
+}
+#search_by_page:HOVER {
+	cursor: pointer;
+	color: orange;
+	border: 1px solid orange;
+}
 /* 模态框的样式 */
 .modal{
     display: none;

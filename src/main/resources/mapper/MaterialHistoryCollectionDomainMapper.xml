@@ -116,4 +116,10 @@
     and user_info_id = #{userInfoId,jdbcType=BIGINT}
     and type = 2
   </delete>
+  <select id="SelectByUserInfoId" parameterType="java.lang.Long" resultType="java.lang.Long">
+  	select material_info_id
+    from material_history_collection
+  	where type =2 
+  	and user_info_id = #{userInfoId,jdbcType=BIGINT} 
+  </select>
 </mapper>
