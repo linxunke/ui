@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.slf4j.Logger;
@@ -19,14 +22,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ztzh.ui.bo.LoginInfoForRedisBo;
 import com.ztzh.ui.bo.LoginResultBo;
 import com.ztzh.ui.bo.RegisterResultBo;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.UserInfoDomain;
+import com.ztzh.ui.service.LoginInfoRecordService;
 import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.service.UserService;
 import com.ztzh.ui.utils.FTPUtil;
 import com.ztzh.ui.utils.FileUpload;
+import com.ztzh.ui.utils.IpOperateUtil;
 import com.ztzh.ui.vo.ResponseVo;
 
 @RestController
@@ -45,6 +51,9 @@ public class UserController {
 	
 	@Autowired
 	FTPUtil ftpUtil;
+	
+	@Autowired
+	LoginInfoRecordService loginInfoRecordService;
 
 	@RequestMapping(value = "register", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
@@ -122,7 +131,7 @@ public class UserController {
 
 	@RequestMapping(value = "login", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	public String login(
+	public String login(HttpServletRequest request,
 			@RequestParam(value = "account", required = true) String account,
 			@RequestParam(value = "password", required = true) String password) {
 		// 判断账号密码是否匹配
@@ -134,6 +143,12 @@ public class UserController {
 		responseVo.setStatus(status);
 		String message = "";
 		if (ResponseVo.STATUS_SUCCESS.equals(status)) {
+			LoginInfoForRedisBo loginInfoForRedisBo = new LoginInfoForRedisBo();
+			String userId = loginResultBo.getId().toString();
+			loginInfoForRedisBo.setUserId(Long.parseLong(userId));
+			loginInfoForRedisBo.setIpAddress(IpOperateUtil.getIpAddress(request));
+			loginInfoForRedisBo.setLoginTime(new Date());
+			recordLoginInfoToRedis(userId,loginInfoForRedisBo);
 			message = "登录成功";
 		} else if (ResponseVo.STATUS_VALUE_FALSE.equals(status)) {
 			message = "账号无效";
@@ -179,6 +194,10 @@ public class UserController {
 			responseVo.setMessage("获取用户信息失败，可能用户不存在");
 		}
 		return responseVo.toString();
+	}
+	
+	private void recordLoginInfoToRedis(String userId, LoginInfoForRedisBo loginInfoForRedisBo) {
+		loginInfoRecordService.set(userId, loginInfoForRedisBo);
 	}
 			
 }

@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.ztzh.ui.bo.LoginInfoForRedisBo;
@@ -24,5 +23,4 @@ public class LoginInfoRecordServiceImpl implements LoginInfoRecordService{
 	public LoginInfoForRedisBo get(String key) {
 		return (LoginInfoForRedisBo)redisTemplate.boundValueOps(key).get();
 	}
-
 }

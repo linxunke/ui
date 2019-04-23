@@ -192,7 +192,7 @@ $(document).ready(function() {
 		}
 	});
 });
-
+/*下载文件的方法*/
 function downloadStaticFile(imageUrl,imageName) {
         console.log(imageUrl);
         console.log(imageName);
@@ -272,6 +272,7 @@ function addMaterialTypeblocks(userId) {
 		}
 	});
 }
+/*移除一个指定的类别模块*/
 function removeTypeBlock(obj) {
 	$(obj).parent().parent().remove();
 }
@@ -293,11 +294,13 @@ function cancerSelectAllMaterial() {
 	}
 	$("#selectAll").prop('checked',false);
 }
+/*显示模态框*/
 function showModal(materialId) {
 	$("#currentMaterialId").val(materialId);
 	getMaterialInfoDetailsByMaterialId(materialId);
 	$(".modal").css("display","block");
 }
+/*关闭模态框*/
 function closeModal() {
 	$(".modal").css("display","none");
 }
@@ -321,16 +324,19 @@ function getMaterialInfoDetailsByMaterialId(materialId) {
 	});
 }
 /*自定义CheckBox的js功能代码*/
+	/*显示选择框*/
 function show_custom_checkedbox(obj) {
 	$(obj).css("cursor","pointer");
 	$(obj).css("opacity","1");
 }
+	/*隐藏选择框*/
 function hiden_custom_checkedbox(obj) {
 	if($(obj).find(".checked_status").val() != "checked"){
 		$(obj).css("opacity","0");
 		$(obj).css("cursor","default");
 	}
 }
+/*改变指定的选择框的状态*/
 function change_checked_status(obj) {
 	var status = $(obj).find("input").val();
 	if(status == "unchecked"){
@@ -368,7 +374,7 @@ function init(userId,canvasId,currentPage) {
 	/*调用分页显示素材图片的方法*/
 	getMaterialsInCurrentCanvas(userId,canvasId,currentPage);
 }
-
+/*获取用户的信息*/
 function getUserInfo(userId) {
 	$.ajax({
 		url:'/user/getUserInfoById',
@@ -476,11 +482,12 @@ function showMaterialAsImg(data) {
 	canvasId = materialInfoList[0].canvasInfoIdPrivate;
 	refreshPageModual(currentPage,pageNumber);
 }
-
+/*刷新显示页码模块*/
 function refreshPageModual(currentPage,pageNumber) {
 	$("#currentPage").val(currentPage);
 	$("#pageNum").html(pageNumber);
 }
+/*判断一个素材是否是图标*/
 function materialIsAIcon(materialTypeInfoList) {
 	for(var i =0; i < materialTypeInfoList.length; i++){
 		if(materialTypeInfoList[i].materialTypeCodeParent != '01'){

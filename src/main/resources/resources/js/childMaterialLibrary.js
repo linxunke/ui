@@ -5,6 +5,7 @@ childTypeCode = getParameter('childTypeCode');
 typeCatchData = null;
 $(document).ready(function() {
 	init(userId,childTypeCode,currentPage);
+	/*点击父级类别返回对应的页面*/
 	$("#nav_bar_parent").click(function() {
 		var parentTypeCode = $(this).find("#nav_bar_parent_id").val();
 		window.location.href="/userpage/toMaterialLibrary?userId="+userId+"&parentTypeCode="+parentTypeCode;
@@ -136,10 +137,12 @@ $(document).ready(function() {
 		}
 	});
 });
+/*初始化方法*/
 function init(userId,childTypeCode,currentPage) {
 	getLibraryTypeInfos(userId,childTypeCode);
 	getMaterialListInLibrary(userId,childTypeCode,currentPage);
 }
+/*生成当前分类的面包屑导航栏*/
 function getLibraryTypeInfos (userId,childTypeCode) {
 	$.ajax({
 		url:'/materialLibrary/getCurrentTypeInfos',
@@ -170,6 +173,7 @@ function getLibraryTypeInfos (userId,childTypeCode) {
 		}
 	});
 }
+/*请求当前细分类别的素材信息*/
 function getMaterialListInLibrary(userId,childTypeCode,currentPage) {
 	$.ajax({
 		url:'/materialLibrary/getMaterialsByChildTypeCode',
@@ -197,7 +201,7 @@ function getMaterialListInLibrary(userId,childTypeCode,currentPage) {
 		}
 	});
 }
-
+/*以图标形式展示素材*/
 function showMaterialAsIcon(data){
 	var materialInfoList = data.object.pageInfoUtil.object;
 	$(".material_show_body").empty();
@@ -212,6 +216,7 @@ function showMaterialAsIcon(data){
 	pageNumber = data.object.pageInfoUtil.pageNumber;
 	refreshPageModual(currentPage,pageNumber);
 }
+/*以图片形式展示素材*/
 function showMaterialAsImg(data) {
 	var materialInfoList = data.object.pageInfoUtil.object;
 	$(".material_show_body").empty();
@@ -225,6 +230,7 @@ function showMaterialAsImg(data) {
 	pageNumber = data.object.pageInfoUtil.pageNumber;
 	refreshPageModual(currentPage,pageNumber);
 }
+/*刷新显示页码模块*/
 function refreshPageModual(currentPage,pageNumber) {
 	$("#currentPage").val(currentPage);
 	$("#pageNum").html(pageNumber);
@@ -274,7 +280,7 @@ function getMaterialInfoDetailsByMaterialId(materialId) {
 	});
 	
 }
-/*展示详情页的信息*/
+/*拼接显示详情页的信息*/
 function showMaterialDetailsInModal(data,typeCatchData) {
 	var materialPngSrc = window.location.protocol + "//" + window.location.host +"/"
 	+ data.object.materialInfo.pngUrl;
@@ -321,6 +327,7 @@ function showMaterialDetailsInModal(data,typeCatchData) {
 		}
 	}
 }
+/*判断当前素材是否是一个图标*/
 function materialIsAIcon(materialTypeInfoList) {
 	for(var i =0; i < materialTypeInfoList.length; i++){
 		if(materialTypeInfoList[i].materialTypeCodeParent != '01'){
@@ -329,7 +336,7 @@ function materialIsAIcon(materialTypeInfoList) {
 	}
 	return true;
 }
-
+/*添加num个类别模块*/
 function addTypeBlocksByNum(num) {
 	for(var i = 0; i < num; i++){
 		$("#material_type_info_div").append('<div class="material_info_div"><div class="float_l material_type_div_each">'+
@@ -342,6 +349,7 @@ function addTypeBlocksByNum(num) {
 				'<div class="material_style_type float_l"></div></div></div></div>');
 	}
 }
+/*下载文件的方法*/
 function downloadStaticFile(imageUrl,imageName) {
     console.log(imageUrl);
     console.log(imageName);
