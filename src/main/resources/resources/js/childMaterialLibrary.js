@@ -10,6 +10,11 @@ $(document).ready(function() {
 		var parentTypeCode = $(this).find("#nav_bar_parent_id").val();
 		window.location.href="/userpage/toMaterialLibrary?userId="+userId+"&parentTypeCode="+parentTypeCode;
 	});
+	$(".each_similar_material_div").click(function() {
+		var theMaterialId = $(this).find(".similar_material_id").val();
+		closeModal();
+		showModal(theMaterialId);
+	});
 	/*点击跳转上一页*/
 	$("#lastPage").click(function() {
 		getMaterialListInLibrary(userId,childTypeCode,currentPage<=1?1:currentPage-1);
@@ -289,9 +294,36 @@ function reloadMaterialInfoInModal(materialInfos) {
 	$(".material_lable_content").html(materialInfos.MaterialDetailsInfoBo.materialDescription);
 	$("#current_material_color_percentage_in_modal").html(materialInfos.MaterialDetailsInfoBo.colorPercentage);
 	$("#currentMaterialId").val(materialInfos.MaterialDetailsInfoBo.id);
+	getSimilarMaterial(materialInfos.MaterialDetailsInfoBo.colorPercentage);
 }
-function getSimilarMaterial() {
-	
+function getSimilarMaterial(color_percentage) {
+	$.ajax({
+		url:'/elasticsearch/queryByParam',
+		type:'post',
+		data:{
+			colorPercentage:color_percentage,
+			page:0,
+			pageSize:3,
+			userId:userId
+		},
+		success:function(data){
+			//var resultData = JSON.parse(data);
+			var similarMaterialList = JSON.parse(data);
+			console.log(similarMaterialList);
+			showSimilarMaterialImg(similarMaterialList);
+		},
+		error:function(){
+			console.log("error happened ...");
+		}
+	});
+}
+
+function showSimilarMaterialImg(similarMaterialList) {
+	var each_similar_material = $(".each_similar_material_div");
+	for(var i = 0; i < each_similar_material.length; i++){
+		$(each_similar_material[i]).find(".similar_material_img").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
+		$(each_similar_material[i]).find(".similar_material_id").val(similarMaterialList.items[i].id);
+	}
 }
 /*下载文件的方法*/
 function downloadStaticFile(imageUrl,imageName) {

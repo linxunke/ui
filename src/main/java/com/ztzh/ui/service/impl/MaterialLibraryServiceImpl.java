@@ -161,4 +161,35 @@ public class MaterialLibraryServiceImpl implements MaterialLibraryService {
 		resultMap.put("isIcon", isIcon);
 		return resultMap;
 	}
+
+	@Override
+	public List<MaterialInfoDomain> getMaterialListByChildTypeCodeAndNumber(
+			String childTypeCode, int start, int number) {
+		int infoTotalNumber = materialTypeInfoDomainMapper
+				.selectMaterialNumberByChildTypeCode(childTypeCode); // 总条数
+		int end = (infoTotalNumber < start + number) ? (infoTotalNumber - start) : number;
+		List<MaterialInfoDomain> resultList = null;
+		if(end >= 0){
+			resultList = materialInfoDomainMapper.
+					selectMaterialInfoWithchildTypeCodeByPage(childTypeCode, start, end);
+		}
+		return resultList;
+	}
+
+	@Override
+	public List<MaterialChildTypeCoverInfosBo> getChildTypeInfosByParentCodeWithoutCover(
+			String parentCode, boolean isIcon) {
+		List<MaterialChildTypeCoverInfosBo> resultList = new ArrayList<MaterialChildTypeCoverInfosBo>();
+		List<MaterialTypeDomain> childTypeList = materialTypeDomainMapper
+				.selectChildTypeByParentCode(parentCode);
+		for (int i = 0; i < childTypeList.size(); i++) {
+			MaterialChildTypeCoverInfosBo bo = new MaterialChildTypeCoverInfosBo();
+			bo.setChildTypeDomain(childTypeList.get(i));
+			bo.setMaterialOfChildTypeNum(materialTypeInfoDomainMapper
+					.selectMaterialNumberByChildTypeCode(childTypeList.get(i)
+							.getTypeCode()));
+			resultList.add(bo);
+		}
+		return resultList;
+	}
 }

@@ -396,6 +396,9 @@
 	max-height: 100%;
 	height: 100%;
 }
+.similar_material_img:HOVER{
+	cursor: pointer;
+}
  #material_content_name{
 	width: 260px;
 	height:36px;
