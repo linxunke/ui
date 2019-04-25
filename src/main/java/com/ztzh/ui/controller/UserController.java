@@ -167,9 +167,9 @@ public class UserController {
 	
 	@RequestMapping(value="getUserInfoById",method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
-	public String getUserInfoById(@RequestParam(value = "userId", required = true) String userId){
+	public String getUserInfoById(@RequestParam(value = "userId", required = true) Long userId){
 		ResponseVo responseVo = new ResponseVo();
-		UserInfoDomain userInfoDomain = userService.getUserShowInfoById(new Long(userId));
+		UserInfoDomain userInfoDomain = userService.getUserShowInfoById(userId);
 		if(userInfoDomain != null){
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取用户信息成功");

@@ -8,6 +8,22 @@
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
   </resultMap>
+  <resultMap id="HistoryOrCollectionResultMap" type="com.ztzh.ui.po.MaterialInfoDomain">
+ 	<id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="canvas_info_id_private" jdbcType="BIGINT" property="canvasInfoIdPrivate" />
+    <result column="canvas_info_id_public" jdbcType="BIGINT" property="canvasInfoIdPublic" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_description" jdbcType="VARCHAR" property="materialDescription" />
+    <result column="material_type" jdbcType="VARCHAR" property="materialType" />
+    <result column="material_url" jdbcType="VARCHAR" property="materialUrl" />
+    <result column="thumbnail_url" jdbcType="VARCHAR" property="thumbnailUrl" />
+    <result column="png_url" jdbcType="VARCHAR" property="pngUrl" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="color_type" jdbcType="INTEGER" property="colorType" />
+    <result column="color_percentage" jdbcType="REAL" property="colorPercentage" />
+    <result column="is_valid" jdbcType="INTEGER" property="isValid" />
+  </resultMap>
   <sql id="Base_Column_List">
     id, material_info_id, user_info_id, type, operate_time
   </sql>
@@ -121,5 +137,16 @@
     from material_history_collection
   	where type =2 
   	and user_info_id = #{userInfoId,jdbcType=BIGINT} 
+  </select>
+  <select id="countByUserId" resultType="java.lang.Integer">
+  	select count(id) from
+  	material_history_collection
+  	where user_info_id = #{userInfoId,jdbcType=BIGINT} and type = #{type,jdbcType=INTEGER} 	
+  </select>
+  <select id="SelectByUserIdForHistory" resultMap="HistoryOrCollectionResultMap">
+  	SELECT b.id, b.material_name, b.thumbnail_url 
+	from material_history_collection as a, material_info as b 
+	where a.user_info_id = #{userId,jdbcType=BIGINT} and a.type = #{type,jdbcType=INTEGER} 
+	and a.material_info_id = b.id;
   </select>
 </mapper>

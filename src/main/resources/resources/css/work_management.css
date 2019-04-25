@@ -38,6 +38,7 @@
 	height: 28px;
 	position: absolute;
 	margin: 26px 1053px 42px 299px;
+	color: rgba(255,255,255,1);
 }
 .head_active{
 	color: orange!important;

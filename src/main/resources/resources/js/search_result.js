@@ -2,14 +2,14 @@
  * 
  */
 var userId = getParameter('userId');
-var materialName = "图标"/*getParameter('materialName')*/;
-var materialDescription = "图标"/*getParameter('materialName')*/;
-var materialTypeCodeParent = "01"/*getParameter('materialTypeCodeParent')*/;
-var page = 0/*getParameter('page')*/;
+var materialName = getParameter('materialName');
+var materialDescription = getParameter('materialName');
+var materialTypeCodeParent = getParameter('materialTypeCodeParent');
+var page = getParameter('page');
 var materialStyleCode = "";
 var sort_code = "";
 var color_code = "";
-var pageSize = 12/*getParameter('pageSize')*/;
+var pageSize = getParameter('pageSize');
 var parentTypeCount;
 var TotalPage = 0;
 var materialsAmount = 0;
@@ -95,13 +95,6 @@ $(document).ready(function() {
 		color_code = $("#search_color_type").val();
 		getPhotoUrl();
 	});
-	
-	/*点击下载弹出弹窗*/
-	/*$(".download").click(function () {
-		console.log("进入弹窗方法");
-		var currentMaterialId = $(this).parent().parent().find(".material_id_container").html();
-		showModal(currentMaterialId);
-	});*/
 	
 	/*下载格式为ai的图片*/
 	$("#download_material_ai").click(function() {
@@ -257,10 +250,14 @@ function typeCount(){
     	   console.log("TotalPage="+TotalPage);
     	   $("#tatolPage").html(TotalPage);
     	   if(result.object == ""){
-    		   //这里写死i了，因为前端拿到筛选结果为空，但要改变数量	   
-        		   $(".countshow").html(0+"&nbsp");
+    		   //这里写死i了，因为前端拿到筛选结果为空，但要改变数量
+    		   $(".countshow").html(0+"&nbsp");
+    		   $("#typename_4").find(".countshow").html("&nbsp");
+    		   $("#typename_5").find(".countshow").html("&nbsp");
     	   }else if(result.object.length<= 4){
     		   $(".countshow").html(0+"&nbsp");
+    		   $("#typename_4").find(".countshow").html("&nbsp");
+    		   $("#typename_5").find(".countshow").html("&nbsp");   
     		   for(var i = 0; i<= result.object.length-1; i++){
         		   $("#"+result.object[i].materialTypeCodeParent).html(result.object[i].materialCount+"&nbsp");
         	   }
@@ -313,8 +310,6 @@ function getPhotoUrl(){
 	       success:function (data) {
 	    	   $(".result_photo").remove();
 	    	   var result = JSON.parse(data);
-	    	   console.log("============================");
-	    	   console.log(result.items[1].isCollection);
 	    	   typeCount();
 	    	   for(var i = 0; i<=result.items.length-1; i++){
 	    		   var div = document.createElement('div');
@@ -417,10 +412,7 @@ function changeHead(){
 	var cc = $("#typename_1_0").html();
 	var parentId = $(this).parent().attr('id');
 	var child_code = $(this).find(".child_type_code").val();
-	//console.log("parentId="+parentId);
-	//console.log("child_code="+child_code);
 	$("#"+parentId).children(":first").children(":last").html(childname+'&emsp;<img src="../img/分类_箭头.png"><input class="parent_type_code" type="text" value="'+child_code+'" style="display:none"/>');
-	//console.log($("#"+parentId).children(":first").children(":last").find(".parent_type_code").val());
 	
 	getPhotoUrl();
 }

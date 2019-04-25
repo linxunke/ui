@@ -117,7 +117,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         	boolQueryBuilder.must(QueryBuilders.termQuery("colorType", materialESBo.getColorType()));
         }
         if(null!=materialESBo.getMaterialTypeCodeParent()&&""!=materialESBo.getMaterialTypeCodeParent()) {
-        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialESBo.getMaterialTypeCodeParent()));
+        	String materialTypeCodeParents = materialESBo.getMaterialTypeCodeParent();
+        	List<String> materialTypeCodeParentList = Arrays.asList(materialTypeCodeParents.split(","));
+        	for(String materialTypeCodeParent:materialTypeCodeParentList) {
+        		boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialTypeCodeParent));
+        	}
         }
         if(null!=materialESBo.getMaterialTypeCodeChild()&&""!=materialESBo.getMaterialTypeCodeChild()) {
         	String materialTypeCodeChilds = materialESBo.getMaterialTypeCodeChild();
@@ -161,7 +165,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         	boolQueryBuilder.filter(rangeQueryBuider);
         }
 		if(null!=materialESBo.getMaterialTypeCodeParent()) {
-			boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialESBo.getMaterialTypeCodeParent()));
+			String materialTypeCodeParents = materialESBo.getMaterialTypeCodeParent();
+			List<String> materialTypeCodeParentList = Arrays.asList(materialTypeCodeParents.split(","));
+			for(String materialTypeCodeParent:materialTypeCodeParentList){
+				boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeParent", materialTypeCodeParent));
+			}
 		}
 		if(null!=materialESBo.getMaterialTypeCodeChild()&&""!=materialESBo.getMaterialTypeCodeChild()) {
 	        String materialTypeCodeChilds = materialESBo.getMaterialTypeCodeChild();

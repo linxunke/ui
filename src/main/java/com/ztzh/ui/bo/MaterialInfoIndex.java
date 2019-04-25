@@ -38,7 +38,7 @@ public class MaterialInfoIndex {
     private Float colorPercentage;
 	@Field(type=FieldType.Integer)
 	private Integer countDownload;
-	private int isCollection;
+	private int isCollection;// 1 已收藏  0 未收藏
 	private List<MaterialTypeInfoIndex> materialTypeInfoIndex;
 	public Long getId() {
 		return id;

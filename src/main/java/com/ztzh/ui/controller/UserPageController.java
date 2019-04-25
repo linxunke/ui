@@ -76,4 +76,8 @@ public class UserPageController {
 	public String toChildMateiralLibrary(){
 		return "childMaterialLibrary";
 	}
+	@RequestMapping(value="toHistoryManage")
+	public String toHistoryManage(){
+		return "/history_manage";
+	}
 }

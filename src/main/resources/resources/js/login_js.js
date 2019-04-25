@@ -40,8 +40,9 @@ $(document).ready(function () {
               dataType:'text',
               type:'post',
               success:function (data) {
-            	  console.log(data);
-            	 window.location.herf="/userpage/work_management?userId="+data.userId;
+            	  var result = JSON.parse(data);
+            	  console.log(result.userId);
+            	 window.location.href="/userpage/work_manage?userId="+result.userId;
               },
               error:function () {
             	  console.log("error happen -------------");

@@ -2,8 +2,7 @@ package com.ztzh.ui.service;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
+import com.ztzh.ui.bo.MaterialInfoIndex;
 import com.ztzh.ui.po.MaterialHistoryCollectionDomain;
 
 public interface MaterialHistoryCollectionService {
@@ -13,4 +12,6 @@ public interface MaterialHistoryCollectionService {
 	public boolean collectMaterial(MaterialHistoryCollectionDomain materialHistoryCollectionDomain, String operationCode) throws Exception;
 	
 	List<Long> SelectByUserInfoId(Long userInfoId);
+	
+	List<MaterialInfoIndex> SelectByUserIdForHistory(Long userId, int type);
 }

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>我的下载历史</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/history_manage.css}"
+	type="text/css">
+<link rel="stylesheet" th:href="@{/css/nav.css}" type="text/css" />
+</head>
+<body>
+<div class="manage_all">
+		<div class="manage_head">
+			<div class="nav">
+				<div class="nav_list logo">
+					<img src="../img/logo.png">
+				</div>
+				<div class="nav_list home">
+					<a href="#">首页</a>
+				</div>
+				<div class="nav_list material_library">
+					<a href="#">素材库</a>
+				</div>
+				<div class="nav_list work_management">
+					<a class="nav_active" href="#">作品管理</a>
+				</div>
+				<div class="nav_list search_box">
+					<img src="../img/搜图.png" class="search_map" alt="">
+					<input type="text" value="春节" class="search_content" />
+					<img src="../img/搜索.png" alt="" class="search_btn">
+				</div>
+				<div class="nav_list update">
+					<img src="../img/上传.png">
+				</div>
+				<div class="nav_list message">
+					<img src="../img/消息.png">
+				</div>
+				<div class="nav_list need_sign_in">
+					<img src="../img/未登录.png">
+				</div>
+			</div>
+		</div>
+		<div class="manage_userdoing">
+			<div class="userdoing" id="manage_userhead"></div>
+			<div class="userdoing" id="manage_username">UserName</div>
+			<div class="userdoing" id="manage_userwork1">我上传的作品</div>
+			<div class="userdoing" id="manage_userwork2">我的收藏</div>
+			<div class="userdoing head_active" id="manage_userwork3">下载历史</div>
+			<div class="userdoing" id="manage_userwork4">超级管理</div>
+			<div id="manage_materialcount"><span id="materialcount">下载？个素材</span> <span id="clear_download">清空下载</span></div>
+			<div class="userdoing" id="manage_search">
+				<img src="../img/我的-搜索.png">
+			</div>
+			<div class="userdoing" id="manage_upload">
+				<img src="../img/我的-上传.png">
+			</div>
+		</div>
+		<div class="empty">
+		</div>
+		<div class="manage_material_list" id="material_list">
+		</div>
+		<div class="footer">
+			<div class="page_modual">
+			<div class="float_l page_modual_each"><a onclick="lastPage()" id="lastPage">上一页</a></div>
+			<div class="float_l page_modual_each">
+				<input id="currentPage" type="number" value="1"/>
+				<input id="search_by_page" type="button" value="跳转">
+			</div>
+			<div class="float_l page_modual_each"><a onclick="nextPage()" id="nextPage">下一页</a></div>
+			<div class="float_l page_modual_each">共<span id="tatolPage"></span>页</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 模态框 -->
+	<div class="modal">
+		<div class="modal_content">
+			<header class="modal_header">
+				<h4>素材信息</h4>
+				<button id="closeModal" onclick="closeModal()">×</button>
+			</header>
+			<div class="modal_body">
+				<div class="float_l modal_material_div">
+					<div class="material_img_div">
+						<img src="" id="material_img_preview">
+					</div>
+				</div>
+				<div class="float_l modal_materialInfo_div">
+					<div class="material_info_div">
+						<div class="material_info_title float_l">名称</div>
+						<div class="material_info_content float_l">
+							<div id="material_content_name">111</div>
+						</div>
+					</div>
+					<div id="material_type_info_div" style="margin-top: 20px;">
+						<!-- <div class="material_info_div">
+							<div class="float_l material_type_div_each">
+								<span class="material_type_name">类型</span>
+								<div class="material_type_content float_l">
+									<div class="material_parent_type float_l"></div>
+								</div>
+							</div>
+							<div class="float_l material_type_div_each">
+								<span class="material_type_name">细分</span>
+								<div class="material_type_content float_l">
+									<div class="material_child_type float_l"></div>
+								</div>
+							</div>
+							<div class="float_l material_type_div_each" style="margin-right: 0">
+								<span class="material_type_name">风格</span>
+								<div class="material_type_content float_l">
+									<div class="material_style_type float_l"></div>
+								</div>
+							</div>
+						</div> -->
+						
+						
+					</div>
+					<div class="material_info_div">
+						<div class="material_info_title float_l">标签</div>
+						<div class="material_info_content float_l">
+							<div id="material_content_label">111</div>
+						</div>
+					</div>
+					<div class="material_info_div">
+						<div class="material_info_title float_l">个人画板</div>
+						<div class="material_info_content float_l">
+							<div id="personal_canvas">111</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div>
+						<button class="download_btn">
+							<span id="download_material_png">PNG</span>
+							<select id="material_png_size_select">
+								<option value="512">512x512</option>
+								<option value="16">16x16</option>
+								<option value="32">32x32</option>
+								<option value="64">64x64</option>
+								<option value="72">72x72</option>
+								<option value="96">96x96</option>
+								<option value="128">128x128</option>
+								<option value="256">256x256</option>
+								<option value="1024">1024x1024</option>
+							</select>
+							<input id="isIconInput" type="text" style="display: none"/>
+						</button>
+						<button id="download_material_svg" class="download_btn">SVG</button>
+						<button id="download_material_ai" class="download_btn">AI</button>
+					</div>
+					<input type="text" id="currentMaterialId" value="" style="display: none"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
+	<a href="" id="downloadImg" download="" style="display: none"></a>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
+	<script type="text/javascript" th:src="@{/js/nav.js}"></script>
+	<script type="text/javascript" th:src="@{/js/history_manage.js}"></script>
+</body>
+</html>

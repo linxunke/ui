@@ -1,7 +1,8 @@
 var userId = getParameter('userId'); 
 var page = 0;
-var pageSize = 15;
+var pageSize = 12;
 $(document).ready(function () {
+	
 	$.ajax({
 		url:'/SearchIndex/SearchThreePhoto?userId='+userId,
     	data:"",
@@ -89,25 +90,30 @@ $("#combo_box").click(function() {
 
 function changeChooseWord(){
 	var a = $(this).children("span").text();
-	var b =  $(this).children("div").html();
+	var b =  $(this).find(".hidedivForCode").html();
+	console.log(b);
 	console.log("1111"+a+"2222="+b);
 	$("#combo_box_head").html('<span>'+a+'</span>'+'<div class="hidedivForCode">'+b+'</div>');
-	console.log($("#combo_box_head").children("span").text());
-	console.log($("#combo_box_head").children("div").html());
+	console.log("span="+$("#combo_box_head").children("span").text());
+	console.log("div="+$("#combo_box_head").children("div").html());
 }
 
 combo_box_first.addEventListener('click',function(){
-	console.log($(this).html());
 	var c = $(this).html();
-	$("#combo_box_head").html($(this).html());
-})
+	$("#combo_box_head").html('<span>'+$(this).html()+'</span>');
+	console.log("------"+$("#combo_box_head").children("span").text());
+});
 
 function elasticSearch(){
 	var materialName = document.getElementById("searchBox_content").value;
 	var typeName = $("#combo_box_head").children("span").text();
 	var materialTypeCodeParent = $("#combo_box_head").children("div").html();
+	if(typeName == "全部"){
+		typeName = "";
+		materialTypeCodeParent = "01,02,03,04,05,06";
+	}
 	console.log(materialName+"..."+typeName+"..."+materialTypeCodeParent);
-	window.location.herf = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
+	window.location.href = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
 	"&materialDescription="+materialName+"&materialTypeCodeParent="+materialTypeCodeParent+
 	"&page="+page+"&pageSize="+pageSize;
 	$.ajax({

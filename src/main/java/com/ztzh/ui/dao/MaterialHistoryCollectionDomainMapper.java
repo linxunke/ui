@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ztzh.ui.po.MaterialHistoryCollectionDomain;
+import com.ztzh.ui.po.MaterialInfoDomain;
 
 public interface MaterialHistoryCollectionDomainMapper {
     int deleteByPrimaryKey(Long id);
@@ -26,4 +27,8 @@ public interface MaterialHistoryCollectionDomainMapper {
     int cancelCollection(@Param("materialInfoId") Long materialInfoId,@Param("userInfoId") Long userInfoId);
     
     List<Long> SelectByUserInfoId(Long userInfoId);
+    
+    List<MaterialInfoDomain> SelectByUserIdForHistory(@Param("userId") Long userId,@Param("type") int type);
+    
+    int countByUserId(@Param("userInfoId") Long userInfoId,@Param("type")int type);
 }
