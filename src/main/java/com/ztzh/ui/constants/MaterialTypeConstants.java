@@ -10,7 +10,7 @@ public class MaterialTypeConstants {
 	 */
 	public static String MATERIAL_TYPE_HOT_CODE = "0022";
 	/*
-	 * 素材属于图标
+	 * 图标的typeCode
 	 */
 	public static String MATERIAL_TYPE_ICON_PARENT_TYPE = "01";
 

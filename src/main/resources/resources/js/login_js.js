@@ -40,8 +40,8 @@ $(document).ready(function () {
               dataType:'text',
               type:'post',
               success:function (data) {
-            	  console.log(data);
-            	 window.location.herf="/userpage/work_management?userId="+data.userId;
+            	 var resultData = JSON.parse(data);
+            	 window.location.href= "/userpage/toSearchIndex?userId="+resultData.userId;
               },
               error:function () {
             	  console.log("error happen -------------");

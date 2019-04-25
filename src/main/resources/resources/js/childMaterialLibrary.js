@@ -10,6 +10,7 @@ $(document).ready(function() {
 		var parentTypeCode = $(this).find("#nav_bar_parent_id").val();
 		window.location.href="/userpage/toMaterialLibrary?userId="+userId+"&parentTypeCode="+parentTypeCode;
 	});
+	/*点击相似图片*/
 	$(".each_similar_material_div").click(function() {
 		var theMaterialId = $(this).find(".similar_material_id").val();
 		closeModal();
@@ -51,9 +52,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl, resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -88,9 +87,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -125,9 +122,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -157,7 +152,6 @@ function getLibraryTypeInfos (userId,childTypeCode) {
 		},
 		success:function(data){
 			var resultData = JSON.parse(data);
-			console.log(resultData);
 			if(resultData.status == '200'){
 				for(var i = 0; i < resultData.object.length; i++){
 					if(resultData.object[i].typeCode == childTypeCode){
@@ -189,7 +183,6 @@ function getMaterialListInLibrary(userId,childTypeCode,currentPage) {
 		},
 		success:function(data){
 			var resultData = JSON.parse(data);
-			console.log(resultData);
 			if(resultData.status == '200'){
 				if(resultData.object.isIcon){
 					showMaterialAsIcon(resultData);
@@ -260,7 +253,6 @@ function getMaterialInfoDetailsByMaterialId(materialId) {
 		},
 		success:function(data){
 			var materialData = JSON.parse(data);
-			console.log(materialData);
 			if(materialData.status == '200'){
 				reloadMaterialInfoInModal(materialData.object);
 			}
@@ -292,6 +284,7 @@ function reloadMaterialInfoInModal(materialInfos) {
 	$("#currentMaterialId").val(materialInfos.MaterialDetailsInfoBo.id);
 	getSimilarMaterial(materialInfos.MaterialDetailsInfoBo.colorPercentage);
 }
+/*获取相似图片的信息*/
 function getSimilarMaterial(color_percentage) {
 	$.ajax({
 		url:'/elasticsearch/queryByParam',
@@ -304,7 +297,6 @@ function getSimilarMaterial(color_percentage) {
 		},
 		success:function(data){
 			var similarMaterialList = JSON.parse(data);
-			console.log(similarMaterialList);
 			showSimilarMaterialImg(similarMaterialList);
 		},
 		error:function(){
@@ -312,7 +304,7 @@ function getSimilarMaterial(color_percentage) {
 		}
 	});
 }
-
+/*显示相似图片*/
 function showSimilarMaterialImg(similarMaterialList) {
 	var each_similar_material = $(".each_similar_material_div");
 	for(var i = 0; i < each_similar_material.length; i++){

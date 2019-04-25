@@ -2,14 +2,14 @@
  * 
  */
 var userId = getParameter('userId');
-var materialName = "图标"/*getParameter('materialName')*/;
-var materialDescription = "图标"/*getParameter('materialName')*/;
-var materialTypeCodeParent = "01"/*getParameter('materialTypeCodeParent')*/;
-var page = 0/*getParameter('page')*/;
+var materialName = getParameter('materialName');
+var materialDescription = getParameter('materialName');
+var materialTypeCodeParent = getParameter('materialTypeCodeParent');
+var page = getParameter('page');
 var materialStyleCode = "";
 var sort_code = "";
 var color_code = "";
-var pageSize = 12/*getParameter('pageSize')*/;
+var pageSize = getParameter('pageSize');
 var parentTypeCount;
 var TotalPage = 0;
 var materialsAmount = 0;
@@ -21,9 +21,7 @@ $(document).ready(function() {
         type:'post',
         async:false,
        success:function (data) {
-    	   console.log(data);
     	   parentTypeCount = data.object.length;
-    	   //console.log("parentTypeCount="+parentTypeCount);
     	 //下面需要后台传过来的信息innerHTML,拼接父元素
     	   for(var i = 0;i <= data.object.length-1; i++){
     		   var div = document.createElement('div');
@@ -84,7 +82,6 @@ $(document).ready(function() {
 	$(".child_pane").click(function(){
 		$("#color_pane").html('<input id="search_color_type" type="text" value="" style="display:none"/>')
 		var color_type = $(this).find(".color_type").val();
-		console.log("color_type="+color_type);
 		$("#search_color_type").val(color_type);
 		var backcolor = $(this).css("background-color");
 		$("#color_pane").css("background-color",backcolor);
@@ -113,9 +110,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl, resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -150,9 +145,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -187,9 +180,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -204,7 +195,6 @@ $(document).ready(function() {
 	});
 });
 $("#result_list_body").on('click','.download',function(){
-	console.log("进入弹窗方法");
 	var currentMaterialId = $(this).parent().parent().find(".material_id_container").html();
 	showModal(currentMaterialId);
 });
@@ -223,8 +213,6 @@ function typeCount(){
 			}
 		}
 	}
-	console.log("===="+materialStyleCode);
-	console.log("mix_code2="+mix_code2);
 	$.ajax({
 		url:'/elasticsearch/countMaterialByType?userId='+userId,
     	data:
@@ -238,16 +226,13 @@ function typeCount(){
         type:'post',
        success:function (data) {
     	   var result = JSON.parse(data);
-    	   console.log(result);
     	   for(var i = 0; i <= result.object.length-1; i++){
     		   if(result.object[i].materialCount > materialsAmount){
     			   materialsAmount = result.object[i].materialCount;
     		   }
     	   }
-    	   console.log("materialsAmount="+materialsAmount);
     	   //计算总页数
     	   TotalPage =parseInt((materialsAmount % pageSize == 0)?(materialsAmount / pageSize):(materialsAmount / pageSize)+1);
-    	   console.log("TotalPage="+TotalPage);
     	   $("#tatolPage").html(TotalPage);
     	   if(result.object == ""){
     		   //这里写死i了，因为前端拿到筛选结果为空，但要改变数量	   
@@ -313,7 +298,6 @@ function getPhotoUrl(){
 	     		   div.id = "photo_" + i;
 	     		   document.getElementById("result_list_body").appendChild(div);
 	     		   //下面需要后台传过来的信息innerHTML
-	     		   console.log(result.items[i].isCollection);
 	     		   if(result.items[i].isCollection == 0){
 	     			  $("#"+div.id).html('<div class="material_id_container" style="display:none">'+result.items[i].id+'</div><div class="photo_url" ><img style="width:220px;height:160px;" src="'+window.location.protocol + "//" + window.location.host +'/'+result.items[i].thumbnailUrl+'"></div><div class="photo_name">'+result.items[i].materialName+'</div><div class="handles" id="handles'+i+'"><div class="copy float_l"><img src="../img/相似.png"></div><div class="download"><img style="width:16px;height:16px;float:right;" src="../img/下载.png"></div><div class="collect float_r" style="margin-right:5px"><img src="../img/未赞.png"><input class="collection_valid" style="display:none;" type="number" value="'+result.items[i].isCollection+'"/></div></div>');
 	     		   }else{
@@ -344,7 +328,6 @@ function nextPage(){
 	
 	if(page<TotalPage-1){
 		page = parseInt(page)+1;
-		console.log("page222="+page);
 	}else{
 		page = parseInt(page);
 	}
@@ -408,11 +391,7 @@ function changeHead(){
 	var cc = $("#typename_1_0").html();
 	var parentId = $(this).parent().attr('id');
 	var child_code = $(this).find(".child_type_code").val();
-	//console.log("parentId="+parentId);
-	//console.log("child_code="+child_code);
 	$("#"+parentId).children(":first").children(":last").html(childname+'&emsp;<img src="../img/分类_箭头.png"><input class="parent_type_code" type="text" value="'+child_code+'" style="display:none"/>');
-	//console.log($("#"+parentId).children(":first").children(":last").find(".parent_type_code").val());
-	
 	getPhotoUrl();
 }
 function showModal(materialId) {
@@ -437,7 +416,6 @@ function getMaterialInfoDetailsByMaterialId(materialId) {
 		},
 		success:function(data){
 			var materialData = JSON.parse(data);
-			console.log(materialData);
 			if(materialData.status == '200'){
 				reloadMaterialInfoInModal(materialData.object);
 			}else {
@@ -486,7 +464,6 @@ function getSimilarMaterial(color_percentage) {
 		success:function(data){
 			//var resultData = JSON.parse(data);
 			var similarMaterialList = JSON.parse(data);
-			console.log(similarMaterialList);
 			showSimilarMaterialImg(similarMaterialList);
 		},
 		error:function(){
@@ -531,12 +508,10 @@ $("#result_list_body").on('click','.collect',function(){
 		},
 		success:function(data){
 			var result = JSON.parse(data);
-			console.log(result.status == "200");
-			console.log(result.status == "500");
 			if(result.status == "200"){
-				console.log(result.message);
+				
 			}else{
-				console.log(result.message);
+				
 			}
 		},
 		error:function(){
