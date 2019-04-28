@@ -37,7 +37,19 @@
 		</div>
 	</div>
 	<div class="nav_head">
-		<div class="nav_head_content"></div>
+		<div class="nav_head_content float_l"></div>
+		<div class="show_as_list">
+			<div class="show_as_list_button">
+				<div class="list_button_list_show">
+					<img src="../img/列表显示.png">
+				</div>
+				<div class="list_button_block_show" style="display: none">
+					<img src="../img/缩略图显示.png">
+				</div>
+			</div>
+			<input id="show_as_list_button" type="text" value="false"
+				style="display: none" />
+		</div>
 	</div>
 	<div class="material_library_container">
 		<!-- <div class="child_type_material_group">
@@ -51,8 +63,136 @@
 			</div>
 		</div> -->
 	</div>
+	<div class="material_library_list_container">
+		<div class="child_Type_list float_l" id="childTypeList">
+			<div class="each_child_type_li list_li_active">
+				<div class="child_type_li_img float_l">
+					<img src="../img/文件夹.png" />
+				</div>
+				<div class="child_type_name_div float_l">
+					<div class="child_type_name_content"></div>
+					<div class="chilt_type_id_content" style="display: none"></div>
+				</div>
+				<div class="child_type_material_number float_l"></div>
+			</div>
+		</div>
+		<div class="material_list float_l" id="materialList">
+			<!-- <div class="each_material_li list_li_active">
+				<div class="material_li_thumbnail float_l">
+					<img class="material_li_thumbnail_img" src="">
+				</div>
+				<div class="material_li_info_div float_l">
+					<div class="material_li_name"></div>
+					<div class="material_li_id" style="display: none"></div>
+				</div>
+			</div> -->
+		</div>
+		<div class="material_info_list float_l">
+			<div class="modal_material_div">
+				<div class="material_img_div">
+					<img src="" id="material_img_preview">
+				</div>
+			</div>
+			<div class="material_info_div">
+				<div class="material_name_content"></div>
+			</div>
+			<div class="material_info_div">
+				<div class="user_info_block">
+					<div class="author_head_img_div float_l">
+						<img class="author_head_img" src="">
+					</div>
+					<div class="author_details_info_div float_l">
+						<div class="author_details_info_li float_l">
+							<div class="material_author_name"></div>
+						</div>
+						<div class="author_details_info_li float_l">
+							<div class="material_author_createDate"></div>
+						</div>
+						<div class="author_details_info_li float_l">
+							<div id="current_canvas_id_in_modal" style="display: none"></div>
+							<div class="material_author_canvasName float_l"></div>
+							<div class="find_more_in_cavans float_l">
+								<img src="../img/更多.png">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="material_info_div">
+				<div class="material_history_info_div float_l">
+					<div class="history_info_icon float_l">
+						<img class="history_icon_img" src="../img/已点赞.png" />
+					</div>
+					<div class="float_l">
+						<div class="history_info_collectionNum"></div>
+					</div>
+				</div>
+				<div class="material_history_info_div float_l">
+					<div class="history_info_icon float_l">
+						<img class="history_icon_img" src="../img/下载.png" />
+					</div>
+					<div class="float_l">
+						<div class="history_info_downloadsNum"></div>
+					</div>
+				</div>
+			</div>
+			<div class="material_info_div">
+				<div class="material_lable_icon_div float_l">
+					<img class="material_lable_icon_img" src="../img/标签.png">
+				</div>
+				<div class="material_lable_content_div float_l">
+					<div class="material_lable_content"></div>
+				</div>
+			</div>
+			<div class="download_material_div">
+				<div class="download_buttons_div" id="download_buttons_id">
+					<button class="download_btn_png">
+						<span id="download_material_png">PNG</span> <select
+							id="material_png_size_select">
+							<option value="512">512x512</option>
+							<option value="16">16x16</option>
+							<option value="32">32x32</option>
+							<option value="64">64x64</option>
+							<option value="72">72x72</option>
+							<option value="96">96x96</option>
+							<option value="128">128x128</option>
+							<option value="256">256x256</option>
+							<option value="1024">1024x1024</option>
+						</select> <input id="isIconInput" type="text" style="display: none" />
+					</button>
+					<button id="download_material_svg" class="download_btn">SVG</button>
+					<button id="download_material_ai" class="download_btn">AI</button>
+				</div>
+				<input type="text" id="currentMaterialId" value=""
+					style="display: none" />
+			</div>
+			<div class="similar_material_block">
+				<div class="similar_block_head">相似</div>
+				<div id="current_material_color_percentage_in_modal"
+					style="display: none"></div>
+				<div class="similar_img_div">
+					<div class="each_similar_material_div float_l">
+						<img class="similar_material_img" src=""> <input type="text"
+							class="similar_material_id" value="" style="display: none" />
+					</div>
+					<div class="each_similar_material_div float_l">
+						<img class="similar_material_img" src=""> <input type="text"
+							class="similar_material_id" value="" style="display: none" />
+					</div>
+					<div class="each_similar_material_div float_l">
+						<img class="similar_material_img" src=""> <input type="text"
+							class="similar_material_id" value="" style="display: none" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<a href="" id="downloadImg" download="" style="display: none"></a>
 	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript"
+		th:src="@{/js/jquery/jquery.mousewheel.js}"></script>
 	<script type="text/javascript" th:src="@{/js/nav.js}"></script>
 	<script type="text/javascript" th:src="@{/js/materialLibrary.js}"></script>
 </body>

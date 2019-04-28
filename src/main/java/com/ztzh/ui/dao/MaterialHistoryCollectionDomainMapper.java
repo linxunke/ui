@@ -24,4 +24,6 @@ public interface MaterialHistoryCollectionDomainMapper {
     int countByMaterialInfoId(Long materialInfoId);
     
     int cancelCollection(@Param("materialInfoId") Long materialInfoId,@Param("userInfoId") Long userInfoId);
+    
+    List<Long> SelectByUserInfoId(Long userInfoId);
 }

@@ -3,7 +3,9 @@ var userId = getParameter('userId');
 var Page;
 var currentPage;
 $(document).ready(function () {
-	
+	$("#manage_upload").click(function() {
+		window.open("/userpage/toMaterialUpload?userId="+userId);
+	});
     var btn = document.getElementById('manage_add_btn');
     var cover = document.getElementById('cover_layer');
     var close = document.getElementById('close');
@@ -20,7 +22,7 @@ $(document).ready(function () {
     
     //查看当前页面
     console.log("currentPage="+$.cookie("currentPage"));*/
-    currentPage = parseInt(document.getElementById('currentPageNumber').innerHTML);
+    currentPage = parseInt($("#currentPage").val());
     console.log("currentPage111="+currentPage);
     getUserName(userId);
     
@@ -45,29 +47,28 @@ $(document).ready(function () {
     		  var div = document.createElement('div');
     		  div.className = "every_board";
     		  div.id = "every_board" + i;
-    		  div.onclick =enterCanvas;
     		  document.getElementById("board_list").appendChild(div);
     		  //下面需要后台传过来的信息innerHTML
     		  /*result.object.canvasInfo[i].lastMaterialUrl*/
     		  if(result.object.canvasInfo[i].canvasName =="未分类"){
     			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
     				  $("#"+div.id).html('<div'+
-        				  ' class="board_covers"><img style="width:220px;height:160px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" class="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+        				  ' class="board_covers" onclick="enterCanvas(this)"><img style="width:220px;height:160px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" class="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }else{
     				  $("#"+div.id).html('<div'+
-            				  ' class="board_covers" ><img style="width:220px;height:160px"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+            				  ' class="board_covers" onclick="enterCanvas(this)"><img style="width:220px;height:160px"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" id="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }
     		  }else{
     			  if(result.object.canvasInfo[i].lastMaterialUrl!=undefined){
     		  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
     				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
     				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
-    				  ' class="board_covers" ><img style="width:220px;height:160px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" class="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    				  ' class="board_covers" onclick="enterCanvas(this)"><img style="width:220px;height:160px" src="'+window.location.protocol + "//" + window.location.host +'/'+ result.object.canvasInfo[i].lastMaterialUrl+'"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" class="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }else{
     				  $("#"+div.id).html('<div onclick="update('+result.object.canvasInfo[i].canvasId+''+
     	    				  ')" class="edit_button"><img class="edit_img" src="../img/编辑.png"><span'+
     	    				  ' class="canvas-id">'+result.object.canvasInfo[i].canvasId+'/span></div><div'+
-    	    				  ' class="board_covers" ><img style="width:220px;height:160px"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" class="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
+    	    				  ' class="board_covers" onclick="enterCanvas(this)"><img style="width:220px;height:160px"></div><div class="board_name">'+result.object.canvasInfo[i].canvasName+'</div><div class="drawing_count">'+result.object.canvasInfo[i].materialCount+'</div><img class="download_logo" src="../img/下载.png"><div class="download_count">'+downloadCount+'</div><div class="upload_date">'+result.object.canvasInfo[i].lastMaterialUploadTimeFormate+'</div><div style="display:none" class="board_id">'+result.object.canvasInfo[i].canvasId+'</div>');
     			  }
     		  }
     	   }
@@ -268,26 +269,20 @@ function getUserName(userId){
     	}
     });
 }
-function homePage(){
-	$(".every_board").remove();
-	currentPage = 1;
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
-	sendAjax(currentPage);
-    
-}
 function lastPage(){
-	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+	var currentPage = $("#currentPage").val();
 	$(".every_board").remove();
 	if(currentPage>1){
 		currentPage = parseInt(currentPage)-1;
 	}else{
 		currentPage = parseInt(currentPage);
 	}
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
+	/*currentPage = currentPage>1?parseInt(currentPage)-1 : parseInt(currentPage);*/
+	$("#currentPage").val(currentPage);
 	sendAjax(currentPage);
 }
 function nextPage(){
-	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+	var currentPage = $("#currentPage").val();
 	$(".every_board").remove();
 	if(currentPage<Page){
 		currentPage = parseInt(currentPage)+1;
@@ -295,17 +290,21 @@ function nextPage(){
 	}else{
 		currentPage = parseInt(currentPage);
 	}
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
-	sendAjax(currentPage);   
+	$("#currentPage").val(currentPage);
+	sendAjax(currentPage);
 }
-function finalPage(){
-	var currentPage = document.getElementById('currentPageNumber').innerHTML;
+$("#search_by_page").click(function(event){
+	var currentPage = $("#currentPage").val();
 	$(".every_board").remove();
-	currentPage = Page;
-	document.getElementById('currentPageNumber').innerHTML=currentPage;
-	sendAjax(currentPage);   
-}
-
+	if(currentPage > Page){
+		currentPage = Page;
+	}
+	else if(currentPage < 1){
+		currentPage = 1;
+	}
+	$("#currentPage").val(currentPage);
+	sendAjax(currentPage);
+});
 function sendAjax(currentPage){
 	console.log("currentPage1212="+currentPage);
 	$.ajax({
@@ -358,7 +357,7 @@ function sendAjax(currentPage){
         }
     });
 }
-function enterCanvas() {
-	var canvasId = $(this).find(".board_id").html();
+function enterCanvas(obj) {
+	var canvasId = $(obj).parent().find(".board_id").html();
 	 window.location.href = '/userpage/toMaterialManage?userId='+userId +'&canvasId='+canvasId;
 }

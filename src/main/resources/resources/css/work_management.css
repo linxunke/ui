@@ -39,13 +39,15 @@
 	position: absolute;
 	margin: 26px 1053px 42px 299px;
 }
-
+.head_active{
+	color: orange!important;
+}
 #manage_userwork1 {
 	width: 120px;
 	height: 28px;
 	position: absolute;
 	margin: 67px 1040px 9px 300px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
@@ -56,7 +58,7 @@
 	height: 28px;
 	position: absolute;
 	margin: 67px 920px 9px 420px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
@@ -67,7 +69,7 @@
 	height: 28px;
 	position: absolute;
 	margin: 67px 830px 9px 510px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
@@ -78,7 +80,7 @@
 	height: 28px;
 	position: absolute;
 	margin: 67px 740px 9px 600px;
-	color: rgba(255, 214, 48, 1);
+	color: rgba(223, 225, 230, 1);
 	font-size: 14px;
 	text-align: left;
 	font-family: PingFangSC-Medium;
@@ -202,7 +204,7 @@
 	margin: 10px 10px 66px 10px;
 	width: 220px;
 	height: 160px;
-	background-color: silver;
+
 }
 .img-covers{
 	max-width: 160px;
@@ -498,13 +500,44 @@ p{
 	height:30px;
 	z-index: 10;
 }
-.pageTransition{
-	position: absolute;
-	margin: 0px 30% 100px 40%;
-	color: black;
+.footer{
+	width: 100%;
+	height: 50px;
 }
-.pageButton{
-	text-decoration:underline;
+.page_modual{
+	width:400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.page_modual_each{
+	margin-left: 30px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 14px;
+	color: rgba(113, 119, 135, 1);
+	font-family: PingFangSC-Regular;
+}
+
+.page_modual_each a:HOVER {
+	cursor: pointer;
+	color: orange;
+}
+#currentPage{
+	width: 40px;
+	height: 20px;
+	border-radius:3px;
+}
+#search_by_page{
+	width: 50px;
+	height: 25px;
+	border-radius:8px;
+	border: 1px solid grey;
+	background-color: white;
+}
+#search_by_page:HOVER {
+	cursor: pointer;
+	color: orange;
+	border: 1px solid orange;
 }
 .pageButton:HOVER{
 	cursor: pointer;

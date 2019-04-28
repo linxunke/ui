@@ -1,4 +1,6 @@
 var userId = getParameter('userId'); 
+var page = 0;
+var pageSize = 15;
 $(document).ready(function () {
 	$.ajax({
 		url:'/SearchIndex/SearchThreePhoto?userId='+userId,
@@ -80,17 +82,10 @@ function chooseSearchWord(){
 		
 	});
 }
-$("#combo_box_head").mouseenter(function(event){
-	/*$(".combo_box_child").css({
-		display:"block",
-	})*/	
-	$(".combo_box_child").slideDown();
-})
 
-$("#combo_box").mouseleave(function(event){
-	$(".combo_box_child").slideUp();
-
-})
+$("#combo_box").click(function() {
+	$(".combo_box_child").slideToggle("fast");
+});
 
 function changeChooseWord(){
 	var a = $(this).children("span").text();
@@ -108,16 +103,19 @@ combo_box_first.addEventListener('click',function(){
 })
 
 function elasticSearch(){
-	var materialName = document.getElementById("searchBox_content").value;;
+	var materialName = document.getElementById("searchBox_content").value;
 	var typeName = $("#combo_box_head").children("span").text();
-	var typeCodeParent = $("#combo_box_head").children("div").html();
-	console.log(materialName+"..."+typeName+"..."+typeCodeParent);
+	var materialTypeCodeParent = $("#combo_box_head").children("div").html();
+	console.log(materialName+"..."+typeName+"..."+materialTypeCodeParent);
+	window.location.herf = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
+	"&materialDescription="+materialName+"&materialTypeCodeParent="+materialTypeCodeParent+
+	"&page="+page+"&pageSize="+pageSize;
 	$.ajax({
 		url:"/elasticsearch/queryByParam?userId="+userId,
 		data:{
 			materialName: materialName,
 			materialDescription: materialName,
-			materialTypeCodeParent: typeCodeParent,
+			materialTypeCodeParent: materialTypeCodeParent,
 			page: 0,
 			pageSize: 15
 		},

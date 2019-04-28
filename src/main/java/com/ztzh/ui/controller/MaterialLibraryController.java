@@ -18,8 +18,8 @@ import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
 import com.ztzh.ui.po.CanvasInfoDomain;
+import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.po.MaterialTypeDomain;
-import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.service.MaterialInfoService;
 import com.ztzh.ui.service.MaterialLibraryService;
 import com.ztzh.ui.utils.PageQueryUtil;
@@ -80,6 +80,20 @@ public class MaterialLibraryController {
 		return responseVo.toString();
 	}
 
+	@RequestMapping(value = "/getChildTypesInfosByParentTypeCode", method = {
+			RequestMethod.POST, RequestMethod.GET })
+	public String getChildTypesInfoByParentTypeCode(
+			@RequestParam(value = "userId", required = true) String userId,
+			@RequestParam(value = "parentTypeCode", required = true) String parentTypeCode,
+			@RequestParam(value = "isIcon", required = true) boolean isIcon){
+		ResponseVo responseVo = new ResponseVo();
+		responseVo.setUserId(userId);
+		List<MaterialChildTypeCoverInfosBo> resultList = materialLibraryService.getChildTypeInfosByParentCodeWithoutCover(parentTypeCode, isIcon);
+		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+		responseVo.setMessage("根据分类获取细分类别的统计信息成功");
+		responseVo.setObject(resultList);
+		return responseVo.toString();
+	}
 	@RequestMapping(value = "/getMaterialsByChildTypeCode", method = {
 			RequestMethod.POST, RequestMethod.GET })
 	public String getMaterialsByChildTypeCode(
@@ -112,6 +126,27 @@ public class MaterialLibraryController {
 		return responseVo.toString();
 	}
 
+	@RequestMapping(value = "/getMaterialsByChildTypeCodeAndNumber", method = {
+			RequestMethod.POST, RequestMethod.GET })
+	public String getMaterialListByChildTypeCodeAndNum(
+			@RequestParam(value = "userId", required = true) String userId,
+			@RequestParam(value = "childTypeCode", required = true) String childTypeCode,
+			@RequestParam(value = "start", required = true) int start,
+			@RequestParam(value = "materialNumber", required = true) int materialNumber){
+		ResponseVo responseVo = new ResponseVo();
+		List<MaterialInfoDomain> resultList = materialLibraryService.getMaterialListByChildTypeCodeAndNumber(childTypeCode, start, materialNumber);
+		if(resultList != null){
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setMessage("根据细分类型批量获取素材列表成功");
+		}else {
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("该细分类型下的素材列表为空");
+		}
+		responseVo.setObject(resultList);
+		responseVo.setUserId(userId);
+		return responseVo.toString();
+	}
+	
 	@RequestMapping(value = "/getMaterialInfoInLibrary", method = {
 			RequestMethod.POST, RequestMethod.GET })
 	public String getMaterialInfoInLibrary(
@@ -134,6 +169,26 @@ public class MaterialLibraryController {
 		}
 		responseVo.setUserId(userId);
 		responseVo.setObject(resultMap);
+		return responseVo.toString();
+	}
+
+	@RequestMapping(value = "/getMaterialInfoInLibraryById", method = {
+			RequestMethod.POST, RequestMethod.GET })
+	public String getMaterialInfoInLibraryById(
+			@RequestParam(value = "userId", required = true) String userId,
+			@RequestParam(value = "materialId", required = true) String materialId) {
+		ResponseVo responseVo = new ResponseVo();
+		Map<String, Object> resultMap = materialLibraryService
+				.getMaterialAndUserInfoById(new Long(materialId));
+		if (resultMap != null) {
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+			responseVo.setMessage("根据Id获取素材、用户、统计信息成功!");
+		} else {
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+			responseVo.setMessage("根据Id获取素材、用户、统计信息失败!");
+		}
+		responseVo.setObject(resultMap);
+		responseVo.setUserId(userId);
 		return responseVo.toString();
 	}
 

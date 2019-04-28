@@ -121,6 +121,7 @@
 	height: 56px;
 	font-size:20px;
 	border: none;
+	outline:none;
 }
 #searchBox_button{
 	width: 56px;
