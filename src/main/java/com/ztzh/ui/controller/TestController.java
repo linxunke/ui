@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,10 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.annotation.JsonAppend.Attr;
+import com.ztzh.ui.bo.LoginInfoForRedisBo;
 import com.ztzh.ui.constants.UserConstants;
 import com.ztzh.ui.po.UserInfoDomain;
 import com.ztzh.ui.service.CanvasInfoService;
 import com.ztzh.ui.service.ImageConvertService;
+import com.ztzh.ui.service.LoginInfoRecordService;
 import com.ztzh.ui.service.TestService;
 import com.ztzh.ui.service.UploadFileService;
 import com.ztzh.ui.utils.FTPUtil;
@@ -71,6 +74,9 @@ public class TestController {
 	
 	@Autowired
 	ImageConvertService imageConvertService;
+	
+	@Autowired
+	LoginInfoRecordService loginInfoRecordService;
 	
 	@RequestMapping(value="/test")
 	public String testInsert() {
@@ -194,6 +200,38 @@ public class TestController {
 			}
 		}
 		return difference;
+	}
+	
+	@RequestMapping(value="recorde")
+	public String recorde(HttpServletRequest request) {
+		LoginInfoForRedisBo loginInfoForRedisBo = new LoginInfoForRedisBo();
+		loginInfoForRedisBo.setUserId(15L);
+		loginInfoForRedisBo.setLoginTime(new Date());
+		loginInfoForRedisBo.setIpAddress(getIpAddress(request));
+		logger.info("{}",loginInfoRecordService.get("15"));
+		loginInfoRecordService.set("15", loginInfoForRedisBo);
+		logger.info("{}",loginInfoRecordService.get("15"));
+		return "";
+	}
+	
+	private String getIpAddress(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_CLIENT_IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return ip;
 	}
 
 }
