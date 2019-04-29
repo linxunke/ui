@@ -119,7 +119,10 @@
     	<![CDATA[('')]]>
     </if>
   </delete>
-  
+  <delete id="deleteAllMaterial">
+  	delete from material_history_collection 
+  	where user_info_id = #{userId,jdbcType=BIGINT} and type = #{type,jdbcType=INTEGER}
+  </delete>
   <select id="countByMaterialInfoId" resultType="java.lang.Integer">
   	select count(id) from
   	material_history_collection
@@ -147,6 +150,6 @@
   	SELECT b.id, b.material_name, b.thumbnail_url 
 	from material_history_collection as a, material_info as b 
 	where a.user_info_id = #{userId,jdbcType=BIGINT} and a.type = #{type,jdbcType=INTEGER} 
-	and a.material_info_id = b.id;
+	and a.material_info_id = b.id limit #{start},#{PageSize};
   </select>
 </mapper>

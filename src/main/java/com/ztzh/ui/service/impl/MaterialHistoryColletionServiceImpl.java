@@ -47,9 +47,10 @@ public class MaterialHistoryColletionServiceImpl implements MaterialHistoryColle
 	}
 
 	@Override
-	public List<MaterialInfoIndex> SelectByUserIdForHistory(Long userId,int type) {
+	public List<MaterialInfoIndex> SelectByUserIdForHistory(Long userId,int type,int currentPage,int pageSize) {
+		int start = (currentPage - 1)*pageSize;
 		List<MaterialInfoDomain> listDomain = 
-				materialHistoryCollectionDomainMapper.SelectByUserIdForHistory(userId,type);
+				materialHistoryCollectionDomainMapper.SelectByUserIdForHistory(userId,type,start,pageSize);
 		List<MaterialInfoIndex> list = new ArrayList<MaterialInfoIndex>();
 		for(int i = 0; i <= listDomain.size()-1; i++){
 			MaterialInfoIndex materialInfoIndex = new MaterialInfoIndex();

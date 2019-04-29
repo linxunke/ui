@@ -13,5 +13,5 @@ public interface MaterialHistoryCollectionService {
 	
 	List<Long> SelectByUserInfoId(Long userInfoId);
 	
-	List<MaterialInfoIndex> SelectByUserIdForHistory(Long userId, int type);
+	List<MaterialInfoIndex> SelectByUserIdForHistory(Long userId, int type,int currentPage,int pageSize);
 }

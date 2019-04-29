@@ -80,4 +80,8 @@ public class UserPageController {
 	public String toHistoryManage(){
 		return "/history_manage";
 	}
+	@RequestMapping(value="toCollectionManage")
+	public String toCollectionManage(){
+		return "/collection_manage";
+	}
 }

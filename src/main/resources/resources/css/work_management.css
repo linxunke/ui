@@ -43,7 +43,7 @@
 .head_active{
 	color: orange!important;
 }
-#manage_userwork1 {
+#myBoard {
 	width: 120px;
 	height: 28px;
 	position: absolute;
@@ -54,7 +54,7 @@
 	font-family: PingFangSC-Medium;
 }
 
-#manage_userwork2 {
+#myCollection {
 	width: 80px;
 	height: 28px;
 	position: absolute;
@@ -65,7 +65,7 @@
 	font-family: PingFangSC-Medium;
 }
 
-#manage_userwork3 {
+#myHistory {
 	width: 80px;
 	height: 28px;
 	position: absolute;
@@ -76,7 +76,7 @@
 	font-family: PingFangSC-Medium;
 }
 
-#manage_userwork4 {
+#superManage {
 	width: 80px;
 	height: 28px;
 	position: absolute;

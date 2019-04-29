@@ -25,6 +25,7 @@ public class ResponseVo {
 	public String message;
 	public String userId;
 	public Object object;
+	public Object omnipotent;
 	public String getStatus() {
 		return status;
 	}
@@ -49,6 +50,7 @@ public class ResponseVo {
 	public void setObject(Object object) {
 		this.object = object;
 	}
+	
 	@Override
 	public String toString() {
 		return JSON.toJSONString(this);

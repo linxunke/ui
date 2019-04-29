@@ -1,4 +1,5 @@
 var typeData; /*存储数据库中已经查询到的所有分类的信息，分为3部分（类别，细分，风格）*/
+var iconTypeCode = '';
 $(document).ready(function(){
 	var userId = getParameter('userId'); 
 	/*获取分类的类别信息*/
@@ -9,7 +10,6 @@ $(document).ready(function(){
 		},
 		success:function(data){
 			typeData = JSON.parse(data);
-			console.log(typeData);
 			/*初始化分类模块的类型下拉框*/
 			var materialTypes = typeData.object.materialTypes;
 			for(var i=0;i<materialTypes.length;i++){
@@ -17,7 +17,7 @@ $(document).ready(function(){
 			}
 			/*初始化分类模块的细分下拉框*/
 			var materialSegmentations = typeData.object.materialSegmentations;
-			//（默认为图标，01）根据已选择类型的值来显示细分的模块
+			//（默认为图标）根据已选择类型的值来显示细分的模块
 			var selectedTypeCode=$(".material_type_text option:selected").val();
 			for(var i=0;i<materialSegmentations.length;i++){
 				if(selectedTypeCode == materialSegmentations[i].parentCode){
@@ -40,7 +40,6 @@ $(document).ready(function(){
 		url:'/canvasInfo/getAllCanvasInfoByUserId?userId='+userId+"&onlyData=1",
 		type:'get',
 		success:function(data){
-			console.log(data);
 			var canvasInfo = data.object;
 			var appendOptions = '';
 			for(var i=0; i < canvasInfo.length; i++){
@@ -115,14 +114,17 @@ $(document).ready(function(){
 			data:formdata,
 			contentType: false,
 	        processData: false,
+	        async:false,
 			success:function(data){
 				var resultData = JSON.parse(data);
-				console.log(resultData);
 				if(resultData.status == '200'){
 					alert(resultData.message);
+					$("#upload_material").attr("disabled",false);
 					window.location.href = "/userpage/toMaterialUpload?userId="+resultData.userId;
 				}else if(resultData.status == '500'){
 					alert(resultData.message);
+					$("#upload_material").attr("disabled",false);
+
 				}
 			},
 			error:function () {
@@ -160,7 +162,21 @@ function deleteInfoModule(obj){
 	/*删除整个类别模块的内容*/
 	$module.parent().remove();
 }
-
+/*获取图标的typecode*/
+function getIconTypeCode() {
+	$.ajax({
+		url:'/materialInfo/getParentTypeCodeOfIcon?userId='+userId,
+		type:'get',
+		success:function(data){
+			var resultData = JSON.parse(data);
+			iconTypeCode = resultData.object;
+		},
+		error:function(){
+			console.log("error happened .....");
+			return iconTypeCode;
+		}
+	});
+}
 //定义一些使用的变量
 var     jcrop_api,//jcrop对象
         boundx,//图片实际显示宽度
@@ -196,7 +212,6 @@ function getFileUrl(sourceId) {
 function changeFile() {
     var url = getFileUrl("file");//根据id获取文件路径
     var fileObj = document.getElementById("file").files[0];
-    /*console.log(fileObj.type);*/
     /*需要添加psd格式的判断*/
     /* *********** */
     /*if(fileObj.type == 'application/postscript'){*/
@@ -213,12 +228,10 @@ function changeFile() {
             processData: false,
     		success:function(data){
     			var resultData = JSON.parse(data);
-    			console.log(resultData);
     			if(resultData.status == '200'){
     				/*拼接图片的地址*/
     				var realUrl = window.location.protocol + "//" + window.location.host + "/images/" + resultData.object;
     				preImg(realUrl);
-    				console.log(realWidth + "--" + realHeight);
     			}else if(resultData.status == '500'){
     				alert(resultData.message);
     			}
@@ -267,7 +280,6 @@ function preImg(url) {
 
 //初始化Jcrop插件
 function initJcrop(){
-    console.log('init',[xsize,ysize]);
     $target.removeAttr("style");//清空上一次初始化设置的样式
     $target.Jcrop({
       onChange: updatePreview,

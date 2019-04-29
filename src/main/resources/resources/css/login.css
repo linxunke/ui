@@ -76,8 +76,10 @@ body{
 	font-family: PingFangSC-Medium;
 }
 .hrr{
-	height: 1px;
+	height: 2px;
 	width: 324px;
+	border:none;
+	border-top:2px solid #185598;
 }
 .top_right{
 	float:left;

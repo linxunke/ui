@@ -89,8 +89,10 @@ public class CanvasInfoController {
 				List<String> iconUrls = iconUrlResultBo.getPngUrls();
 				List<String> realIconUrls = new ArrayList<String>();
 				for (String iconUrl : iconUrls) {
-					realIconUrls.add(ftpAddress.replace("/", "\\\\") + "\\"
-							+ iconUrl.replace("/", "\\"));
+					if(iconUrl != null){
+						realIconUrls.add(ftpAddress.replace("/", "\\\\") + "\\"
+								+ iconUrl.replace("/", "\\"));
+					}				
 				}
 				if (realIconUrls.size() > 0) {
 					String displayIconUrl = null;

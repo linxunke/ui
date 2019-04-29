@@ -9,5 +9,9 @@ public class MaterialTypeConstants {
 	 * 最热
 	 */
 	public static String MATERIAL_TYPE_HOT_CODE = "0022";
+	/*
+	 * 图标的typeCode
+	 */
+	public static String MATERIAL_TYPE_ICON_PARENT_TYPE = "01";
 
 }

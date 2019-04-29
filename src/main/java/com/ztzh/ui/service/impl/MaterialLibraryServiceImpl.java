@@ -15,12 +15,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ztzh.ui.bo.MaterialChildTypeCoverInfosBo;
+import com.ztzh.ui.bo.MaterialDetailsInfoBo;
+import com.ztzh.ui.constants.MaterialTypeConstants;
 import com.ztzh.ui.controller.UserController;
 import com.ztzh.ui.dao.MaterialInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.po.MaterialTypeDomain;
+import com.ztzh.ui.po.MaterialTypeInfoDomain;
 import com.ztzh.ui.service.MaterialLibraryService;
 import com.ztzh.ui.utils.ImageMagickUtil;
 import com.ztzh.ui.utils.PageQueryUtil;
@@ -122,9 +125,11 @@ public class MaterialLibraryServiceImpl implements MaterialLibraryService {
 		PageQueryUtil pageQueryUtil = new PageQueryUtil(pageSize, currentPage,
 				infoTotalNumber);
 		int start = (currentPage - 1) * pageSize;
-		int end = (currentPage >= pageNumber) ? (infoTotalNumber - start) : pageSize;
+		int end = (currentPage >= pageNumber) ? (infoTotalNumber - start)
+				: pageSize;
 		List<MaterialInfoDomain> resultList = materialInfoDomainMapper
-				.selectMaterialInfoWithchildTypeCodeByPage(childTypeCode,start, end);
+				.selectMaterialInfoWithchildTypeCodeByPage(childTypeCode,
+						start, end);
 		pageQueryUtil.setObject(resultList);
 		return pageQueryUtil;
 	}
@@ -134,5 +139,57 @@ public class MaterialLibraryServiceImpl implements MaterialLibraryService {
 			String childTypeCode) {
 		return materialTypeDomainMapper
 				.selectTypeInfosByChildTypeCode(childTypeCode);
+	}
+
+	@Override
+	public Map<String, Object> getMaterialAndUserInfoById(Long materialId) {
+		MaterialDetailsInfoBo resultBo = materialInfoDomainMapper
+				.selectMaterialAndUserInfoById(materialId);
+		resultBo.setUploadFormatTime(resultBo.getUploadTime());
+		List<MaterialTypeInfoDomain> materialTypeList = materialTypeInfoDomainMapper
+				.selectMaterialTypeInfosByMaterialInfoId(materialId);
+		boolean isIcon = true;
+		for (MaterialTypeInfoDomain materialTypeInfoDomain : materialTypeList) {
+			if (!MaterialTypeConstants.MATERIAL_TYPE_ICON_PARENT_TYPE
+					.equalsIgnoreCase(materialTypeInfoDomain
+							.getMaterialTypeCodeParent().trim())) {
+				isIcon = false;
+			}
+		}
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("MaterialDetailsInfoBo", resultBo);
+		resultMap.put("isIcon", isIcon);
+		return resultMap;
+	}
+
+	@Override
+	public List<MaterialInfoDomain> getMaterialListByChildTypeCodeAndNumber(
+			String childTypeCode, int start, int number) {
+		int infoTotalNumber = materialTypeInfoDomainMapper
+				.selectMaterialNumberByChildTypeCode(childTypeCode); // 总条数
+		int end = (infoTotalNumber < start + number) ? (infoTotalNumber - start) : number;
+		List<MaterialInfoDomain> resultList = null;
+		if(end >= 0){
+			resultList = materialInfoDomainMapper.
+					selectMaterialInfoWithchildTypeCodeByPage(childTypeCode, start, end);
+		}
+		return resultList;
+	}
+
+	@Override
+	public List<MaterialChildTypeCoverInfosBo> getChildTypeInfosByParentCodeWithoutCover(
+			String parentCode, boolean isIcon) {
+		List<MaterialChildTypeCoverInfosBo> resultList = new ArrayList<MaterialChildTypeCoverInfosBo>();
+		List<MaterialTypeDomain> childTypeList = materialTypeDomainMapper
+				.selectChildTypeByParentCode(parentCode);
+		for (int i = 0; i < childTypeList.size(); i++) {
+			MaterialChildTypeCoverInfosBo bo = new MaterialChildTypeCoverInfosBo();
+			bo.setChildTypeDomain(childTypeList.get(i));
+			bo.setMaterialOfChildTypeNum(materialTypeInfoDomainMapper
+					.selectMaterialNumberByChildTypeCode(childTypeList.get(i)
+							.getTypeCode()));
+			resultList.add(bo);
+		}
+		return resultList;
 	}
 }

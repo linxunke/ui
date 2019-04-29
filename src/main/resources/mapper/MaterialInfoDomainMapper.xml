@@ -547,4 +547,50 @@
 	where b.material_type_code_child = #{childTypeCode}) and is_valid = 1
 	limit #{start} , #{end}
   </select>
+  
+  <resultMap type="com.ztzh.ui.bo.MaterialDetailsInfoBo" id="materialAndUserResultMap">
+  	<id column="id" jdbcType="BIGINT" property="id" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="user_photo_url" jdbcType="BIGINT" property="createUserHeadImgUrl" />
+    <result column="user_nickname" jdbcType="BIGINT" property="createUserName" />
+    <result column="canvas_info_id_private" jdbcType="BIGINT" property="canvasInfoIdPrivate" />
+    <result column="canvas_info_id_public" jdbcType="BIGINT" property="canvasInfoIdPublic" />
+    <result column="canvas_name" jdbcType="BIGINT" property="canvasName" />
+    <result column="material_name" jdbcType="BIGINT" property="materialName" />
+    <result column="material_description" jdbcType="BIGINT" property="materialDescription" />
+    <result column="material_type" jdbcType="BIGINT" property="materialType" />
+    <result column="material_url" jdbcType="BIGINT" property="materialUrl" />
+    <result column="thumbnail_url" jdbcType="BIGINT" property="thumbnailUrl" />
+    <result column="png_url" jdbcType="BIGINT" property="pngUrl" />
+    <result column="upload_time" jdbcType="BIGINT" property="uploadTime" />
+    <result column="color_type" jdbcType="BIGINT" property="colorType" />
+    <result column="color_percentage" jdbcType="BIGINT" property="colorPercentage" />
+    <result column="collection_count" jdbcType="BIGINT" property="collectionCount" />
+    <result column="download_count" jdbcType="BIGINT" property="downloadCount" />
+  </resultMap>
+  
+  <select id="selectMaterialAndUserInfoById" resultMap="materialAndUserResultMap">
+  	select	a.id,
+  	a.create_user_id,
+  	b.user_photo_url as user_photo_url ,
+  	b.user_nickname as user_nickname,
+  	a.canvas_info_id_private,
+  	a.canvas_info_id_public,
+  	c.canvas_name as canvas_name,
+  	a.material_name,
+  	a.material_description,
+  	a.material_type,
+  	a.material_url,
+  	a.thumbnail_url,
+  	a.png_url,
+  	a.upload_time,
+  	a.color_type,
+  	a.color_percentage,
+  	count(d.id) as download_count,
+  	count(e.id) as collection_count 
+  	from material_info as a LEFT JOIN user_info as b on a.create_user_id = b.id
+		LEFT JOIN canvas_info as c on a.canvas_info_id_private = c.id 
+		LEFT JOIN material_history_collection as d on a.id = d.material_info_id and d.type = 1 		LEFT JOIN material_history_collection as e on a.id = e.material_info_id and e.type = 2
+  	where a.id = #{materialId}
+  </select>
 </mapper>

@@ -15,7 +15,7 @@
 					<img src="../img/logo.png">
 				</div>
 				<div class="nav_list home">
-					<a href="#">首页</a>
+					<a class="nav_active" href="#">首页</a>
 				</div>
 				<div class="nav_list material_library">
 					<a href="#">素材库</a>
@@ -60,7 +60,6 @@
 			</div>
 		</div>
 	</div>
-	
 	<div class="modal">
 		<div class="modal_content">
 			<header class="modal_header">
@@ -75,51 +74,79 @@
 				</div>
 				<div class="float_l modal_materialInfo_div">
 					<div class="material_info_div">
-						<div class="material_info_title float_l">名称</div>
-						<div class="material_info_content float_l">
-							<div id="material_content_name">111</div>
-						</div>
-					</div>
-					<div id="material_type_info_div" style="margin-top: 20px;">
-						<!-- <div class="material_info_div">
-							<div class="float_l material_type_div_each">
-								<span class="material_type_name">类型</span>
-								<div class="material_type_content float_l">
-									<div class="material_parent_type float_l"></div>
-								</div>
-							</div>
-							<div class="float_l material_type_div_each">
-								<span class="material_type_name">细分</span>
-								<div class="material_type_content float_l">
-									<div class="material_child_type float_l"></div>
-								</div>
-							</div>
-							<div class="float_l material_type_div_each" style="margin-right: 0">
-								<span class="material_type_name">风格</span>
-								<div class="material_type_content float_l">
-									<div class="material_style_type float_l"></div>
-								</div>
-							</div>
-						</div> -->
-						
-						
+						<div class="material_name_content"></div>
 					</div>
 					<div class="material_info_div">
-						<div class="material_info_title float_l">标签</div>
-						<div class="material_info_content float_l">
-							<div id="material_content_label">111</div>
+						<div class="user_info_block">
+							<div class="author_head_img_div float_l">
+								<img class="author_head_img" src="" alt="">
+							</div>
+							<div class="author_details_info_div float_l">
+								<div class="author_details_info_li float_l">
+									<div class="material_author_name"></div>
+								</div>
+								<div class="author_details_info_li float_l">
+									<div class="material_author_createDate"></div>
+								</div>
+								<div class="author_details_info_li float_l">
+									<div id="current_canvas_id_in_modal" style="display: none"></div>
+									<div class="material_author_canvasName float_l"></div>
+									<div class="find_more_in_cavans float_l">
+										<img src="../img/更多.png">
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="material_info_div">
-						<div class="material_info_title float_l">个人画板</div>
-						<div class="material_info_content float_l">
-							<div id="personal_canvas">111</div>
+						<div class="material_history_info_div float_l">
+							<div class="history_info_icon float_l">
+								<img class="history_icon_img" src="../img/已点赞.png"/>
+							</div>
+							<div class="float_l">
+								<div class="history_info_collectionNum"></div>
+							</div>
+						</div>
+						<div class="material_history_info_div float_l">
+							<div class="history_info_icon float_l">
+								<img class="history_icon_img" src="../img/下载.png"/>
+							</div>
+							<div class="float_l">
+								<div class="history_info_downloadsNum"></div>
+							</div>
+						</div>
+					</div>
+					<div class="material_info_div">
+						<div class="material_lable_icon_div float_l">
+							<img class="material_lable_icon_img" src="../img/标签.png">
+						</div>
+						<div class="material_lable_content_div float_l">
+							<div class="material_lable_content"></div>
+						</div>
+					</div>
+					<div class="similar_material_block" id="similar_material_div_in_modal">
+						<div class="similar_block_head">相似</div>
+						<div id="current_material_color_percentage_in_modal" style="display: none"></div>
+						<div class="similar_img_div">
+							<div class="each_similar_material_div float_l">
+								<img class="similar_material_img" src="">
+								<input type="text" class="similar_material_id" value="" style="display: none"/>
+							</div>
+							<div class="each_similar_material_div float_l">
+								<img class="similar_material_img" src="">
+								<input type="text" class="similar_material_id" value="" style="display: none"/>
+							</div>
+							<div class="each_similar_material_div float_l">
+								<img class="similar_material_img" src="">
+								<input type="text" class="similar_material_id" value="" style="display: none"/>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer">
-					<div>
-						<button class="download_btn">
+			</div>
+			<div class="modal-footer">
+					<div class="download_buttons_div">
+						<button class="download_btn_png">
 							<span id="download_material_png">PNG</span>
 							<select id="material_png_size_select">
 								<option value="512">512x512</option>
@@ -139,14 +166,14 @@
 					</div>
 					<input type="text" id="currentMaterialId" value="" style="display: none"/>
 				</div>
-			</div>
 		</div>
 	</div>
-	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
 	<a href="" id="downloadImg" download="" style="display: none"></a>
+	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
+	<script type="text/javascript" th:src="@{/js/nav.js}"></script>
 	<script type="text/javascript" th:src="@{/js/search_result.js}"></script>
 </body>
 </html>

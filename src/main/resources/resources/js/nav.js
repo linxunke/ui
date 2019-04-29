@@ -24,13 +24,11 @@ function showUserHeadImg(userId) {
 			userId:userId
 		},
 		success:function(data){
-			console.log(data);
 			if(data.status == '200'){
 				var user = data.object;
 				/*显示用户头像*/
 				var headImgSrc = window.location.protocol + "//" + window.location.host +"/"
 						+ user.userPhotoUrl;
-				//$("#user_head_img").prop("src",headImgSrc);
 				$(".need_sign_in").find("img").attr("src",headImgSrc);
 			}else {
 				alert(data.message);

@@ -4,13 +4,41 @@
 var userId = getParameter('userId'); 
 var pageSize = 8;
 var currentPage = 1;
+var Page=1;
 $(document).ready(function(){
 	$("#manage_upload").click(function() {
 		window.open("/userpage/toMaterialUpload?userId="+userId);
 	});
 	getUserName(userId);
 	getMaterialCount(userId);
-	getHistoryMeterial();
+	getHistoryMeterial(currentPage);
+	/*清空下载*/
+	$("#clear_download").click(function(){
+		var confirmDelete = confirm("确认删除下载历史吗？");
+		if(confirmDelete == true){
+			$.ajax({
+				url:'/historyandcollection/deleteHistoryOrCollectionMaterial',
+				data:{
+					userId:userId,
+					type:1
+				},
+				type:'post',
+				success:function(data){
+					var resultData = JSON.parse(data);
+					if(resultData.status == "200"){
+						location.reload();
+					}else{
+						alert(resultData.message);
+					}
+					
+				},
+				error:function(){
+					console.log("error happened .....");
+				}
+			});
+		}
+		
+	});
 	/*下载格式为ai的图片*/
 	$("#download_material_ai").click(function() {
 		var currentMaterialId = $("#currentMaterialId").val();
@@ -28,9 +56,7 @@ $(document).ready(function(){
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl, resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -65,9 +91,7 @@ $(document).ready(function(){
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -102,9 +126,7 @@ $(document).ready(function(){
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -117,9 +139,20 @@ $(document).ready(function(){
 			});
 		}
 	});
+	$("#myBoard").click(function(){
+    	window.location.href="/userpage/work_manage?userId="+userId;
+    });
+    $("#myCollection").click(function(){
+    	window.location.href="/userpage/toCollectionManage?userId="+userId;
+    });
+    $("#myHistory").click(function(){
+    	window.location.href="/userpage/toHistoryManage?userId="+userId;
+    });
+    $("#superManage").click(function(){
+    	
+    });
 });
 $("#material_list").on('click','.download',function(){
-	console.log("进入弹窗方法");
 	var currentMaterialId = $(this).parent().parent().find(".material_id_container").html();
 	showModal(currentMaterialId);
 });
@@ -157,6 +190,8 @@ function getMaterialCount(userId){
     	success:function(data){
     		var resultData = JSON.parse(data);
     		$("#materialcount").html("下载"+resultData.object+"个素材");
+    		Page = (resultData.object % pageSize == 0)?resultData.object / pageSize:parseInt(resultData.object / pageSize)+1;
+    		$("#tatolPage").html(Page);
     		console.log(resultData);
  			
     	},
@@ -165,7 +200,7 @@ function getMaterialCount(userId){
     	}
     });
 }
-function getHistoryMeterial(){
+function getHistoryMeterial(currentPage){
 	$.ajax({
     	url:'/historyandcollection/selectHistoryOrCollectionMaterial',
     	data:{
@@ -197,6 +232,134 @@ function getHistoryMeterial(){
     	}
     });
 }
+function lastPage(){
+	var currentPage = $("#currentPage").val();
+	$(".result_photo").remove();
+	if(currentPage>1){
+		currentPage = parseInt(currentPage)-1;
+	}else{
+		currentPage = parseInt(currentPage);
+	}
+	/*currentPage = currentPage>1?parseInt(currentPage)-1 : parseInt(currentPage);*/
+	$("#currentPage").val(currentPage);
+	getHistoryMeterial(currentPage);
+}
+function nextPage(){
+	var currentPage = $("#currentPage").val();
+	$(".result_photo").remove();
+	if(currentPage<Page){
+		currentPage = parseInt(currentPage)+1;
+	}else{
+		currentPage = parseInt(currentPage);
+	}
+	$("#currentPage").val(currentPage);
+	getHistoryMeterial(currentPage);
+}
+$("#search_by_page").click(function(event){
+	var currentPage = $("#currentPage").val();
+	$(".result_photo").remove();
+	if(currentPage > Page){
+		currentPage = Page;
+	}
+	else if(currentPage < 1){
+		currentPage = 1;
+	}
+	$("#currentPage").val(currentPage);
+	getHistoryMeterial(currentPage);
+});
+
+function showModal(materialId) {
+	$("#currentMaterialId").val(materialId);
+	$("#material_type_info_div").empty();
+	getMaterialInfoDetailsByMaterialId(materialId); //
+	$(".modal").css("display","block");
+	console.log(materialId);
+}
+/*关闭模态框*/
+function closeModal() {
+	$(".modal").css("display","none");
+}
+/*获取图片的全部信息*/
+function getMaterialInfoDetailsByMaterialId(materialId) {
+	$.ajax({
+		url:'/materialLibrary/getMaterialInfoInLibraryById',
+		type:'get',
+		async:false,
+		data:{
+			userId:userId,
+			materialId:materialId
+		},
+		success:function(data){
+			var materialData = JSON.parse(data);
+			if(materialData.status == '200'){
+				reloadMaterialInfoInModal(materialData.object);
+			}else {
+				alert(materialData.message);
+			}
+		},
+		error:function(){
+			console.log("error happened .....");
+		}
+	});
+	
+}
+/*展示详情页的信息*/
+function reloadMaterialInfoInModal(materialInfos) {
+	if(materialInfos.isIcon){
+		$("#material_png_size_select").css("display","inline");
+	}else {
+		$("#material_png_size_select").css("display","none");
+	}
+	$("#isIconInput").val(materialInfos.isIcon);
+	$("#material_img_preview").attr("src",window.location.protocol + "//" + window.location.host + materialInfos.MaterialDetailsInfoBo.pngUrl);
+	$(".material_name_content").html(materialInfos.MaterialDetailsInfoBo.materialName);
+	$(".author_head_img").attr("src",window.location.protocol + "//" + window.location.host +"/" + materialInfos.MaterialDetailsInfoBo.createUserHeadImgUrl);
+	$(".material_author_name").html(materialInfos.MaterialDetailsInfoBo.createUserName);
+	$(".material_author_createDate").html(materialInfos.MaterialDetailsInfoBo.uploadFormatTime);
+	$("#current_canvas_id_in_modal").html(materialInfos.MaterialDetailsInfoBo.canvasInfoIdPrivate);
+	$(".material_author_canvasName").html(materialInfos.MaterialDetailsInfoBo.canvasName);
+	$(".history_info_collectionNum").html(materialInfos.MaterialDetailsInfoBo.collectionCount);
+	$(".history_info_downloadsNum").html(materialInfos.MaterialDetailsInfoBo.downloadCount);
+	$(".material_lable_content").html(materialInfos.MaterialDetailsInfoBo.materialDescription);
+	$("#current_material_color_percentage_in_modal").html(materialInfos.MaterialDetailsInfoBo.colorPercentage);
+	$("#currentMaterialId").val(materialInfos.MaterialDetailsInfoBo.id);
+	getSimilarMaterial(materialInfos.MaterialDetailsInfoBo.colorPercentage);
+}
+/*获取相似素材的信息*/
+function getSimilarMaterial(color_percentage) {
+	$.ajax({
+		url:'/elasticsearch/queryByParam',
+		type:'post',
+		data:{
+			colorPercentage:color_percentage,
+			page:0,
+			pageSize:3,
+			userId:userId
+		},
+		success:function(data){
+			//var resultData = JSON.parse(data);
+			var similarMaterialList = JSON.parse(data);
+			showSimilarMaterialImg(similarMaterialList);
+		},
+		error:function(){
+			console.log("error happened ...");
+		}
+	});
+}
+/*显示相似素材的图片*/
+function showSimilarMaterialImg(similarMaterialList) {
+	var each_similar_material = $(".each_similar_material_div");
+	for(var i = 0; i < each_similar_material.length; i++){
+		$(each_similar_material[i]).find(".similar_material_img").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
+		$(each_similar_material[i]).find(".similar_material_id").val(similarMaterialList.items[i].id);
+	}
+}
+/*下载文件的方法*/
+function downloadStaticFile(imageUrl,imageName) {
+    $("#downloadImg").attr("href",window.location.protocol + "//" + window.location.host + imageUrl);
+    $("#downloadImg").attr("download",imageName);
+    document.getElementById("downloadImg").click(); 
+}
 $("#material_list").on('click','.collect',function(){
 	var operationCode;
 	if($(this).find(".collection_valid").val() == 0){
@@ -220,12 +383,10 @@ $("#material_list").on('click','.collect',function(){
 		},
 		success:function(data){
 			var result = JSON.parse(data);
-			console.log(result.status == "200");
-			console.log(result.status == "500");
 			if(result.status == "200"){
-				console.log(result.message);
+				
 			}else{
-				console.log(result.message);
+				
 			}
 		},
 		error:function(){
@@ -233,155 +394,8 @@ $("#material_list").on('click','.collect',function(){
 		}
 	});
 });
-function showModal(materialId) {
-	$("#currentMaterialId").val(materialId);
-	$("#material_type_info_div").empty();
-	getMaterialInfoDetailsByMaterialId(materialId);
-	$(".modal").css("display","block");
-}
-/*关闭模态框*/
-function closeModal() {
-	$(".modal").css("display","none");
-}
-/*获取图片的全部信息*/
-function getMaterialInfoDetailsByMaterialId(materialId) {
-	var typeData;
-	$.ajax({
-		url:'/uploadMaterial/getMaterialTypes?userId='+userId,
-		type:'get',
-		async:false,
-		success:function(data){
-			typeCatchData = JSON.parse(data);
-			console.log(typeCatchData);
-		},
-		error:function(){
-			console.log('error happened----');
-		}
-	});
-	$.ajax({
-		url:'/materialLibrary/getMaterialInfoInLibrary',
-		type:'get',
-		async:false,
-		data:{
-			userId:userId,
-			materialId:materialId
-		},
-		success:function(data){
-			var materialData = JSON.parse(data);
-			console.log(materialData);
-			showMaterialDetailsInModal(materialData,typeCatchData);
-		},
-		error:function(){
-			console.log("error happened .....");
-		}
-	});
-	
-}
-/*展示详情页的信息*/
-function showMaterialDetailsInModal(data,typeCatchData) {
-	var materialPngSrc = window.location.protocol + "//" + window.location.host +"/"
-	+ data.object.materialInfo.pngUrl;
-	$("#material_img_preview").attr("src",materialPngSrc);
-	var isIcon = materialIsAIcon(data.object.materialInfo.materialTypeInfoList);
-	if(isIcon){
-		$("#material_png_size_select").css("display","inline");
-		$("#isIconInput").val(true);
-	}else{
-		$("#material_png_size_select").css("display","none");
-		$("#isIconInput").val(false);
-	}
-	$("#material_content_name").html(data.object.materialInfo.materialName);
-	$("#material_content_label").html(data.object.materialInfo.materialDescription);
-	$("#personal_canvas").html(data.object.canvasInfo.canvasName);
-	$("#currentMaterialId").val(data.object.materialInfo.id);
-	var materialTypeInfoList = data.object.materialInfo.materialTypeInfoList;
-	var parentTypeInfoList = typeCatchData.object.materialTypes;
-	var childTypeInfoList = typeCatchData.object.materialSegmentations;
-	var styleTypeInfoList = typeCatchData.object.materialStyles;
-	addTypeBlocksByNum(materialTypeInfoList.length);
-	var materialTypeBlocks = $("#material_type_info_div").find(".material_info_div");
-	for(var i = 0; i < materialTypeInfoList.length; i++){
-		for(var j = 0; j < parentTypeInfoList.length; j++){
-			if(parentTypeInfoList[j].typeCode == materialTypeInfoList[i].materialTypeCodeParent){
-				$(materialTypeBlocks[i]).find(".material_parent_type ").html(parentTypeInfoList[j].typeName);
-				break;
-			}
-		}
-		for(var j = 0; j < childTypeInfoList.length; j++){
-			if (childTypeInfoList[j].typeCode == materialTypeInfoList[i].materialTypeCodeChild) {
-				$(materialTypeBlocks[i]).find(".material_child_type ").html(childTypeInfoList[j].typeName);
-				break;
-			}
-		}
-		for(var j = 0; j < styleTypeInfoList.length; j++){
-			if (styleTypeInfoList[j].typeCode == materialTypeInfoList[i].materialStyleCode) {
-				$(materialTypeBlocks[i]).find(".material_style_type ").html(styleTypeInfoList[j].typeName);
-				break;
-			}
-		}
-	}
-}
-function materialIsAIcon(materialTypeInfoList) {
-	for(var i =0; i < materialTypeInfoList.length; i++){
-		if(materialTypeInfoList[i].materialTypeCodeParent != '01'){
-			return false;
-		}
-	}
-	return true;
-}
-
-function addTypeBlocksByNum(num) {
-	for(var i = 0; i < num; i++){
-		$("#material_type_info_div").append('<div class="material_info_div"><div class="float_l material_type_div_each">'+
-				'<span class="material_type_name">类型</span><div class="material_type_content float_l">'+
-				'<div class="material_parent_type float_l"></div></div></div>'+
-				'<div class="float_l material_type_div_each"><span class="material_type_name">细分</span>'+
-				'<div class="material_type_content float_l"><div class="material_child_type float_l">'+
-				'</div></div></div><div class="float_l material_type_div_each" style="margin-right: 0">'+
-				'<span class="material_type_name">风格</span><div class="material_type_content float_l">'+
-				'<div class="material_style_type float_l"></div></div></div></div>');
-	}
-}
-function downloadStaticFile(imageUrl,imageName) {
-    //console.log(imageUrl);
-    //console.log(imageName);
-    $("#downloadImg").attr("href",window.location.protocol + "//" + window.location.host + imageUrl);
-    $("#downloadImg").attr("download",imageName);
-    document.getElementById("downloadImg").click(); 
-}
-$("#result_list_body").on('click','.collect',function(){
-	var operationCode;
-	if($(this).find(".collection_valid").val() == 0){
-		$(this).html('<img src="../img/已点赞.png"><input class="collection_valid" style="display:none;" type="number" value="1"/>');
-		operationCode = 1;
-	}else{
-		$(this).html('<img src="../img/未赞.png"><input class="collection_valid" style="display:none;" type="number" value="0"/>');
-		operationCode = 0;
-	}
-	//当前图片素材的id
-	var currentMaterialId = $(this).parent().parent().find(".material_id_container").html();
-	$.ajax({
-		url:'/historyandcollection/collectOperate',
-		type:'post',
-		async:false,
-		data:{
-			userId:userId,
-			materialInfoId:currentMaterialId,
-			operationCode:operationCode,
-			type:2
-		},
-		success:function(data){
-			var result = JSON.parse(data);
-			console.log(result.status == "200");
-			console.log(result.status == "500");
-			if(result.status == "200"){
-				console.log(result.message);
-			}else{
-				console.log(result.message);
-			}
-		},
-		error:function(){
-			console.log("error happened .....");
-		}
-	});
-});
+$("#similar_material_div_in_modal").on("click",".each_similar_material_div",function(){
+	var materiaId = $(this).find(".similar_material_id").val();
+	closeModal();
+	showModal(materiaId);
+})

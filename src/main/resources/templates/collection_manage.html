@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>我的收藏</title>
+</head>
+<link rel="stylesheet" th:href="@{/css/history_manage.css}"
+	type="text/css">
+<link rel="stylesheet" th:href="@{/css/nav.css}" type="text/css" />
+<body>
+	<div class="manage_all">
+		<div class="manage_head">
+			<div class="nav">
+				<div class="nav_list logo">
+					<img src="../img/logo.png">
+				</div>
+				<div class="nav_list home">
+					<a href="#">首页</a>
+				</div>
+				<div class="nav_list material_library">
+					<a href="#">素材库</a>
+				</div>
+				<div class="nav_list work_management">
+					<a class="nav_active" href="#">作品管理</a>
+				</div>
+				<div class="nav_list search_box">
+					<img src="../img/搜图.png" class="search_map" alt=""> <input
+						type="text" value="春节" class="search_content" /> <img
+						src="../img/搜索.png" alt="" class="search_btn">
+				</div>
+				<div class="nav_list update">
+					<img src="../img/上传.png">
+				</div>
+				<div class="nav_list message">
+					<img src="../img/消息.png">
+				</div>
+				<div class="nav_list need_sign_in">
+					<img src="../img/未登录.png">
+				</div>
+			</div>
+		</div>
+		<div class="manage_userdoing">
+			<div class="userdoing" id="manage_userhead"></div>
+			<div class="userdoing" id="manage_username">UserName</div>
+			<div class="userdoing" id="myBoard">我上传的作品</div>
+			<div class="userdoing head_active" id="myCollection">我的收藏</div>
+			<div class="userdoing" id="myHistory">下载历史</div>
+			<div class="userdoing" id="superManage">超级管理</div>
+			<div id="manage_materialcount">
+				<span id="materialcount">收藏了？个素材</span>
+			</div>
+			<div class="userdoing" id="manage_search">
+				<img src="../img/我的-搜索.png">
+			</div>
+			<div class="userdoing" id="manage_upload">
+				<img src="../img/我的-上传.png">
+			</div>
+		</div>
+		<div class="empty"></div>
+		<div class="manage_material_list" id="material_list"></div>
+		<div class="footer">
+			<div class="page_modual">
+				<div class="float_l page_modual_each">
+					<a onclick="lastPage()" id="lastPage">上一页</a>
+				</div>
+				<div class="float_l page_modual_each">
+					<input id="currentPage" type="number" value="1" /> <input
+						id="search_by_page" type="button" value="跳转">
+				</div>
+				<div class="float_l page_modual_each">
+					<a onclick="nextPage()" id="nextPage">下一页</a>
+				</div>
+				<div class="float_l page_modual_each">
+					共<span id="tatolPage"></span>页
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 模态框 -->
+	<div class="modal">
+		<div class="modal_content">
+			<header class="modal_header">
+				<h4>素材信息</h4>
+				<button id="closeModal" onclick="closeModal()">×</button>
+			</header>
+			<div class="modal_body">
+				<div class="float_l modal_material_div">
+					<div class="material_img_div">
+						<img src="" id="material_img_preview">
+					</div>
+				</div>
+				<div class="float_l modal_materialInfo_div">
+					<div class="material_info_div">
+						<div class="material_name_content"></div>
+					</div>
+					<div class="material_info_div">
+						<div class="user_info_block">
+							<div class="author_head_img_div float_l">
+								<img class="author_head_img" src="" alt="">
+							</div>
+							<div class="author_details_info_div float_l">
+								<div class="author_details_info_li float_l">
+									<div class="material_author_name"></div>
+								</div>
+								<div class="author_details_info_li float_l">
+									<div class="material_author_createDate"></div>
+								</div>
+								<div class="author_details_info_li float_l">
+									<div id="current_canvas_id_in_modal" style="display: none"></div>
+									<div class="material_author_canvasName float_l"></div>
+									<div class="find_more_in_cavans float_l">
+										<img src="../img/更多.png">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="material_info_div">
+						<div class="material_history_info_div float_l">
+							<div class="history_info_icon float_l">
+								<img class="history_icon_img" src="../img/已点赞.png"/>
+							</div>
+							<div class="float_l">
+								<div class="history_info_collectionNum"></div>
+							</div>
+						</div>
+						<div class="material_history_info_div float_l">
+							<div class="history_info_icon float_l">
+								<img class="history_icon_img" src="../img/下载.png"/>
+							</div>
+							<div class="float_l">
+								<div class="history_info_downloadsNum"></div>
+							</div>
+						</div>
+					</div>
+					<div class="material_info_div">
+						<div class="material_lable_icon_div float_l">
+							<img class="material_lable_icon_img" src="../img/标签.png">
+						</div>
+						<div class="material_lable_content_div float_l">
+							<div class="material_lable_content"></div>
+						</div>
+					</div>
+					<div class="similar_material_block" id="similar_material_div_in_modal">
+						<div class="similar_block_head">相似</div>
+						<div id="current_material_color_percentage_in_modal" style="display: none"></div>
+						<div class="similar_img_div">
+							<div class="each_similar_material_div float_l">
+								<img class="similar_material_img" src="">
+								<input type="text" class="similar_material_id" value="" style="display: none"/>
+							</div>
+							<div class="each_similar_material_div float_l">
+								<img class="similar_material_img" src="">
+								<input type="text" class="similar_material_id" value="" style="display: none"/>
+							</div>
+							<div class="each_similar_material_div float_l">
+								<img class="similar_material_img" src="">
+								<input type="text" class="similar_material_id" value="" style="display: none"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+					<div class="download_buttons_div">
+						<button class="download_btn_png">
+							<span id="download_material_png">PNG</span>
+							<select id="material_png_size_select">
+								<option value="512">512x512</option>
+								<option value="16">16x16</option>
+								<option value="32">32x32</option>
+								<option value="64">64x64</option>
+								<option value="72">72x72</option>
+								<option value="96">96x96</option>
+								<option value="128">128x128</option>
+								<option value="256">256x256</option>
+								<option value="1024">1024x1024</option>
+							</select>
+							<input id="isIconInput" type="text" style="display: none"/>
+						</button>
+						<button id="download_material_svg" class="download_btn">SVG</button>
+						<button id="download_material_ai" class="download_btn">AI</button>
+					</div>
+					<input type="text" id="currentMaterialId" value="" style="display: none"/>
+				</div>
+		</div>
+	</div>
+
+	<a href="" id="downloadImg" download="" style="display: none"></a>
+	<script type="text/javascript" th:src="@{/js/tool.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.Jcrop.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery/jquery.color.js}"></script>
+	<script type="text/javascript" th:src="@{/js/nav.js}"></script>
+	<script type="text/javascript" th:src="@{/js/collection_manage.js}"></script>
+</body>
+</html>

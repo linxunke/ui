@@ -22,13 +22,15 @@ public interface MaterialHistoryCollectionDomainMapper {
     
     int deleteByMaterialInfoIds(@Param("materialInfoIds")List<Long> materialInfoIds);
     
+    boolean deleteAllMaterial(@Param("userId")Long userId, @Param("type")int type);
+    
     int countByMaterialInfoId(Long materialInfoId);
     
     int cancelCollection(@Param("materialInfoId") Long materialInfoId,@Param("userInfoId") Long userInfoId);
     
     List<Long> SelectByUserInfoId(Long userInfoId);
     
-    List<MaterialInfoDomain> SelectByUserIdForHistory(@Param("userId") Long userId,@Param("type") int type);
+    List<MaterialInfoDomain> SelectByUserIdForHistory(@Param("userId") Long userId,@Param("type") int type,@Param("start")int start,@Param("PageSize")int PageSize);
     
     int countByUserId(@Param("userInfoId") Long userInfoId,@Param("type")int type);
 }

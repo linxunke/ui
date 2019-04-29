@@ -95,11 +95,29 @@ public class HistoryAndCollectionController {
 		List<Long> list = materialHistoryCollectionService.SelectByUserInfoId(userId);
 		//查出此人下载的素材信息
 		List<MaterialInfoIndex> listMaterialInfo = 
-				materialHistoryCollectionService.SelectByUserIdForHistory(userId, type);
+				materialHistoryCollectionService.SelectByUserIdForHistory(userId, type,currentPage,pageSize);
 				
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setUserId(userId.toString());
 		responseVo.setObject(listMaterialInfo);
+		return responseVo.toString();
+	}
+	@RequestMapping(value = "deleteHistoryOrCollectionMaterial", method = {
+			RequestMethod.GET, RequestMethod.POST })
+	public String deleteHistoryOrCollectionMaterial(
+			@RequestParam(value = "userId") Long userId,
+			@RequestParam(value = "type") Integer type) {
+		boolean IsDelete = materialHistoryCollectionDomainMapper.deleteAllMaterial(userId, type);
+		ResponseVo responseVo = new ResponseVo();
+		responseVo.setUserId(userId.toString());
+		logger.info("是否成功：{}", IsDelete );
+		if (IsDelete) {
+			responseVo.setMessage("操作成功");
+			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+		} else {
+			responseVo.setMessage("删除失败或没有下载记录");
+			responseVo.setStatus(ResponseVo.STATUS_FAILED);
+		}
 		return responseVo.toString();
 	}
 }

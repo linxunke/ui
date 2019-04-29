@@ -40,9 +40,15 @@ $(document).ready(function () {
               dataType:'text',
               type:'post',
               success:function (data) {
-            	  var result = JSON.parse(data);
-            	  console.log(result.userId);
-            	 window.location.href="/userpage/work_manage?userId="+result.userId;
+            	 var resultData = JSON.parse(data);
+            	 console.log(resultData);
+            	 if(resultData.status == "200"){
+            		 window.location.href= "/userpage/toSearchIndex?userId="+resultData.userId;
+            	 }else if(resultData.status == "01"){
+            		 alert("用户无效，请联系系统管理员或注册新账号。");
+            	 }else{
+            		 alert("用户名或密码错误！");
+            	 }
               },
               error:function () {
             	  console.log("error happen -------------");
