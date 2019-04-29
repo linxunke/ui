@@ -12,22 +12,19 @@ $(document).ready(function () {
                 dataType:'text',
                 type:'post',
                success:function (data) {
-            	   console.log("----data:"+data);
             	   if(data=='true'){
-            		   console.log("account is available!");
             		   $("#phone_prompt").css("color","green");
                        $("#phone_prompt").html("√  手机号码格式正确");
                        $("#save_btn").attr("disabled",false);
             	   }
             	   else{
-            		   console.log("account has been registered!");
             		   $("#phone_prompt").css("color","red");
                        $("#phone_prompt").html("×  手机号码已被注册");
                        $("#save_btn").attr("disabled","disabled");
             	   }
                 },
                 error:function () {
-                	console.log("1");
+                	console.log("error happened ....");
                 }
         	});
         }
@@ -89,7 +86,6 @@ $(document).ready(function () {
                 type:'post',
                success:function (data) {
             	   var result = JSON.parse(data);
-            	   console.log(result.status);
             	   if("200" == result.status){
             		   window.location.href = '/userpage/toLogin';
             	   } else{
@@ -182,8 +178,6 @@ function changeFile() {
 
 //3、将本地图片 显示到浏览器上 
 function preImg(url) { 
-
-    console.log('url===' + url);
     //图片裁剪逻辑
     if(jcrop_api)//判断jcrop_api是否被初始化过
     {
@@ -216,7 +210,6 @@ function preImg(url) {
 
 //初始化Jcrop插件
 function initJcrop(){
-    console.log('init',[xsize,ysize]);
     $target.removeAttr("style");//清空上一次初始化设置的样式
     $target.Jcrop({
       onChange: updatePreview,
@@ -319,9 +312,6 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], { type: mime });*/ 
 	var arr = dataurl.split(',');
     var mime = arr[0].match(/:(.*?);/)[1];// 结果：   image/png
-    console.log("arr[0]====" + JSON.stringify(arr[0]));//   "data:image/png;base64"
-    console.log("arr[0].match(/:(.*?);/)====" + arr[0].match(/:(.*?);/));// :image/png;,image/png
-    console.log("arr[0].match(/:(.*?);/)[1]====" + arr[0].match(/:(.*?);/)[1]);//   image/png
     var bstr = atob(arr[1].replace(/\s/g, ''));
     var n = bstr.length;
     var u8arr = new Uint8Array(n);

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ztzh.ui.bo.MaterialAndTypeInfoBo;
 import com.ztzh.ui.bo.MaterialChildTypeCoverInfosBo;
+import com.ztzh.ui.constants.MaterialTypeConstants;
 import com.ztzh.ui.dao.CanvasInfoDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeDomainMapper;
 import com.ztzh.ui.dao.MaterialTypeInfoDomainMapper;
@@ -67,10 +68,10 @@ public class MaterialLibraryController {
 			RequestMethod.POST, RequestMethod.GET })
 	public String getChildTypesByParentTypeCode(
 			@RequestParam(value = "userId", required = true) String userId,
-			@RequestParam(value = "parentTypeCode", required = true) String parentTypeCode,
-			@RequestParam(value = "isIcon", required = true) boolean isIcon) {
+			@RequestParam(value = "parentTypeCode", required = true) String parentTypeCode) {
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setUserId(userId);
+		boolean isIcon = MaterialTypeConstants.MATERIAL_TYPE_ICON_PARENT_TYPE.equalsIgnoreCase(parentTypeCode.trim()) ? true : false;
 		List<MaterialChildTypeCoverInfosBo> resultList = materialLibraryService
 				.getChildTypeInfoByParentCode(parentTypeCode, isIcon);
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
@@ -84,10 +85,10 @@ public class MaterialLibraryController {
 			RequestMethod.POST, RequestMethod.GET })
 	public String getChildTypesInfoByParentTypeCode(
 			@RequestParam(value = "userId", required = true) String userId,
-			@RequestParam(value = "parentTypeCode", required = true) String parentTypeCode,
-			@RequestParam(value = "isIcon", required = true) boolean isIcon){
+			@RequestParam(value = "parentTypeCode", required = true) String parentTypeCode){
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setUserId(userId);
+		boolean isIcon = MaterialTypeConstants.MATERIAL_TYPE_ICON_PARENT_TYPE.equalsIgnoreCase(parentTypeCode.trim()) ? true : false;
 		List<MaterialChildTypeCoverInfosBo> resultList = materialLibraryService.getChildTypeInfosByParentCodeWithoutCover(parentTypeCode, isIcon);
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 		responseVo.setMessage("根据分类获取细分类别的统计信息成功");
@@ -104,7 +105,7 @@ public class MaterialLibraryController {
 		responseVo.setUserId(userId);
 		PageQueryUtil pageQueryUtil;
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		if ("01".equalsIgnoreCase(materialTypeDomainMapper
+		if (MaterialTypeConstants.MATERIAL_TYPE_ICON_PARENT_TYPE.equalsIgnoreCase(materialTypeDomainMapper
 				.selectParentTypeCodeByChildTypeCode(childTypeCode))) {
 			pageQueryUtil = materialLibraryService.getMaterialsByChildTypeCode(
 					childTypeCode, currentPage, PageQueryUtil.PAGE_SIZE_IS_40);

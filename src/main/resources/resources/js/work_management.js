@@ -13,17 +13,7 @@ $(document).ready(function () {
     var close2 = document.getElementById('close2');
     var show2 = document.getElementById('show_div2');
     var sure = document.getElementById('sure');
-   /* if($.cookie("currentPage")==undefined){
-    	var currentPage = document.getElementById('currentPageNumber').innerHTML;
-    }else{
-    	document.getElementById('currentPageNumber').innerHTML=$.cookie("currentPage");
-    	var currentPage = document.getElementById('currentPageNumber').innerHTML;
-    }
-    
-    //查看当前页面
-    console.log("currentPage="+$.cookie("currentPage"));*/
     currentPage = parseInt($("#currentPage").val());
-    console.log("currentPage111="+currentPage);
     getUserName(userId);
     
     $.ajax({
@@ -41,7 +31,6 @@ $(document).ready(function () {
     	   Page=$.cookie("PageCount");
     	   document.getElementById('tatolPage').innerHTML=PageCount;
     	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");
-    	   console.log(result);	   
     	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
     		  var downloadCount=result.object.canvasInfo[i].collectionCount;
     		  var div = document.createElement('div');
@@ -98,7 +87,6 @@ $(document).ready(function () {
     	var boardName = $("#show_text").val();
         var board_des = $("#show_textarea").val();
         var userid = 1;
-        console.log(boardName+"++"+board_des);
     	//添加div
     	/*var main = document.getElementById('unsorted_board');
         var div = document.createElement('div');
@@ -167,14 +155,12 @@ function update(canvasId){
 	show2.style.display = "block";
 	var userId = getParameter('userId');
 	var canvasid = canvasId;
-	console.log("canvasid="+canvasid);
 	sure2.addEventListener('click',function(){
     	cover.style.display = "none";
     	close2.style.display = "none";
     	show2.style.display = "none";
     	var boardName = $("#show_text2").val();
         var board_des = $("#show_textarea2").val();
-        console.log(boardName+"++"+board_des+"++"+canvasid);
         $.ajax({
         	url:'/managementCon/managementUpdate?userId='+userId,
         	data:{
@@ -231,7 +217,6 @@ function update(canvasId){
         	Type:'post',
         	success:function(data){
         		var resultData = JSON.parse(data);
-        		console.log(resultData.status);
         		if(resultData.status == '200'){
         			alert(resultData.message);
         			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
@@ -254,9 +239,7 @@ function getUserName(userId){
     	success:function(data){/*
     		var resultData = JSON.parse(data);*/
     		var resultData = data;
-    		console.log(data);
     		if(resultData.status == '200'){
-    			console.log();
     			$("#manage_username").html(resultData.object.userNickname);
     			$("#manage_userhead").append('<img style="width:64px;height:64px;border-radius: 64px" src="'+window.location.protocol + "//" + window.location.host + '//' + resultData.object.userPhotoUrl + '">');
     			
@@ -286,7 +269,6 @@ function nextPage(){
 	$(".every_board").remove();
 	if(currentPage<Page){
 		currentPage = parseInt(currentPage)+1;
-		console.log("currentPage222="+currentPage);
 	}else{
 		currentPage = parseInt(currentPage);
 	}
@@ -306,7 +288,6 @@ $("#search_by_page").click(function(event){
 	sendAjax(currentPage);
 });
 function sendAjax(currentPage){
-	console.log("currentPage1212="+currentPage);
 	$.ajax({
     	url:'/canvasInfo/getCanvasByUserId?userId='+userId,
     	data:{
@@ -317,8 +298,7 @@ function sendAjax(currentPage){
        success:function (data) {
     	   var result = JSON.parse(data);
     	   
-    	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");
-    	   console.log(result);	   
+    	   $("#manage_boardcount").html("共有"+result.object.canvasCount+"个画板作品");   
     	   for(var i = result.object.canvasInfo.length - 1; i >= 0 ; i--){
     		   var downloadCount = result.object.canvasInfo[i].collectionCount;
     		   var div = document.createElement('div');

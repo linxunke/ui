@@ -5,7 +5,7 @@ canvasId = getParameter('canvasId');
 var typeCatchDate;
 $(document).ready(function() {
 	
-	init(userId, canvasId,1);
+	init(userId, canvasId, 1);
 	
 	/*点击跳转上一页*/
 	$("#lastPage").click(function() {
@@ -18,8 +18,6 @@ $(document).ready(function() {
 	/*点击根据页数搜索*/
 	$("#search_by_page").click(function() {
 		var theCurrentPage = $("#currentPage").val();
-		console.log("theCurrentPage:"+theCurrentPage);
-		console.log("pageNumber:"+pageNumber);
 		if(theCurrentPage<1 || theCurrentPage > pageNumber){
 			alert("要查找的页数不正确,请重新输入！");
 		}else {
@@ -82,7 +80,6 @@ $(document).ready(function() {
 	        processData: false,
 	        success:function(data){
 				var resultData = JSON.parse(data);
-				console.log(resultData);
 				alert(resultData.message);
 				window.location.reload();
 			},
@@ -108,9 +105,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl, resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -145,9 +140,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -182,9 +175,7 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
-					console.log(resultData);
 					if(resultData.status == '200'){
-						console.log(resultData.message);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -200,8 +191,6 @@ $(document).ready(function() {
 });
 /*下载文件的方法*/
 function downloadStaticFile(imageUrl,imageName) {
-        console.log(imageUrl);
-        console.log(imageName);
         $("#downloadImg").attr("href",window.location.protocol + "//" + window.location.host + imageUrl);
         $("#downloadImg").attr("download",imageName);
         document.getElementById("downloadImg").click(); 
@@ -213,7 +202,6 @@ function deleteMaterialInfoById(materialId) {
 	var materialIdObj = new Object();
 	materialIdObj.id = materialId;
 	materialInfoIds[0] = materialIdObj;
-	console.log(materialInfoIds);
 	$.ajax({
 		url:'/uploadMaterial/deleteMaterialsByBatch',
 		type:'get',
@@ -223,7 +211,6 @@ function deleteMaterialInfoById(materialId) {
 		},
 		success:function(data){
 			var resultData = JSON.parse(data);
-			console.log(resultData);
 			alert(resultData.message);
 			if(resultData.status == '200'){
 				window.location.href = "/userpage/toMaterialManage?userId="+resultData.userId+"&canvasId="+canvasId;
@@ -257,7 +244,7 @@ function addMaterialTypeblocks(userId) {
 			'<span class="material_type_name">细分</span><div class="material_type_content float_l">'+
 			'<select class="material_child_type_select">';
 			for(var i = 0; i < childType.length; i++){
-				if(childType[i].parentCode == '01'){
+				if(childType[i].parentCode == parentType[0].typeCode){
 					newTypeModual += '<option value="'+childType[i].typeCode+'">'+childType[i].typeName+'</option>';
 				}
 			}
@@ -270,7 +257,6 @@ function addMaterialTypeblocks(userId) {
 			}
 			newTypeModual += '</select></div></div><div class="float_l">'+
 			'<input type="button" onclick="removeTypeBlock(this)" class="remove_parent_type_div" value="-"/></div></div>';
-			
 			$("#material_type_info_div").append(newTypeModual);
 		},
 		error:function(){
@@ -321,7 +307,6 @@ function getMaterialInfoDetailsByMaterialId(materialId) {
 		},
 		success:function(data){
 			var materialData = JSON.parse(data);
-			console.log(materialData);
 			showMaterialDetailsInModal(materialData);
 		},
 		error:function(){
@@ -389,14 +374,12 @@ function getUserInfo(userId) {
 			userId:userId
 		},
 		success:function(data){
-			console.log(data);
 			if(data.status == '200'){
 				var user = data.object;
 				$("#user_name").html(user.userNickname);
 				/*显示用户头像*/
 				var headImgSrc = window.location.protocol + "//" + window.location.host +"/"
 						+ user.userPhotoUrl;
-				console.log(headImgSrc);
 				$("#user_head_img").prop("src",headImgSrc);
 			}else {
 				alert(data.message);
@@ -417,7 +400,6 @@ function getCanvasInfoById(userId,canvasId) {
 			userId:userId
 		},
 		success:function(data){
-			console.log(data);
 			$(".canvas_name").html(data.object.canvasInfo.canvasName);
 			$(".material_num").html(data.object.materialNum);
 		},
@@ -437,7 +419,6 @@ function getMaterialsInCurrentCanvas(userId,canvasId,currentPage) {
 			currentPage:currentPage
 		},
 		success:function(data){
-			console.log(data);
 			var showAsIcon = data.object.existIcon;
 			if(showAsIcon){
 				showMaterialAsIcon(data);
@@ -495,13 +476,24 @@ function refreshPageModual(currentPage,pageNumber) {
 }
 /*判断一个素材是否是图标*/
 function materialIsAIcon(materialTypeInfoList) {
+	var iconTypeCode = '';
+	$.ajax({
+		url:'/materialInfo/getParentTypeCodeOfIcon?userId='+userId,
+		type:'get',
+		async:false,
+		success:function(data){
+			var resultData = JSON.parse(data);
+			iconTypeCode = resultData.object;
+		},
+		error:function(){
+			console.log("error happened ...");
+		}
+	});
 	for(var i =0; i < materialTypeInfoList.length; i++){
-		if(materialTypeInfoList[i].materialTypeCodeParent != '01'){
-			console.log("false");
+		if(materialTypeInfoList[i].materialTypeCodeParent != iconTypeCode){
 			return false;
 		}
 	}
-	console.log("true");
 	return true;
 }
 /*展示详情页的信息*/
@@ -551,7 +543,6 @@ function showMaterialDetailsInModal(data) {
 		for(var j = 0; j < styleTypeOptions.length; j++){
 			if($(styleTypeOptions[j]).val() == materialTypeInfos[i].materialStyleCode){
 				$(styleTypeOptions[j]).attr("selected", "selected");
-				console.log("i:"+i);
 			}
 		}
 	}
@@ -575,7 +566,6 @@ function getUserCanvas(userId,checkedOptionVal) {
 		url:'/canvasInfo/getAllCanvasInfoByUserId?userId='+userId+"&onlyData=1",
 		type:'get',
 		success:function(data){
-			console.log(data);
 			var canvasInfo = data.object;
 			var appendOptions = '';
 			for(var i=0; i < canvasInfo.length; i++){
@@ -622,7 +612,6 @@ function delete_in_batch() {
 		},
 		success:function(data){
 			var resultData = JSON.parse(data);
-			console.log(resultData);
 			alert(resultData.message);
 			if(resultData.status = '200'){
 				window.location.href = "/userpage/toMaterialManage?userId="+resultData.userId+"&canvasId="+canvasId;

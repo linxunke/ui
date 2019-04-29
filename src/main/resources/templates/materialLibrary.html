@@ -166,7 +166,8 @@
 				<input type="text" id="currentMaterialId" value=""
 					style="display: none" />
 			</div>
-			<div class="similar_material_block">
+			<div class="similar_material_block"
+				id="current_similar_material_container">
 				<div class="similar_block_head">相似</div>
 				<div id="current_material_color_percentage_in_modal"
 					style="display: none"></div>
@@ -187,6 +188,110 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal">
+		<div class="modal_content">
+			<header class="modal_header">
+				<h4>素材信息</h4>
+				<button id="closeModal" onclick="closeModal()">×</button>
+			</header>
+			<div class="modal_body">
+				<div class="float_l material_img_div_in_modal">
+					<img class="material_img_in_modal" src="../img/splitImg.jpg" />
+				</div>
+				<div class="float_l material_info_div_in_modal">
+					<div class="material_info_li_in_modal">
+						<div class="material_name_content_in_modal"></div>
+					</div>
+					<div class="material_info_li_in_modal">
+						<div class="float_l author_head_img_div_in_modal">
+							<img class="author_head_img_in_modal" src="" alt="">
+						</div>
+						<div class="float_l author_details_info_in_modal">
+							<div class="author_details_info_li float_l">
+								<div class="material_author_name_in_modal"></div>
+							</div>
+							<div class="author_details_info_li float_l">
+								<div class="material_author_createDate_in_modal"></div>
+							</div>
+							<div class="author_details_info_li float_l">
+								<div id="current_canvas_id_in_modal_in_modal"
+									style="display: none"></div>
+								<div class="material_author_canvasName_in_modal float_l"></div>
+								<div class="find_more_in_cavans_in_modal float_l">
+									<img src="../img/更多.png">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="material_info_li_in_modal">
+						<div class="material_history_info_div_in_modal float_l">
+							<div class="history_info_icon_in_modal float_l">
+								<img class="history_icon_img_in_modal" src="../img/已点赞.png"/>
+							</div>
+							<div class="float_l">
+								<div class="history_info_collectionNum_in_modal"></div>
+							</div>
+						</div>
+						<div class="material_history_info_div_in_modal float_l">
+							<div class="history_info_icon_in_modal float_l">
+								<img class="history_icon_img_in_modal" src="../img/下载.png"/>
+							</div>
+							<div class="float_l">
+								<div class="history_info_downloadsNum_in_modal"></div>
+							</div>
+						</div>
+					</div>
+					<div class="material_info_li_in_modal">
+						<div class="material_lable_icon_div_in_modal float_l">
+							<img class="material_lable_icon_img_in_modal" src="../img/标签.png">
+						</div>
+						<div class="material_lable_content_div_in_modal float_l">
+							<div class="material_lable_content_in_modal"></div>
+						</div>
+					</div>
+					<div class="similar_material_block_in_modal" id="similar_material_div_in_modal">
+						<div class="similar_block_head">相似</div>
+						<div id="the_material_color_percentage_in_modal" style="display: none"></div>
+						<div class="similar_img_div_in_modal">
+							<div class="each_similar_material_div_in_modal float_l">
+								<img class="similar_material_img_in_modal" src="">
+								<input type="text" class="similar_material_id_in_modal" value="" style="display: none"/>
+							</div>
+							<div class="each_similar_material_div_in_modal float_l">
+								<img class="similar_material_img_in_modal" src="">
+								<input type="text" class="similar_material_id_in_modal" value="" style="display: none"/>
+							</div>
+							<div class="each_similar_material_div_in_modal float_l">
+								<img class="similar_material_img_in_modal" src="">
+								<input type="text" class="similar_material_id_in_modal" value="" style="display: none"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="download_buttons_div_in_modal" id="download_materials_button_group">
+						<button class="download_btn_png_in_modal">
+							<span id="download_material_png_in_modal">PNG</span>
+							<select id="material_png_size_select_in_modal">
+								<option value="512">512x512</option>
+								<option value="16">16x16</option>
+								<option value="32">32x32</option>
+								<option value="64">64x64</option>
+								<option value="72">72x72</option>
+								<option value="96">96x96</option>
+								<option value="128">128x128</option>
+								<option value="256">256x256</option>
+								<option value="1024">1024x1024</option>
+							</select>
+							<input id="isIconInput_in_modal" type="text" style="display: none"/>
+						</button>
+						<button id="download_material_svg_in_modal" class="download_btn">SVG</button>
+						<button id="download_material_ai_in_modal" class="download_btn">AI</button>
+				</div>
+				<input type="text" id="currentMaterialIdInModal" value="" style="display: none"/>
+			</div>
+		</div>
 	</div>
 	<a href="" id="downloadImg" download="" style="display: none"></a>
 	<script type="text/javascript" th:src="@{/js/tool.js}"></script>

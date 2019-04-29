@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ztzh.ui.bo.MaterialAndTypeInfoBo;
+import com.ztzh.ui.constants.MaterialTypeConstants;
 import com.ztzh.ui.dao.MaterialHistoryCollectionDomainMapper;
+import com.ztzh.ui.dao.MaterialTypeDomainMapper;
 import com.ztzh.ui.po.MaterialHistoryCollectionDomain;
 import com.ztzh.ui.po.MaterialInfoDomain;
 import com.ztzh.ui.service.MaterialInfoService;
@@ -38,6 +40,9 @@ public class MaterialInfoController {
 	
 	@Autowired
 	MaterialHistoryCollectionDomainMapper materialHistoryCollectionDomainMapper;
+	
+	@Autowired
+	MaterialTypeDomainMapper materialTypeDomainMapper;
 	
 	@RequestMapping(value = "/getMaterialDetailInfo", method = { RequestMethod.POST,
 			RequestMethod.GET })
@@ -85,6 +90,19 @@ public class MaterialInfoController {
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);
 			responseVo.setMessage("获取文件的路径失败！");
 		}
+		return responseVo.toString();
+	}
+	
+	/*获得图标分类的typeCode*/
+	@RequestMapping(value = "/getParentTypeCodeOfIcon", method = { RequestMethod.POST,
+			RequestMethod.GET })
+	public String getParentTypeCodeOfIcon(
+			@RequestParam(value = "userId", required = true) String userId){
+		ResponseVo responseVo = new ResponseVo();
+		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+		responseVo.setMessage("获取图标的typecode成功");
+		responseVo.setObject(MaterialTypeConstants.MATERIAL_TYPE_ICON_PARENT_TYPE);
+		responseVo.setUserId(userId);
 		return responseVo.toString();
 	}
 }

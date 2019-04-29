@@ -1,6 +1,6 @@
 var userId = getParameter('userId'); 
 var page = 0;
-var pageSize = 15;
+var pageSize = 12;
 $(document).ready(function () {
 	$.ajax({
 		url:'/SearchIndex/SearchThreePhoto?userId='+userId,
@@ -8,11 +8,9 @@ $(document).ready(function () {
         type:'post',
        success:function (data) {
     	   var result = (data);
-    	   console.log(result);
     	   var firstPhoto = document.getElementById("#photo_img1");
     	   var secondPhoto = document.getElementById("#photo_img2");
     	   var thirdPhoto = document.getElementById("#photo_img3");
-    	   console.log(window.location.protocol + "//" + window.location.host +'/'+result.object[0].thumbnailUrl);
     	   if(result.status == '200'){
     	   $("#photo_img1").append('<img style="width:220px;height:160px;margin-top: 16px" src="'+window.location.protocol + "//" + window.location.host +'/'+result.object[0].thumbnailUrl+'">');
     	   $("#photo_head1").html('<img style="border-radius:20px;width:40px;height:40px" src="'+window.location.protocol + "//" + window.location.host +'/'+result.object[0].userPhotoUrl+'">');
@@ -45,7 +43,6 @@ function countNumber(){
         type:'post',
        success:function (data) {
     	   var result = (data);
-    	   console.log(result);
     	   $("#count_icon").html(result.object[0]);
     	   $("#count_drawing").html(result.object[1]);
        },
@@ -62,9 +59,6 @@ function chooseSearchWord(){
         type:'post',
        success:function (data) {
     	   var result = (data);
-    	   console.log(result);
-    	   /*var oUl = document.getElementById("combo_box");
-    	   var aLi = oUl.getElementsByTagName("div");*/
     	   for(var i = 0; i < result.object.length ; i++){
     		   var div = document.createElement('div');
      		  div.className = "combo_box_child";
@@ -90,14 +84,10 @@ $("#combo_box").click(function() {
 function changeChooseWord(){
 	var a = $(this).children("span").text();
 	var b =  $(this).children("div").html();
-	console.log("1111"+a+"2222="+b);
 	$("#combo_box_head").html('<span>'+a+'</span>'+'<div class="hidedivForCode">'+b+'</div>');
-	console.log($("#combo_box_head").children("span").text());
-	console.log($("#combo_box_head").children("div").html());
 }
 
 combo_box_first.addEventListener('click',function(){
-	console.log($(this).html());
 	var c = $(this).html();
 	$("#combo_box_head").html($(this).html());
 })
@@ -106,8 +96,7 @@ function elasticSearch(){
 	var materialName = document.getElementById("searchBox_content").value;
 	var typeName = $("#combo_box_head").children("span").text();
 	var materialTypeCodeParent = $("#combo_box_head").children("div").html();
-	console.log(materialName+"..."+typeName+"..."+materialTypeCodeParent);
-	window.location.herf = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
+	window.location.href = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
 	"&materialDescription="+materialName+"&materialTypeCodeParent="+materialTypeCodeParent+
 	"&page="+page+"&pageSize="+pageSize;
 	$.ajax({
@@ -120,13 +109,11 @@ function elasticSearch(){
 			pageSize: 15
 		},
 		type:'post',
-	       success:function (data) {
-	    	   var result = (data);
-	    	   console.log("result="+result);
-	       },
-	       error:function(){
+	    success:function (data) {
+	    },
+	    error:function(){
 	    	   console.log('error happened----');
-	       }
+	    }
 			
 	});
 }
