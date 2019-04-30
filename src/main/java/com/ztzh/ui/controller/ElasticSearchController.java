@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ztzh.ui.bo.MaterialCountByParentType;
 import com.ztzh.ui.bo.MaterialESBo;
 import com.ztzh.ui.bo.MaterialInfoIndex;
+import com.ztzh.ui.dao.MaterialInfoDomainMapper;
 import com.ztzh.ui.service.ElasticSearchService;
 import com.ztzh.ui.service.MaterialHistoryCollectionService;
 import com.ztzh.ui.service.UploadMaterialsService;
@@ -35,6 +36,8 @@ public class ElasticSearchController {
 	@Autowired
 	MaterialHistoryCollectionService materialHistoryCollectionService;
 	
+	@Autowired
+	MaterialInfoDomainMapper materialInfoDomainMapper;
 	@RequestMapping(value = "/createMaterialInfoIndex", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
 	public String createMaterialInfoIndex() {
@@ -86,15 +89,17 @@ public class ElasticSearchController {
 			MaterialESBo materialESBo) {
 		logger.info("查询条件{}",materialESBo);
 		List<MaterialCountByParentType> materialCountByParentTypeList = elasticSearchService.countMaterialByType(materialESBo);
+		int allMaterialCount = materialInfoDomainMapper.selectAllMaterialCount();
 		ResponseVo responseVo = new ResponseVo();
 		responseVo.setMessage("查询成功");
 		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 		responseVo.setObject(materialCountByParentTypeList);
+		responseVo.setOmnipotent(allMaterialCount);
 		return responseVo.toString();
 	}
 	
 	@RequestMapping(value="queryByParamIsCollection", method = {RequestMethod.GET,
-			RequestMethod.POST})
+			RequestMethod.POST},produces = "application/json;charset=UTF-8")
 	public String queryByParamIsCollection(@RequestParam Long userId,
 			MaterialESBo materialESBo,@RequestParam int page, @RequestParam int pageSize) {
 		logger.info("查询条件{}",materialESBo);

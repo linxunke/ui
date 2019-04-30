@@ -1,6 +1,7 @@
 var userId = getParameter('userId'); 
 var page = 0;
 var pageSize = 12;
+var AllTypeCodeParent = "";
 $(document).ready(function () {
 	
 	$.ajax({
@@ -68,8 +69,10 @@ function chooseSearchWord(){
      		 document.getElementById("combo_box").appendChild(div);
      		$("#"+div.id).html('<span>'+result.object[i].typeName+'</span>'+'<div class="hidedivForCode">'+result.object[i].typeCode+'</div>');
      		div.onclick = changeChooseWord;
-
+     		AllTypeCodeParent = result.object[i].typeCode+","+AllTypeCodeParent;
     	   }
+    	   AllTypeCodeParent = AllTypeCodeParent.substring(0, AllTypeCodeParent.lastIndexOf(','));
+    	   console.log(AllTypeCodeParent);
        },
        error:function(){
     	   console.log('error happened----');
@@ -94,32 +97,24 @@ combo_box_first.addEventListener('click',function(){
 	console.log("------"+$("#combo_box_head").children("span").text());
 });
 
+$(document).keydown(function(event){
+
+	if(event.keyCode == 13){
+	elasticSearch();
+	}
+
+});
 function elasticSearch(){
 	var materialName = document.getElementById("searchBox_content").value;
 	var typeName = $("#combo_box_head").children("span").text();
 	var materialTypeCodeParent = $("#combo_box_head").children("div").html();
 	if(typeName == "全部"){
 		typeName = "";
-		materialTypeCodeParent = "01,02,03,04,05,06";
+		materialTypeCodeParent = AllTypeCodeParent;
 	}
-	window.location.href = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialName+
-	"&materialDescription="+materialName+"&materialTypeCodeParent="+materialTypeCodeParent+
+	var materialNameCode = encodeURI(encodeURI(materialName));
+	console.log(materialNameCode);
+	window.location.href = "/userpage/toSearchResult?userId="+userId+"&materialName="+materialNameCode+
+	"&materialDescription="+materialNameCode+"&materialTypeCodeParent="+materialTypeCodeParent+
 	"&page="+page+"&pageSize="+pageSize;
-	$.ajax({
-		url:"/elasticsearch/queryByParam?userId="+userId,
-		data:{
-			materialName: materialName,
-			materialDescription: materialName,
-			materialTypeCodeParent: materialTypeCodeParent,
-			page: 0,
-			pageSize: 15
-		},
-		type:'post',
-	    success:function (data) {
-	    },
-	    error:function(){
-	    	   console.log('error happened----');
-	    }
-			
-	});
 }

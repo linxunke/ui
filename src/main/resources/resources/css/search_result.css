@@ -245,7 +245,7 @@
 
 	float: right;
 }
-.copy:HOVER {
+.similar:HOVER {
 	cursor:pointer;
 }
 .collect:HOVER {

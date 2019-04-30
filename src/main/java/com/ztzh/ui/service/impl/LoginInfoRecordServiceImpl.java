@@ -16,7 +16,7 @@ public class LoginInfoRecordServiceImpl implements LoginInfoRecordService{
 
 	@Override
 	public void set(String key, LoginInfoForRedisBo loginInfo) {
-		redisTemplate.opsForValue().set(key, loginInfo, 60*15, TimeUnit.SECONDS);
+		redisTemplate.opsForValue().set(key, loginInfo, 60*60, TimeUnit.SECONDS);
 	}
 
 	@Override

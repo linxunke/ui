@@ -50,7 +50,12 @@ public class ResponseVo {
 	public void setObject(Object object) {
 		this.object = object;
 	}
-	
+	public Object getOmnipotent() {
+		return omnipotent;
+	}
+	public void setOmnipotent(Object omnipotent) {
+		this.omnipotent = omnipotent;
+	}
 	@Override
 	public String toString() {
 		return JSON.toJSONString(this);

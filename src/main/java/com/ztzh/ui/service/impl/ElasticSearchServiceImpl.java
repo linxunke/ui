@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.queryparser.flexible.core.builders.QueryBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -99,10 +100,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		NativeSearchQueryBuilder searchBuilder = new NativeSearchQueryBuilder();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         if(null!=materialESBo.getMaterialName()&&""!=materialESBo.getMaterialName()) {
-        	boolQueryBuilder.should(QueryBuilders.matchQuery("materialName", materialESBo.getMaterialName()));
+        	boolQueryBuilder.must(QueryBuilders.fuzzyQuery("materialName", materialESBo.getMaterialName()));
         }
         if(null!=materialESBo.getMaterialDescription()&&""!=materialESBo.getMaterialDescription()) {
-        	boolQueryBuilder.should(QueryBuilders.matchQuery("materialDescription", materialESBo.getMaterialDescription()));
+        	boolQueryBuilder.should(QueryBuilders.fuzzyQuery("materialDescription", materialESBo.getMaterialDescription()));
         }
         if(null!=materialESBo.getSort()&&""!=materialESBo.getSort()) {
         	if(materialESBo.getSort().equals(MaterialTypeConstants.MATERIAL_TYPE_HOT_CODE)) {
@@ -131,7 +132,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         	}
         }
         if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
-        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+        	boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
         }
         RangeQueryBuilder rangeQueryBuider = QueryBuilders.rangeQuery("colorPercentage");
         if(null!=materialESBo.getColorPercentage()) {
@@ -160,6 +161,12 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 		NativeSearchQueryBuilder nativeSearchQuerybuilder = new NativeSearchQueryBuilder();
 		RangeQueryBuilder rangeQueryBuider = QueryBuilders.rangeQuery("colorPercentage");
+		 if(null!=materialESBo.getMaterialName()&&""!=materialESBo.getMaterialName()) {
+	        	boolQueryBuilder.must(QueryBuilders.fuzzyQuery("materialName", materialESBo.getMaterialName()));
+	        }
+	        if(null!=materialESBo.getMaterialDescription()&&""!=materialESBo.getMaterialDescription()) {
+	        	boolQueryBuilder.should(QueryBuilders.fuzzyQuery("materialDescription", materialESBo.getMaterialDescription()));
+	        }
         if(null!=materialESBo.getColorPercentage()) {
         	rangeQueryBuider = rangeQueryBuider.gte(materialESBo.getColorPercentage()*0.97).lte(materialESBo.getColorPercentage()*1.03);
         	boolQueryBuilder.filter(rangeQueryBuider);
@@ -177,6 +184,9 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	        for(String materialTypeCodeChild:materialTypeCodeChildList) {
 	        	boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialTypeCodeChild", materialTypeCodeChild));
 	        }
+	    }
+		if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
+	        boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
 	    }
 		nativeSearchQuerybuilder.withQuery(boolQueryBuilder);
 		nativeSearchQuerybuilder.withSearchType(SearchType.QUERY_THEN_FETCH);

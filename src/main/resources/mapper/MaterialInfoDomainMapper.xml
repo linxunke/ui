@@ -390,6 +390,9 @@
 	<select id="selectDrawingCount" resultType="java.lang.Integer">
 	select count(id) from material_type_info where material_type_code_parent = 02;
 	</select>
+	<select id="selectAllMaterialCount" resultType="java.lang.Integer">
+	select count(id) from material_info;
+	</select>
 	<select id="selectTypeNameForBox" resultMap="MaterialTypeResultMap">
 	select type_name,type_code from material_type where parent_code is null and is_valid = 1;
 	</select>

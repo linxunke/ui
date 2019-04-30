@@ -13,6 +13,7 @@ var pageSize = getParameter('pageSize');
 var parentTypeCount;
 var TotalPage = 0;
 var materialsAmount = 0;
+var colorPercentage = "";
 typeCatchData = null;
 $(document).ready(function() {
 	$.ajax({
@@ -202,6 +203,21 @@ $("#result_list_body").on('click','.download',function(){
 //统计数量
 function typeCount(){
 	var mix_code2 = "";
+	sort_code = $("#typename_1_5").find(".parent_type_code").val();
+	materialStyleCode = $("#typename_1_4").find(".parent_type_code").val();
+	color_code = $("#search_color_type").val();
+	if(sort_code == 0){
+		sort_code = "";
+	}
+	if(materialStyleCode == 0){
+		materialStyleCode = "";
+	}
+	if(color_code == 0){
+		color_code = "";
+	}
+	console.log(11111111);
+	console.log(sort_code);
+	console.log(materialStyleCode);
 	//可能需要更改
 	for(var i = 0; i <= parentTypeCount - 3; i++){
 		var code = $("#typename_1_"+i).find(".parent_type_code").val();
@@ -216,23 +232,28 @@ function typeCount(){
 	$.ajax({
 		url:'/elasticsearch/countMaterialByType?userId='+userId,
     	data:
-    	{materialName: materialName,
-		materialDescription: materialDescription,
+    	{materialName: decodeURI(materialName),
+		materialDescription: decodeURI(materialName),
 		materialTypeCodeParent: materialTypeCodeParent,
 		materialStyleCode:materialStyleCode,
 		sort:sort_code,
 		colorType:color_code,
+		colorPercentage:colorPercentage,
 		materialTypeCodeChild:mix_code2},
         type:'post',
        success:function (data) {
     	   var result = JSON.parse(data);
-    	   for(var i = 0; i <= result.object.length-1; i++){
-    		   if(result.object[i].materialCount > materialsAmount){
-    			   materialsAmount = result.object[i].materialCount;
-    		   }
+    	   console.log(result);
+    	   if(materialTypeCodeParent.indexOf(",") != -1){
+    		   materialsAmount = result.omnipotent;
+    	   }else{
+    		   for(var i = 0; i <= result.object.length-1; i++){
+        		   if(result.object[i].materialCount > materialsAmount){
+        			   materialsAmount = result.object[i].materialCount;
+        		   }
+        	   }
     	   }
     	   //计算总页数
-    	   console.log(result);
     	   TotalPage =parseInt((materialsAmount % pageSize == 0)?(materialsAmount / pageSize):(materialsAmount / pageSize)+1);
     	   $("#tatolPage").html(TotalPage);
     	   if(result.object == ""){
@@ -278,24 +299,30 @@ function getPhotoUrl(){
 			}
 		}
 	}
+	console.log(materialName);
+	console.log(decodeURI(materialName));
 	$.ajax({
 		url:"/elasticsearch/queryByParamIsCollection?userId="+userId,
 		data:{
-			materialName: materialName,
-			materialDescription: materialName,
+			materialName: decodeURI(materialName),
+			materialDescription: decodeURI(materialName),
 			materialTypeCodeParent: materialTypeCodeParent,
 			materialTypeCodeChild:mix_code,
 			materialStyleCode:materialStyleCode,
 			sort:sort_code,
 			colorType:color_code,
+			colorPercentage:colorPercentage,
 			page: page,
 			pageSize: pageSize
 		},
 		type:'post',
+		contentType: "application/x-www-form-urlencoded; charset=utf-8",
 		async: false,
 	       success:function (data) {
 	    	   $(".result_photo").remove();
-	    	   var result = JSON.parse(data);
+	    	   //var result = JSON.parse(data);
+	    	   var result = data;
+	    	   console.log(result);
 	    	   typeCount();
 	    	   for(var i = 0; i<=result.items.length-1; i++){
 	    		   var div = document.createElement('div');
@@ -304,9 +331,9 @@ function getPhotoUrl(){
 	     		   document.getElementById("result_list_body").appendChild(div);
 	     		   //下面需要后台传过来的信息innerHTML
 	     		   if(result.items[i].isCollection == 0){
-	     			  $("#"+div.id).html('<div class="material_id_container" style="display:none">'+result.items[i].id+'</div><div class="photo_url" ><img style="width:220px;height:160px;" src="'+window.location.protocol + "//" + window.location.host +'/'+result.items[i].thumbnailUrl+'"></div><div class="photo_name">'+result.items[i].materialName+'</div><div class="handles" id="handles'+i+'"><div class="copy float_l"><img src="../img/相似.png"></div><div class="download"><img style="width:16px;height:16px;float:right;" src="../img/下载.png"></div><div class="collect float_r" style="margin-right:5px"><img src="../img/未赞.png"><input class="collection_valid" style="display:none;" type="number" value="'+result.items[i].isCollection+'"/></div></div>');
+	     			  $("#"+div.id).html('<div class="color_type_container" style="display:none">'+result.items[i].colorType+'</div><div class="colorPercentage_container" style="display:none">'+result.items[i].colorPercentage+'</div><div class="material_id_container" style="display:none">'+result.items[i].id+'</div><div class="photo_url" ><img style="width:220px;height:160px;" src="'+window.location.protocol + "//" + window.location.host +'/'+result.items[i].thumbnailUrl+'"></div><div class="photo_name">'+result.items[i].materialName+'</div><div class="handles" id="handles'+i+'"><div class="similar float_l"><img src="../img/相似.png" title="相似图片"></div><div class="download"><img style="width:16px;height:16px;float:right;" src="../img/下载.png" title="下载"></div><div class="collect float_r" style="margin-right:5px"><img src="../img/未赞.png" title="收藏"><input class="collection_valid" style="display:none;" type="number" value="'+result.items[i].isCollection+'"/></div></div>');
 	     		   }else{
-	     			  $("#"+div.id).html('<div class="material_id_container" style="display:none">'+result.items[i].id+'</div><div class="photo_url" ><img style="width:220px;height:160px;" src="'+window.location.protocol + "//" + window.location.host +'/'+result.items[i].thumbnailUrl+'"></div><div class="photo_name">'+result.items[i].materialName+'</div><div class="handles" id="handles'+i+'"><div class="copy float_l"><img src="../img/相似.png"></div><div class="download"><img style="width:16px;height:16px;float:right;" src="../img/下载.png"></div><div class="collect float_r" style="margin-right:5px"><img src="../img/已点赞.png"><input class="collection_valid" style="display:none;" type="number" value="'+result.items[i].isCollection+'"/></div></div>');
+	     			  $("#"+div.id).html('<div class="color_type_container" style="display:none">'+result.items[i].colorType+'</div><div class="colorPercentage_container" style="display:none">'+result.items[i].colorPercentage+'</div><div class="material_id_container" style="display:none">'+result.items[i].id+'</div><div class="photo_url" ><img style="width:220px;height:160px;" src="'+window.location.protocol + "//" + window.location.host +'/'+result.items[i].thumbnailUrl+'"></div><div class="photo_name">'+result.items[i].materialName+'</div><div class="handles" id="handles'+i+'"><div class="similar float_l"><img src="../img/相似.png" title="相似图片"></div><div class="download"><img style="width:16px;height:16px;float:right;" src="../img/下载.png" title="下载"></div><div class="collect float_r" style="margin-right:5px"><img src="../img/已点赞.png" title="取消收藏"><input class="collection_valid" style="display:none;" type="number" value="'+result.items[i].isCollection+'"/></div></div>');
 	     		   }
 	     		   
 	    	   }
@@ -493,10 +520,10 @@ function downloadStaticFile(imageUrl,imageName) {
 $("#result_list_body").on('click','.collect',function(){
 	var operationCode;
 	if($(this).find(".collection_valid").val() == 0){
-		$(this).html('<img src="../img/已点赞.png"><input class="collection_valid" style="display:none;" type="number" value="1"/>');
+		$(this).html('<img src="../img/已点赞.png" title="取消收藏"><input class="collection_valid" style="display:none;" type="number" value="1"/>');
 		operationCode = 1;
 	}else{
-		$(this).html('<img src="../img/未赞.png"><input class="collection_valid" style="display:none;" type="number" value="0"/>');
+		$(this).html('<img src="../img/未赞.png" title="收藏"><input class="collection_valid" style="display:none;" type="number" value="0"/>');
 		operationCode = 0;
 	}
 	//当前图片素材的id
@@ -523,6 +550,11 @@ $("#result_list_body").on('click','.collect',function(){
 			console.log("error happened .....");
 		}
 	});
+});
+$("#result_list_body").on('click','.similar',function(){
+	color_code=$(this).parent().parent().find(".color_type_container").html();
+	colorPercentage=$(this).parent().parent().find(".colorPercentage_container").html();
+	getPhotoUrl();
 });
 $("#similar_material_div_in_modal").on("click",".each_similar_material_div",function(){
 	var materiaId = $(this).find(".similar_material_id").val();

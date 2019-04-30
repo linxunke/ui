@@ -61,6 +61,8 @@ public interface MaterialInfoDomainMapper {
 	int selectIconCount();
 
 	int selectDrawingCount();
+	
+	int selectAllMaterialCount();
 
 	List<MaterialTypeBo> selectTypeNameForBox();
 
