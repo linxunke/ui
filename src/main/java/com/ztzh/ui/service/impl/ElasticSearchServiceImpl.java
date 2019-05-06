@@ -188,6 +188,9 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
 	        boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
 	    }
+		if(null!=materialESBo.getColorType()) {
+        	boolQueryBuilder.must(QueryBuilders.termQuery("colorType", materialESBo.getColorType()));
+        }
 		nativeSearchQuerybuilder.withQuery(boolQueryBuilder);
 		nativeSearchQuerybuilder.withSearchType(SearchType.QUERY_THEN_FETCH);
 		nativeSearchQuerybuilder.withIndices("materialinfo").withTypes("docs");
