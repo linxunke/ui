@@ -29,6 +29,9 @@ $(document).ready(function () {
 		"&materialDescription="+materialNameCode+"&materialTypeCodeParent="+materialTypeCodeParent+
 		"&page="+page+"&pageSize="+pageSize;
 	});
+	$(".logo").click(function(){
+		window.location.href="/userpage/toSearchIndex?userId="+userId;
+	});
 });
 //拿到父code
 function chooseSearchWord(){

@@ -36,6 +36,9 @@ body{
     width: 120px;
     height: 36px;
 }
+.logo:HOVER{
+	cursor: pointer;
+}
 .home{
     position: absolute;
     left: 357px;

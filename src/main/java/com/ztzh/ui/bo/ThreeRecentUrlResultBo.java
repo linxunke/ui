@@ -43,8 +43,5 @@ public class ThreeRecentUrlResultBo {
 				+ ", userPhotoUrl=" + userPhotoUrl + ", thumbnailUrl="
 				+ thumbnailUrl + ", materialType=" + materialType
 				+ ", childCode=" + childCode + "]";
-	}
-	
-	
-	
+	}	
 }

@@ -671,6 +671,7 @@
 	font-size: 14px;
 	text-align: center;
 	font-family: PingFangTC-Semibold;
+	display: none;
  }
  #download_material_ai{
 	width: 80px;

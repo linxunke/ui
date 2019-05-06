@@ -185,13 +185,10 @@ function update(canvasId){
         	Type:'post',
         	success:function(data){
         		var resultData = JSON.parse(data);
+        		alert(resultData.message);
         		if(resultData.status == '200'){
-        			alert(resultData.message);
         			document.location.reload("/userpage/work_manage?userId="+resultData.userId);
-        		}else if(resultData.status == '500'){
-    				alert(resultData.message);
-    			}
-        		
+        		}
         	},
         	error:function(){
         		console.log("error happened----");

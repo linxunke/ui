@@ -267,7 +267,10 @@ $("#search_by_page").click(function(event){
 	$("#currentPage").val(currentPage);
 	getHistoryMeterial(currentPage);
 });
-
+$("#material_list").on('click','.photo_url',function(){
+	var currentMaterialId = $(this).parent().find(".material_id_container").html();
+	showModal(currentMaterialId);
+});
 function showModal(materialId) {
 	$("#currentMaterialId").val(materialId);
 	$("#material_type_info_div").empty();

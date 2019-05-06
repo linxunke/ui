@@ -211,6 +211,11 @@
 .each_material_img_div:HOVER{
 	cursor: pointer;
 }
+.img_cover{
+	position:relative;
+	left: 10px;
+	height: 160px;
+}
 .material_image_block{
 	width: 230px;
 	height: 180px;
@@ -530,6 +535,7 @@
 	font-size: 14px;
 	text-align: center;
 	font-family: PingFangTC-Semibold;
+	display: none;
  }
  #download_material_ai{
 	width: 80px;

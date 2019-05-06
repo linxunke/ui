@@ -9,6 +9,9 @@
 	width: 300px;
 	margin-left: 230px;
 }
+.img_cover{
+	height: 160px;
+}
 .nav_head_a{
 	height: 100%;
 	width: auto;
@@ -84,13 +87,14 @@
 .material_image_block{
 	width: 230px;
 	height: 180px;
-	margin-top:5px;
-	margin-left: auto;
+	margin-top:8px;
+	margin-left: 10px;
 	margin-right: auto;
 }
 .material_picture{
 	width:auto;
 	height:auto;
+	
 	max-width: 100%;
 	max-height: 100%;
 }
@@ -98,7 +102,7 @@
 	margin-left:5px;
 	text-align: left!important;
 }
-/* 以下是页码模块的代码 */
+/* 浠ヤ笅鏄〉鐮佹ā鍧楃殑浠ｇ爜 */
 .footer{
 	width: 100%;
 	height: 50px;
@@ -137,7 +141,7 @@
 	color: orange;
 	border: 1px solid orange;
 }
-/* 模态框的样式 */
+/* 妯℃�佹鐨勬牱寮� */
 .modal{
     display: none;
     width: 100%;
@@ -506,7 +510,7 @@
  	background-color: white!important;
  }
  #download_material_svg{
-	width: 80px;
+ 	width: 80px;
 	border-radius: 3px;
 	background-color: rgba(255, 255, 255, 1);
 	border: 1px solid rgba(161, 166, 179, 1);
@@ -514,6 +518,7 @@
 	font-size: 14px;
 	text-align: center;
 	font-family: PingFangTC-Semibold;
+	display: none;
  }
  #download_material_ai{
 	width: 80px;

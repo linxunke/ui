@@ -8,7 +8,8 @@ $(document).ready(function () {
 		url:'/SearchIndex/SearchThreePhoto?userId='+userId,
     	data:"",
         type:'post',
-       success:function (data) {
+        async:false,
+        success:function (data) {
     	   var result = (data);
     	   var firstPhoto = document.getElementById("#photo_img1");
     	   var secondPhoto = document.getElementById("#photo_img2");
@@ -36,13 +37,14 @@ $(document).ready(function () {
        } 
 	});
 	countNumber();
-	chooseSearchWord();
+
 });
 function countNumber(){
 	$.ajax({
 		url:'/SearchIndex/countNumber?userId='+userId,
     	data:"",
         type:'post',
+        async:false,
        success:function (data) {
     	   var result = (data);
     	   $("#count_icon").html(result.object[0]);
@@ -55,13 +57,16 @@ function countNumber(){
 	});
 }
 function chooseSearchWord(){
+	console.log("chooseSearchWord函数");
 	$.ajax({
 		url:'/SearchIndex/chooseSearchWord?userId='+userId,
     	data:"",
         type:'post',
+        async:false,
        success:function (data) {
-    	   var result = (data);
-    	   for(var i = 0; i < result.object.length ; i++){
+    	   var result = data;
+    	   for(var i = 0; i < result.object.length; i++){
+    		   console.log(i);
     		   var div = document.createElement('div');
      		  div.className = "combo_box_child";
      		  div.id = "combo_box" + i;
@@ -72,7 +77,7 @@ function chooseSearchWord(){
      		AllTypeCodeParent = result.object[i].typeCode+","+AllTypeCodeParent;
     	   }
     	   AllTypeCodeParent = AllTypeCodeParent.substring(0, AllTypeCodeParent.lastIndexOf(','));
-    	   console.log(AllTypeCodeParent);
+    	   console.log("hhh="+AllTypeCodeParent);
        },
        error:function(){
     	   console.log('error happened----');

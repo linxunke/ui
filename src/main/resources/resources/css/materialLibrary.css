@@ -65,7 +65,7 @@
 	margin-top:30px;
 	margin-right:20px;
 	width: 240px;
-	height: 190px;
+	height: 220px;
 	border-radius: 2px;
 	background-color: rgba(255, 255, 255, 1);
 	box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
@@ -74,6 +74,9 @@
 	cursor: pointer;
 }
 .img_cover_container{
+	position:relative;
+	left: 10px;
+	top:8px;
 	width: 100%;
 	height: 80%;
 }
@@ -82,9 +85,10 @@
 	height: 20%;
 }
 .img_cover{
-	width: 100%;
-	height: 100%;
+	width: 220px;
+	height: 160px;
 }
+
 .group_info_container div{
 	float:left;
 	margin-left:6px;
@@ -199,7 +203,7 @@
 	padding-left:20px;
 	background-color: rgba(255, 255, 255, 1);
 }
-/* 以下是列表显示中素材的信息框样式 */
+/* 浠ヤ笅鏄垪琛ㄦ樉绀轰腑绱犳潗鐨勪俊鎭鏍峰紡 */
 .modal_material_div{
 	width: 100%;
 	height:300px;
@@ -487,7 +491,7 @@
 }
 
 
-/* 模态框的样式 */
+/* 妯℃�佹鐨勬牱寮� */
 .modal{
     display: none;
     width: 100%;

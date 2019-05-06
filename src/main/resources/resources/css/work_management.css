@@ -283,6 +283,16 @@
 #close:HOVER{
 	cursor: pointer;
 }
+.closeModal{	
+	width: 36px;
+	height: 36px;
+	background-color: grey;
+	color:white;
+	font-size:30px;
+	border: none;
+	border-radius:36px;
+}
+
 #show_div{
 	display: none;
 	position: fixed;

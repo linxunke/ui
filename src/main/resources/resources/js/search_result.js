@@ -426,6 +426,10 @@ function changeHead(){
 	$("#"+parentId).children(":first").children(":last").html(childname+'&emsp;<img src="../img/分类_箭头.png"><input class="parent_type_code" type="text" value="'+child_code+'" style="display:none"/>');
 	getPhotoUrl();
 }
+$("#result_list_body").on('click','.photo_url',function(){
+	var currentMaterialId = $(this).parent().find(".material_id_container").html();
+	showModal(currentMaterialId);
+});
 function showModal(materialId) {
 	$("#currentMaterialId").val(materialId);
 	$("#material_type_info_div").empty();
