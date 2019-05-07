@@ -345,7 +345,7 @@ function change_checked_status(obj) {
 	if(status == "unchecked"){
 		$(obj).find(".checked_status").val("checked");
 		$(obj).css("background-color","orange");
-		$(obj).find("span").html("√");
+		$(obj).find("span").html('<img src="../img/选中.png" style="height:20px; width:20px;" >');
 		$(obj).parent().parent().css("background-color","#DFE1E6");
 	}else{
 		$(obj).find(".checked_status").val("unchecked");
@@ -364,7 +364,7 @@ function change_checked_status_with_value(obj,theStatus) {
 	}else {
 		$(obj).find(".checked_status").val("checked");
 		$(obj).css("background-color","orange");
-		$(obj).find("span").html("√");
+		$(obj).find("span").html('<img src="../img/选中.png" style="height:20px; width:20px;" >');
 		$(obj).parent().parent().css("background-color","#DFE1E6");
 		$(obj).css("opacity","1");
 	}
@@ -431,6 +431,8 @@ function getMaterialsInCurrentCanvas(userId,canvasId,currentPage) {
 			currentPage:currentPage
 		},
 		success:function(data){
+			console.log(11111);
+			console.log(data.object.pageInfoUtil.infoTotalNumber);//画板中素材的数量
 			var showAsIcon = data.object.existIcon;
 			if(showAsIcon){
 				showMaterialAsIcon(data);
@@ -446,6 +448,7 @@ function getMaterialsInCurrentCanvas(userId,canvasId,currentPage) {
 /*以图标形式展示素材*/
 function showMaterialAsIcon(data) {
 	var materialInfoList = data.object.pageInfoUtil.object;
+	if(data.object.pageInfoUtil.infoTotalNumber != 0){
 	$(".material_show_body").empty();
 	for(var i = 0; i < data.object.pageInfoUtil.object.length; i++){
 		$(".material_show_body").append('<div class="each_material_icon_div">'+
@@ -461,11 +464,13 @@ function showMaterialAsIcon(data) {
 	pageNumber = data.object.pageInfoUtil.pageNumber;
 	canvasId = materialInfoList[0].canvasInfoIdPrivate;
 	refreshPageModual(currentPage,pageNumber);
+	}
 }
 
 /*以图片形式展示素材*/
 function showMaterialAsImg(data) {
 	var materialInfoList = data.object.pageInfoUtil.object;
+	if(data.object.pageInfoUtil.infoTotalNumber != 0){
 	$(".material_show_body").empty();
 	for(var i = 0; i < data.object.pageInfoUtil.object.length; i++){
 		$(".material_show_body").append('<div class="each_material_img_div"><div class="material_image_block">'+
@@ -480,6 +485,7 @@ function showMaterialAsImg(data) {
 	pageNumber = data.object.pageInfoUtil.pageNumber;
 	canvasId = materialInfoList[0].canvasInfoIdPrivate;
 	refreshPageModual(currentPage,pageNumber);
+	}
 }
 /*刷新显示页码模块*/
 function refreshPageModual(currentPage,pageNumber) {
@@ -678,3 +684,6 @@ function addMaterialTypeBlocks(num) {
 		$("#material_type_info_div").append(newTypeModual);
 	}
 }
+$("#goToUpdate").click(function(){
+	window.location.href='/userpage/toMaterialUpload?userId='+userId;
+})

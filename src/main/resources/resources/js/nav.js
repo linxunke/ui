@@ -32,6 +32,31 @@ $(document).ready(function () {
 	$(".logo").click(function(){
 		window.location.href="/userpage/toSearchIndex?userId="+userId;
 	});
+	//退出登录
+	$(".need_sign_in").click(function(){
+		console.log(1234567);
+		var confirmDelete = confirm("确定要退出登录吗？");
+		if(confirmDelete == true){
+			$.ajax({
+				url:'/user/loginOut?userId='+userId,
+				type:'post',
+				data:{
+					userId:userId
+				},
+				success:function(data){
+					if(data.status == '200'){
+						window.location.href="/userpage/toLogin";
+					}else {
+						alert("退出登录错误");
+					}
+				},
+				error:function(){
+					console.log("error happened ....");
+				}
+			});
+		}
+		
+	});
 });
 //拿到父code
 function chooseSearchWord(){

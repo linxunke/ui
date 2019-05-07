@@ -195,9 +195,23 @@ public class UserController {
 		}
 		return responseVo.toString();
 	}
-	
+	//退出登录
+	@RequestMapping(value="loginOut",method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
+	public String loginOut(@RequestParam(value = "userId", required = true) Long userId){
+		String userid = Long.toString(userId);
+		logger.info("进入退出登录方法0:{}",userid);
+		deleteLoginInfoToRedis(userid);
+		logger.info("进入退出登录方法1");
+		ResponseVo responseVo = new ResponseVo();
+		responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
+		return responseVo.toString();
+	}
 	private void recordLoginInfoToRedis(String userId, LoginInfoForRedisBo loginInfoForRedisBo) {
 		loginInfoRecordService.set(userId, loginInfoForRedisBo);
 	}
-			
+	
+	private void deleteLoginInfoToRedis(String userId) {
+		loginInfoRecordService.loginOut(userId);
+	}
 }

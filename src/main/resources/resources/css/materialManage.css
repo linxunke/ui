@@ -111,7 +111,7 @@
 	color: rgba(255, 255, 255, 1);
 }
 #search_content{
-	display:block;
+	display:none;
 	margin-top:3px;
 	margin-right:10px;
 	width: 70px;
@@ -547,6 +547,30 @@
 	text-align: center;
 	font-family: PingFangTC-Semibold;
  }
+  .download_btn_png:HOVER{
+ 	cursor: pointer;
+ 	background-color: rgba(255, 214, 48, 1);
+ }
+ .download_btn:HOVER #material_png_size_select{
+ 	background-color: rgba(255, 214, 48, 1);
+ }
+#download_material_png:HOVER{
+	background-color: rgba(255, 214, 48, 1);
+}
+#download_material_svg:HOVER{
+	background-color: rgba(255, 214, 48, 1);
+}
+#download_material_ai:HOVER{
+	background-color: rgba(255, 214, 48, 1);
+}
+.download_btn:HOVER{
+	cursor: pointer;
+ 	background-color: rgba(255, 214, 48, 1);
+}
+.download_btn:HOVER #download_material_png{
+	cursor: pointer;
+ 	background-color: rgba(255, 214, 48, 1);
+}
  #deleteMaterial{
  	 position:relative;
  	 left:200px;
@@ -580,4 +604,52 @@
     .modal-content {
         width: 80%;
     }
+}
+#manage_add_board {
+	float: left;
+	margin-top: 20px;
+	margin-left: 40px;
+	width: 240px;
+	height: 236px;
+	background-color: rgba(255, 255, 255, 1);
+	box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+#manage_add_btn {
+	position: absolute;
+	margin: 15px 13px 15px 13px;
+	width: 214px;
+	height: 206px;
+	background-color: rgba(245, 245, 249, 0.3);
+	border: 1px solid rgba(223, 225, 230, 1);
+}
+.addButtonForBoard:HOVER{
+	cursor: pointer;
+}
+#add_mark{
+	position: absolute;
+	margin: 58px 89px 113px 89px;
+	
+}
+#under_add_mark{
+	position: absolute;
+	margin: 118px 77px 72px 77px;
+	width: 80px;
+	height: 17px;
+	color: rgba(157, 163, 176, 1);
+	font-size: 12px;
+	text-align: center;
+	font-family: PingFangSC-Regular;
+	
+}
+#goToUpdate{
+	font-size: 14px;
+	color: blue;
+}
+#goToUpdate:HOVER{
+	cursor: pointer;
+}
+#goToUpload:HOVER {
+	cursor: pointer;
+	background-color: rgba(255, 214, 48, 1);
 }
