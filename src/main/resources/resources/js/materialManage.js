@@ -526,7 +526,11 @@ function showMaterialDetailsInModal(data) {
 		$("#material_png_size_select").css("display","none");
 		$("#isIconInput").val(false);
 	}
-	$("#download_material_ai").html(data.object.materialType);
+	if(data.object.materialType=='ai'){
+		$("#download_material_ai").html('AI');
+	}else if(data.object.materialType=='psd'){
+		$("#download_material_ai").html('PSD');
+	}
 	$("#material_img_preview").prop("src",materialPngSrc);
 	$("#material_content_name").val(data.object.materialName);
 	$("#material_content_label").val(data.object.materialDescription);

@@ -47,6 +47,11 @@ public class CanvasInfoController {
 
 	@Value("${material.catch.png.url}")
 	private String catchOperationUrl;
+	
+	@Value("${imagemagickpath.running.system}")
+	private String system;
+	
+	
 
 	@RequestMapping(value = "getCanvasByUserId", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "application/json;charset=UTF-8")
@@ -90,8 +95,15 @@ public class CanvasInfoController {
 				List<String> realIconUrls = new ArrayList<String>();
 				for (String iconUrl : iconUrls) {
 					if(iconUrl != null){
-						realIconUrls.add(ftpAddress.replace("/", "\\\\") + "\\"
-								+ iconUrl.replace("/", "\\"));
+						if("windows".equals(system)) {
+							realIconUrls.add(ftpAddress.replace("/", "\\\\") + "\\"
+									+ iconUrl.replace("/", "\\"));
+						}else {
+							realIconUrls.add(ftpAddress
+									+ iconUrl);
+						}
+						
+						logger.info("真实图标拼接地址{}",realIconUrls.get(0));
 					}				
 				}
 				if (realIconUrls.size() > 0) {
@@ -103,6 +115,7 @@ public class CanvasInfoController {
 						logger.info("拼接图标成功");
 					} catch (IOException | InterruptedException
 							| IM4JavaException e) {
+						e.printStackTrace();
 						logger.info("拼接图标失败");
 						responseVo.setStatus(ResponseVo.STATUS_FAILED);
 						responseVo.setMessage("拼接图标失败");

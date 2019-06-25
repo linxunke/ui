@@ -72,6 +72,9 @@ public class UploadMaterialsController {
 	@Value("${material.catch.thumbnail.url}")
 	private String catchThumbnailUrl;
 	
+	@Value("${imagemagickpath.running.system}")
+	private String system;
+	
 	@Autowired
 	MaterialInfoService materialInfoService;
 	
@@ -107,7 +110,7 @@ public class UploadMaterialsController {
 		ResponseVo responseVo = new ResponseVo();
 		/*从session中获取userId,并添加到responseVo*/
 		responseVo.setUserId(userId);
-		String resource = FileUpload.writeUploadFile(file, catchResourceUrl);
+		String resource = new FileUpload().writeUploadFile(file, catchResourceUrl,system);
 		/*对上传的文件类型做转换*/
 		String resourceFileType = this.getFileType(resource);
 		if(!(resourceFileType.equals("ai") || resourceFileType.equals("psd"))){
@@ -119,7 +122,13 @@ public class UploadMaterialsController {
 			return responseVo.toString();
 		}
 		/* 获取缓存的源文件的文件名 */
-		String[] tempStrs = resource.split("\\\\");
+		String[] tempStrs = null;
+		if(system.equals("windows")) {
+			tempStrs = resource.split("\\\\");
+		}else {
+			tempStrs = resource.split("/");
+		}
+		
 		String newPath = catchPngUrl + tempStrs[tempStrs.length - 1].split("\\.")[0]
 				+ ".png";
 		String[] imagePath = { resource };

@@ -14,9 +14,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-
+@Component
 public class FileUpload {
 	private static Logger logger = LoggerFactory.getLogger(FileUpload.class);
 	/**
@@ -25,7 +27,7 @@ public class FileUpload {
      * @param file
      * @return
      */
-    public static String writeUploadFile(MultipartFile file,String filepath) {
+    public String writeUploadFile(MultipartFile file,String filepath,String system) {
     	logger.info(filepath);
         String filename = file.getOriginalFilename();
         File fileDir = new File(filepath);
@@ -53,8 +55,14 @@ public class FileUpload {
             IOUtils.closeQuietly(fos);
         }
         logger.info("文件名称:{}",filename);
-        logger.info(filepath+"\\" + filename);
-        return filepath+"\\" + filename;
+        if(system.equals("windows")) {
+        	logger.info(filepath+"\\" + filename);
+        	return filepath+"\\" + filename;
+        }else {
+        	logger.info(filepath + filename);
+        	return filepath + filename;
+        }
+       
     }
     
     public static void base64ToFile(String base64, String realPath, String fileName){

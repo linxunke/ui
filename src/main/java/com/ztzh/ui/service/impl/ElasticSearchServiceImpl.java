@@ -100,10 +100,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		NativeSearchQueryBuilder searchBuilder = new NativeSearchQueryBuilder();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         if(null!=materialESBo.getMaterialName()&&""!=materialESBo.getMaterialName()) {
-        	boolQueryBuilder.must(QueryBuilders.fuzzyQuery("materialName", materialESBo.getMaterialName()));
+        	boolQueryBuilder.should(QueryBuilders.fuzzyQuery("materialName", materialESBo.getMaterialName()));
         }
         if(null!=materialESBo.getMaterialDescription()&&""!=materialESBo.getMaterialDescription()) {
-        	boolQueryBuilder.should(QueryBuilders.fuzzyQuery("materialDescription", materialESBo.getMaterialDescription()));
+        	boolQueryBuilder.must(QueryBuilders.fuzzyQuery("materialDescription", materialESBo.getMaterialDescription()));
         }
         if(null!=materialESBo.getSort()&&""!=materialESBo.getSort()) {
         	if(materialESBo.getSort().equals(MaterialTypeConstants.MATERIAL_TYPE_HOT_CODE)) {
@@ -132,7 +132,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
         	}
         }
         if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
-        	boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+        	//判断是否为父节点
+        	if("01".equals(materialESBo.getMaterialStyleCode())) {
+        		boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+        	}else {
+        		boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+        	}
+        	
         }
         RangeQueryBuilder rangeQueryBuider = QueryBuilders.rangeQuery("colorPercentage");
         if(null!=materialESBo.getColorPercentage()) {
@@ -162,10 +168,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 		NativeSearchQueryBuilder nativeSearchQuerybuilder = new NativeSearchQueryBuilder();
 		RangeQueryBuilder rangeQueryBuider = QueryBuilders.rangeQuery("colorPercentage");
 		 if(null!=materialESBo.getMaterialName()&&""!=materialESBo.getMaterialName()) {
-	        	boolQueryBuilder.must(QueryBuilders.fuzzyQuery("materialName", materialESBo.getMaterialName()));
+	        	boolQueryBuilder.should(QueryBuilders.fuzzyQuery("materialName", materialESBo.getMaterialName()));
 	        }
 	        if(null!=materialESBo.getMaterialDescription()&&""!=materialESBo.getMaterialDescription()) {
-	        	boolQueryBuilder.should(QueryBuilders.fuzzyQuery("materialDescription", materialESBo.getMaterialDescription()));
+	        	boolQueryBuilder.must(QueryBuilders.fuzzyQuery("materialDescription", materialESBo.getMaterialDescription()));
 	        }
         if(null!=materialESBo.getColorPercentage()) {
         	rangeQueryBuider = rangeQueryBuider.gte(materialESBo.getColorPercentage()*0.97).lte(materialESBo.getColorPercentage()*1.03);
@@ -186,7 +192,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService{
 	        }
 	    }
 		if(null!=materialESBo.getMaterialStyleCode()&&""!=materialESBo.getMaterialStyleCode()) {
-	        boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+			if("01".equals(materialESBo.getMaterialStyleCode())) {
+        		boolQueryBuilder.should(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+        	}else {
+        		boolQueryBuilder.must(QueryBuilders.termQuery("materialTypeInfoIndex.materialStyleCode", materialESBo.getMaterialStyleCode()));
+        	}
 	    }
 		if(null!=materialESBo.getColorType()) {
         	boolQueryBuilder.must(QueryBuilders.termQuery("colorType", materialESBo.getColorType()));

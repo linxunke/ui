@@ -44,6 +44,8 @@ $(document).keydown(function(event){
 
 });
 function Login() {
+	Save();
+	console.log("login...");
 	var account = $("#login_input1").val();
 	var password = $("#login_input2").val();
 	var md5_password = $.md5(password);
@@ -58,8 +60,9 @@ function Login() {
 			dataType : 'text',
 			type : 'post',
 			success : function(data) {
+				console.log(data);
 				var resultData = JSON.parse(data);
-				console.log(resultData);
+				console.log(resultData.status);
 				if (resultData.status == "200") {
 					window.location.href = "/userpage/toSearchIndex?userId="
 							+ resultData.userId;

@@ -85,6 +85,7 @@ public class MaterialInfoController {
 			responseVo.setStatus(ResponseVo.STATUS_SUCCESS);
 			responseVo.setMessage("获取文件的路径成功");
 			Map<String,String> imageMap  = materialInfoService.getImageUrlAndName(materialInfoDomain, imageType, isIcon, iconSize);
+			logger.info("下载文件具体信息:{}",materialInfoDomain.toString());
 			responseVo.setObject(imageMap);
 		}else {
 			responseVo.setStatus(ResponseVo.STATUS_FAILED);

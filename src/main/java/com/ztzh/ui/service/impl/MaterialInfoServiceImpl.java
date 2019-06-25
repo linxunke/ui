@@ -72,8 +72,11 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 	@Value("${web.upload-path}")
 	private String resourceFTPUrl;
 	
-	@Value("{material.catch.resource.url}")
+	@Value("${material.catch.resource.url}")
 	private String catchResourceUrl;
+	
+	@Value("${imagemagickpath.running.system}")
+	private String system;
 	
 	@Override
 	public List<IconUrlResultBo> getDisplayUrlByThumbnailUrl(List<String> thumbnailUrls) {
@@ -267,7 +270,9 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 				oldImgPath = oldImgPath.replaceAll("//", "/");
 				String imageTempName = UUID.randomUUID().toString().replaceAll("-", "") + ".png";
 				String newPath = catchPngUrl + imageTempName;
-				newPath = newPath.replaceAll("\\\\", "/");
+				if("windows".equals(system)) {
+					newPath = newPath.replaceAll("\\\\", "/");
+				}
 				String imageName = materialInfoDomain.getMaterialName() + ".png";
 				boolean zoomResult = imageMagickUtil.zoomImage(oldImgPath, newPath, iconSize, iconSize);
 				if(zoomResult){
@@ -277,12 +282,24 @@ public class MaterialInfoServiceImpl implements MaterialInfoService{
 				
 				return imageMap;
 			}else {
-				String oldPath = resourceFTPUrl + materialInfoDomain.getMaterialUrl();
+				String oldPath = resourceFTPUrl + materialInfoDomain.getPngUrl();
 				oldPath = oldPath.replaceAll("//", "/");
 				String imageTempName = UUID.randomUUID().toString().replaceAll("-", "")+ ".png";
 				String newPath = catchPngUrl + imageTempName;
-				newPath = newPath.replaceAll("\\\\", "/");
+				if("windows".equals(system)) {
+					newPath = newPath.replaceAll("\\\\", "/");
+				}
 				String imageName = materialInfoDomain.getMaterialName()+".png";
+				String[] oldPathArr = {oldPath};
+				try {
+					imageMagickUtil.convertType(oldPathArr, newPath);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (IM4JavaException e) {
+					e.printStackTrace();
+				}
 				boolean copyResult = copy(oldPath, newPath);
 				if(copyResult){
 					imageMap.put("imageUrl", "/images/"+imageTempName);

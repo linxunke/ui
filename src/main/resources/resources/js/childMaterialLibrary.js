@@ -87,7 +87,9 @@ $(document).ready(function() {
 				},
 				success:function(data){
 					var resultData = JSON.parse(data);
+					console.log(resultData);
 					if(resultData.status == '200'){
+						console.log(resultData.object.imageUrl);
 						downloadStaticFile(resultData.object.imageUrl,resultData.object.imageName);
 					}else{
 						alert(resultData.message);
@@ -269,6 +271,11 @@ function reloadMaterialInfoInModal(materialInfos) {
 	}else {
 		$("#material_png_size_select").css("display","none");
 	}
+	if(materialInfos.MaterialDetailsInfoBo.materialType=='ai'){
+		$("#download_material_ai").html('AI');
+	}else if(materialInfos.MaterialDetailsInfoBo.materialType=='psd'){
+		$("#download_material_ai").html('PSD');
+	}
 	$("#isIconInput").val(materialInfos.isIcon);
 	$("#material_img_preview").attr("src",window.location.protocol + "//" + window.location.host + materialInfos.MaterialDetailsInfoBo.pngUrl);
 	$(".material_name_content").html(materialInfos.MaterialDetailsInfoBo.materialName);
@@ -308,12 +315,17 @@ function getSimilarMaterial(color_percentage) {
 function showSimilarMaterialImg(similarMaterialList) {
 	var each_similar_material = $(".each_similar_material_div");
 	for(var i = 0; i < each_similar_material.length; i++){
-		$(each_similar_material[i]).find(".similar_material_img").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
-		$(each_similar_material[i]).find(".similar_material_id").val(similarMaterialList.items[i].id);
+		if(undefined != similarMaterialList.items[i]){
+			$(each_similar_material[i]).find(".similar_material_img").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
+			$(each_similar_material[i]).find(".similar_material_id").val(similarMaterialList.items[i].id);
+		}else{
+			$(each_similar_material[i]).hide();
+		}
 	}
 }
 /*下载文件的方法*/
 function downloadStaticFile(imageUrl,imageName) {
+	console.log(window.location.protocol + "//" + window.location.host + imageUrl);
     $("#downloadImg").attr("href",window.location.protocol + "//" + window.location.host + imageUrl);
     $("#downloadImg").attr("download",imageName);
     document.getElementById("downloadImg").click(); 

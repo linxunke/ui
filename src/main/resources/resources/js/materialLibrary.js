@@ -259,7 +259,11 @@ function reloadMaterialDetails(materialInfos) {
 		$("#material_png_size_select").css("display","none");
 		$("#isIconInput").val(false);
 	}
-	$("#download_material_ai").html(materialInfos.MaterialDetailsInfoBo.materialType);
+	if(materialInfos.MaterialDetailsInfoBo.materialType=='ai'){
+		$("#download_material_ai").html('AI');
+	}else if(materialInfos.MaterialDetailsInfoBo.materialType=='psd'){
+		$("#download_material_ai").html('PSD');
+	}
 	$("#current_material_color_percentage_in_modal").html(materialInfos.MaterialDetailsInfoBo.colorPercentage);
 	getSimilarMaterial(materialInfos.MaterialDetailsInfoBo.colorPercentage);
 }
@@ -286,8 +290,12 @@ function getSimilarMaterial(color_percentage) {
 function showSimilarMaterialImg(similarMaterialList) {
 	var each_similar_material = $(".each_similar_material_div");
 	for(var i = 0; i < each_similar_material.length; i++){
-		$(each_similar_material[i]).find(".similar_material_img").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
-		$(each_similar_material[i]).find(".similar_material_id").val(similarMaterialList.items[i].id);
+		if(undefined != similarMaterialList.items[i]){
+			$(each_similar_material[i]).find(".similar_material_img").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
+			$(each_similar_material[i]).find(".similar_material_id").val(similarMaterialList.items[i].id);
+		}else{
+			$(each_similar_material[i]).hide();
+		}
 	}
 }
 $("#childTypeList").on('click','.each_child_type_li',function(){
@@ -506,8 +514,12 @@ function getSimilarMaterialInModal(color_percentage) {
 function showSimilarMaterialImgInModal(similarMaterialList) {
 	var each_similar_material = $(".each_similar_material_div_in_modal");
 	for(var i = 0; i < each_similar_material.length; i++){
-		$(each_similar_material[i]).find(".similar_material_img_in_modal").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
-		$(each_similar_material[i]).find(".similar_material_id_in_modal").val(similarMaterialList.items[i].id);
+		if(undefined != similarMaterialList.items[i]){
+			$(each_similar_material[i]).find(".similar_material_img_in_modal").attr("src",window.location.protocol + "//" + window.location.host + similarMaterialList.items[i].thumbnailUrl);
+			$(each_similar_material[i]).find(".similar_material_id_in_modal").val(similarMaterialList.items[i].id);
+		}else{
+			$(each_similar_material[i]).hide();
+		}
 	}
 }
 /*下载png文件*/

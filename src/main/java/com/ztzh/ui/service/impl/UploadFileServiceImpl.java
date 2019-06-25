@@ -23,13 +23,16 @@ public class UploadFileServiceImpl implements UploadFileService{
 	@Value("${user.photo.address}")
 	private String fileAddress;
 	
+	@Value("${imagemagickpath.running.system}")
+    private String system;
+	
 	@Autowired
 	FTPUtil ftpUtil;
 
 	@Override
 	public String uploadUserPhonto(MultipartFile file,String filepath) {
 		filepath = fileAddress;
-		return FileUpload.writeUploadFile(file, filepath);
+		return new FileUpload().writeUploadFile(file, filepath, system);
 	}
 
 	@Override

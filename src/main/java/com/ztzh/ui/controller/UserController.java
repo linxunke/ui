@@ -39,6 +39,9 @@ import com.ztzh.ui.vo.ResponseVo;
 @RequestMapping("/user")
 public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
+	
+	@Value("${imagemagickpath.running.system}")
+	private String system;
 
 	@Value("${user.photo.address}")
 	private String photoAddress;
@@ -91,7 +94,13 @@ public class UserController {
 			// 跳转页面
 			logger.info("成功创建用户");
 			FileUpload.base64ToFile(base64, photoAddress, fileName);
-			String photoRealPath = photoAddress.replace("/", "\\")+"\\"+fileName;
+			String photoRealPath = null;
+			if(system.equals("windows")) {
+				photoRealPath = photoAddress.replace("/", "\\")+"\\"+fileName;
+			}else {
+				photoRealPath = photoAddress+'/'+fileName;
+			}
+			
 			File photoFile = new File(photoRealPath);
 			//写入ftp
 			ftpUtil.uploadToFtp(new FileInputStream(photoFile), fileName, false, UserConstants.FTP_PHOTO_DIRECTORY);

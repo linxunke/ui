@@ -36,6 +36,9 @@ public class FTPUtil {
 	 
 	    @Value("${ftp.filepath}")
 	    private String CURRENT_DIR;     // 文件存放的目录
+	    
+	    @Value("${imagemagickpath.running.system}")
+	    private String system;
 	 
 	    public static final String DIRSPLIT="/";
 	    
@@ -81,17 +84,33 @@ public class FTPUtil {
 	                }
 	                ftpClient.enterLocalPassiveMode();
 	                boolean a = ftpClient.changeToParentDirectory();
+	                log.info("进入父文件夹:{}",a);
+	                if(system!="windows") {
+                		boolean isFtpTest = ftpClient.changeWorkingDirectory("ftp_test");
+                		log.info("是否进入ftp_test:{}",isFtpTest);
+                	}
 	                String[] dirs = directory.split("/");
 	                //切换文件夹
-	                for (String dir : dirs) {
+	                for (int i=1;i<dirs.length;i++) {
+	                	String dir = dirs[i];
 	                //创建并进入不存在的目录
-	                	if (!ftpClient.changeWorkingDirectory(dir)) {
-	                			ftpClient.mkd(dir);
-	                				ftpClient.changeWorkingDirectory(dir);
-	                	}
+	                	ftpClient.enterLocalPassiveMode();
+	                	boolean b =ftpClient.changeWorkingDirectory(dir);
+		                log.info("进入文件夹:{}{}---{}",dir,b,ftpClient.getReplyCode());
+		                log.info("{}",ftpClient.getReplyString());
+		                if (!b) {
+		                	log.info("开始创建文件夹:{}",dir);
+		                		ftpClient.makeDirectory(dir);
+		                		ftpClient.enterLocalPassiveMode();
+		                		boolean isChange = ftpClient.changeWorkingDirectory(dir);
+		                		log.info("进入ftp:{}文件夹:{}",dir,isChange);
+		                }
 	                }
 	                // 上传文件到ftp
+	                log.info("开始上传文件:{}",fileName);
+	                ftpClient.enterLocalPassiveMode();
 	                returnValue = ftpClient.storeFile(fileName, buffIn);
+	                log.info("{}",ftpClient.getReplyString());
 	                if(needDelete){
 	                    ftpClient.deleteFile(fileName);
 	                }

@@ -14,7 +14,7 @@ public class TestServiceImpl implements TestService{
 
 	@Override
 	public void upload(MultipartFile file) {
-		FileUpload.writeUploadFile(file, filepath);
+		new FileUpload().writeUploadFile(file, filepath,"windows");
 		
 	}
 

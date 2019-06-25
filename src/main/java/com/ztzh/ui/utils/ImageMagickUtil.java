@@ -38,6 +38,9 @@ public class ImageMagickUtil {
 	@Value("${material.catch.png.url}")
     private  String catchOperationUrl;
 	
+	@Value("${web.upload-path}")
+	private String ftpUrl;
+	
 	@Value("${imagemagickpath.running.system}")
     private  String runningSystem;
 	
@@ -180,7 +183,9 @@ public class ImageMagickUtil {
 			op.crop(width, height, x, y);
 			op.addImage(newPath);
 			ConvertCmd convert = new ConvertCmd(true);
-			convert.setSearchPath(imageMagickPath);
+			if("windows".equals(runningSystem)) {
+				convert.setSearchPath(imageMagickPath);
+			}
 			convert.run(op);
 			flag = true;
 		} catch (IOException e) {
@@ -216,6 +221,7 @@ public class ImageMagickUtil {
 		try {
 			IMOperation op = new IMOperation();
 			op.addImage(imagePath);
+			logger.info("转换源文件路径：{}",imagePath);
 			if (width == null) {// 根据高度缩放图片
 				op.resize(null, height);
 			} else if (height == null) {// 根据宽度缩放图片
@@ -225,16 +231,17 @@ public class ImageMagickUtil {
 			}
 			op.addImage(newPath);
 			ConvertCmd convert = new ConvertCmd();
-			convert.setSearchPath(imageMagickPath);
+			logger.info("转换路径：{}",newPath);
+			if("windows".equals(runningSystem)) {
+				convert.setSearchPath(imageMagickPath);
+			}
 			convert.run(op);
 			flag = true;
 		} catch (IOException e) {
 			System.out.println("文件读取错误!");
 			flag = false;
-		} catch (InterruptedException e) {
-			flag = false;
-		} catch (IM4JavaException e) {
-			System.out.println(e.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
 			flag = false;
 		} finally {
 
@@ -301,7 +308,17 @@ public class ImageMagickUtil {
 	
 	public String iconDisplay(List<String> urls) throws IOException, InterruptedException, IM4JavaException {
 		IMOperation op = new IMOperation();
-		op.addImage(this.getClass().getResource("/resources/img/iconBackground.png").getPath().substring(1).replace("/", "\\"));
+		String backgroundAddress = null;
+		if("windows".equals(runningSystem)) {
+			backgroundAddress = this.getClass().getResource("/resources/img/iconBackground.png").getPath().substring(1);
+			op.addImage(backgroundAddress.replace("/", "\\"));
+			logger.info("背景图地址：{}",backgroundAddress.replace("/", "\\"));
+		}else {
+			op.addImage(ftpUrl+"/iconBackground.png");
+			logger.info("背景图地址：{}",backgroundAddress);
+		}
+		
+		
 		op.compose("atop");
 		
 		/*

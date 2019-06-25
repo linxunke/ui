@@ -3,7 +3,7 @@ var page = 0;
 var pageSize = 12;
 var AllTypeCodeParent = "";
 $(document).ready(function () {
-	
+	countNumber();
 	$.ajax({
 		url:'/SearchIndex/SearchThreePhoto?userId='+userId,
     	data:"",
@@ -36,7 +36,7 @@ $(document).ready(function () {
     	   console.log('error happened----');
        } 
 	});
-	countNumber();
+	
 
 });
 function countNumber(){

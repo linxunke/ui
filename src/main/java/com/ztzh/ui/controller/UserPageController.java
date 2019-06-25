@@ -26,25 +26,25 @@ public class UserPageController {
 	
 	@RequestMapping(value = "toRegist", method = {RequestMethod.GET,RequestMethod.POST}, produces="application/json;charset=UTF-8")
 	public String toRegist() {
-		return "/register";
+		return "register";
 	}
 
 	@RequestMapping(value="head",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
 	public String head(){
-		return "/head";
+		return "head";
 	}
 	@RequestMapping(value="work_manage",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
 	public String manage(){
-		return "/work_management";
+		return "work_management";
 	}
 	//下面的是测试用，随意更改
 	@RequestMapping(value="test",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
 	public String test(){
-		return "/test";
+		return "test";
 	}
 	@RequestMapping(value="toLogin",method = {RequestMethod.GET,RequestMethod.POST},produces="application/json;charset=UTF-8")
 	public String toLogin(){
-		return "/login";
+		return "login";
 
 	}
 	@RequestMapping(value="toMaterialUpload")
@@ -54,7 +54,7 @@ public class UserPageController {
 
 	@RequestMapping(value="toSearchIndex")
 	public String toSearchIndex(){
-		return "/search_index";
+		return "search_index";
 	}
 
 	
@@ -65,7 +65,7 @@ public class UserPageController {
 	
 	@RequestMapping(value="toSearchResult")
 	public String toSearchResult(){
-		return "/search_result";
+		return "search_result";
 	}
 	
 	@RequestMapping(value="toMaterialLibrary")
@@ -78,10 +78,10 @@ public class UserPageController {
 	}
 	@RequestMapping(value="toHistoryManage")
 	public String toHistoryManage(){
-		return "/history_manage";
+		return "history_manage";
 	}
 	@RequestMapping(value="toCollectionManage")
 	public String toCollectionManage(){
-		return "/collection_manage";
+		return "collection_manage";
 	}
 }
